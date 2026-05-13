@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 你的第一台DIY电脑</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html" class="active">互动装机</a>
+    <a href="recommend.html">一键推荐</a>
+    <a href="service.html">上门组装 / 快递</a>
+  </div>
+  <div class="nav-total">配置总价：<span id="navTotal">¥0</span></div>
+</nav>
+
+<div class="main-container">
+
+  <!-- 左侧：3D机箱 -->
+  <div class="pc-display">
+    <div class="pc-title">你的专属台式机</div>
+    <div class="pc-subtitle">🖱 左键拖拽旋转 · 滚轮缩放 · 指向配件查看详情</div>
+    <div class="case-3d-container" id="case3D">
+      <div class="case-loading">⏳ 加载中...</div>
+      <div id="compLabels"></div>
+      <button class="btn-reset-view" id="btnResetView" title="返回全景">↩ 返回全景</button>
+    </div>
+  </div>
+
+  <!-- 右侧：选配 + 详情面板 -->
+  <div class="right-panel">
+    <div class="picker-panel" id="pickerPanel"></div>
+    <div class="detail-panel" id="detailPanel">
+    <div class="panel-placeholder" id="panelPlaceholder">
+      <div class="placeholder-icon">🖱️</div>
+      <h3>将鼠标指向机箱中的配件</h3>
+      <p>指向配件的部位会高亮放大<br>点击查看详细介绍和在售列表</p>
+    </div>
+  </div>
+  </div>
+
+</div>
+
+<!-- 底部总览栏 -->
+<div class="build-summary" id="buildSummary">
+  <div class="summary-parts" id="summaryParts"></div>
+  <button class="btn-score" id="btnScore" disabled>📊 鲁大师预估跑分</button>
+  <div class="summary-total">总计：<span id="summaryTotal">¥0</span></div>
+</div>
+
+<!-- 跑分弹窗 -->
+<div class="modal-overlay" id="scoreModal" style="display:none;">
+  <div class="modal">
+    <h2>📊 鲁大师性能预估</h2>
+    <div class="score-circle">
+      <div class="score-inner"><span id="scoreNum">0</span><small>万分</small></div>
+    </div>
+    <div class="score-level" id="scoreLevel"></div>
+    <div class="score-comment" id="scoreComment"></div>
+    <div class="score-breakdown" id="scoreBreakdown"></div>
+    <button class="btn-close" onclick="document.getElementById('scoreModal').style.display='none'">关闭</button>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./js/lib/three.module.js"
+  }
+}
+</script>
+<script src="js/data.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

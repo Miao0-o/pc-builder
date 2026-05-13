@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 上门组装 & 快递服务</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html">互动装机</a>
+    <a href="recommend.html">一键推荐</a>
+    <a href="service.html" class="active">上门组装 / 快递</a>
+  </div>
+  <div class="nav-total">📞 客服热线：400-888-6666</div>
+</nav>
+
+<div class="service-page">
+  <h1>🛠️ 一步到位 · 送装服务</h1>
+  <p class="service-subtitle">配件买好了不知道怎么装？交给我们！专业师傅上门，或快递配件我们代装</p>
+
+  <!-- 上门组装 -->
+  <div class="service-card">
+    <h3>🏠 上门组装服务</h3>
+    <div class="service-row">
+      <div>
+        <div class="service-name">基础装机（1小时内）</div>
+        <div class="service-desc">配件安装、走线整理、开机点亮、系统安装</div>
+      </div>
+      <div class="service-price">¥199</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">高级装机（2小时内）</div>
+        <div class="service-desc">含基础装机 + 理线大师 + RGB灯效调校 + 系统优化</div>
+      </div>
+      <div class="service-price">¥349</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">尊享装机（不限时）</div>
+        <div class="service-desc">含高级装机 + 超频调校 + 压力测试 + 跑分报告 + 30天技术支持</div>
+      </div>
+      <div class="service-price">¥599</div>
+    </div>
+    <div class="service-row" style="border-top:1px solid var(--accent);padding-top:16px;">
+      <div>
+        <div class="service-name">🚀 加急上门（2小时到达）</div>
+        <div class="service-desc">在以上服务基础上加收加急费</div>
+      </div>
+      <div class="service-price">+¥149</div>
+    </div>
+  </div>
+
+  <!-- 快递代装 -->
+  <div class="service-card">
+    <h3>📦 快递配件 · 我们代装 · 装好寄回</h3>
+    <div class="service-row">
+      <div>
+        <div class="service-name">标准快递寄送</div>
+        <div class="service-desc">你把配件寄过来 → 我们专业组装 → 整机测试 → 打包寄回（全程约5-7天）</div>
+      </div>
+      <div class="service-price">¥299</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">顺丰特快来回</div>
+        <div class="service-desc">顺丰上门取件 → 加急装机 → 顺丰寄回（全程约3-4天）</div>
+      </div>
+      <div class="service-price">¥499</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">VIP专车护送</div>
+        <div class="service-desc">同城专车取送 + 当天装机 + 当天送回 + 全程录像 + 保险</div>
+      </div>
+      <div class="service-price">¥999</div>
+    </div>
+  </div>
+
+  <!-- 纯快递 -->
+  <div class="service-card">
+    <h3>🚚 国内快递（仅配送，不含组装）</h3>
+    <div class="service-row">
+      <div>
+        <div class="service-name">标准快递 · 全国包邮</div>
+        <div class="service-desc">中通/圆通/韵达 随机发，3-5天送达</div>
+      </div>
+      <div class="service-price">¥0</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">顺丰标快</div>
+        <div class="service-desc">全国1-3天送达，含保价</div>
+      </div>
+      <div class="service-price">¥39</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">顺丰特快 · 次日达</div>
+        <div class="service-desc">主要城市次日18:00前送达，含保价</div>
+      </div>
+      <div class="service-price">¥69</div>
+    </div>
+    <div class="service-row">
+      <div>
+        <div class="service-name">京东快递 · 211限时达</div>
+        <div class="service-desc">指定城市上午买下午到，含保价</div>
+      </div>
+      <div class="service-price">¥59</div>
+    </div>
+  </div>
+
+  <!-- 服务覆盖 -->
+  <div class="service-card">
+    <h3>📍 服务覆盖范围</h3>
+    <div class="service-row">
+      <div class="service-name">上门装机覆盖城市</div>
+      <div style="color:var(--accent);font-weight:600;">全国 300+ 城市</div>
+    </div>
+    <div class="service-row">
+      <div class="service-name">一线城市（北上广深）</div>
+      <div style="color:var(--accent);">最快1小时上门</div>
+    </div>
+    <div class="service-row">
+      <div class="service-name">新一线/二线城市</div>
+      <div style="color:var(--accent);">当天预约当天上门</div>
+    </div>
+    <div class="service-row">
+      <div class="service-name">其他城市</div>
+      <div style="color:var(--text-muted);">提前1天预约</div>
+    </div>
+  </div>
+
+  <div class="service-note">
+    💡 <strong>温馨提示：</strong><br>
+    · 上门装机的师傅均经过专业培训，持证上岗<br>
+    · 请确保购买的所有配件齐全，如需代买配件请提前联系客服<br>
+    · 快递代装服务请妥善包装配件，贵重物品建议保价<br>
+    · 整机组装完成后提供30天售后保障，装机问题免费返修<br>
+    · 客服热线：400-888-6666（9:00-21:00）<br>
+    · 也可添加微信：PCmaster666 在线咨询
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
