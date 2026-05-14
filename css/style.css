@@ -365,6 +365,8 @@ body {
 .buy-link.jd:hover { border-color: #e4393c; background: rgba(228,57,60,0.1); }
 .buy-link.tb { color: #ff5000; border-color: rgba(255,80,0,0.3); }
 .buy-link.tb:hover { border-color: #ff5000; background: rgba(255,80,0,0.1); }
+.buy-link.pdd { color: #3b7dd8; border-color: rgba(59,125,216,0.3); }
+.buy-link.pdd:hover { border-color: #3b7dd8; background: rgba(59,125,216,0.1); }
 
 .choose-badge {
   position: absolute; top: 8px; right: 12px;
