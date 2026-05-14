@@ -6,9 +6,7 @@
 <title>装机大师 - 旧机自助估价</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
-<canvas id="particleCanvas"></canvas>
+<body class="tradein-body">
 
 <nav class="nav">
   <div class="nav-logo">🖥 装机大师</div>
@@ -19,7 +17,6 @@
     <div class="nav-dropdown">
       <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
       <div class="nav-dropdown-menu">
-        <a href="booking.html">📅 同城预约</a>
         <a href="trade-in.html" class="active">♻️ 旧机估价</a>
         <a href="support.html">🔧 售后工单</a>
       </div>
@@ -28,42 +25,139 @@
   <div class="nav-total">💡 旧机折价，换新更划算</div>
 </nav>
 
-<div class="tradein-page">
-  <h1>♻️ 旧机自助估价</h1>
-  <p class="tradein-subtitle">勾选你的旧配件并选择成色，立即算出回收价格</p>
+<div class="tradein-page-light">
 
-  <div class="tradein-cards" id="tradeinCards"></div>
+  <!-- 顶部标题 -->
+  <div class="til-hero">
+    <h1>旧机在线一键估价</h1>
+    <p>闲置手机专业回收、在线自助估价、价格透明</p>
+  </div>
 
-  <div class="tradein-summary" id="tradeinSummary">
-    <div class="tis-left">
-      <span class="tis-label">估价合计</span>
-      <span class="tis-total">¥<span id="tisTotal">0</span></span>
-      <span class="tis-count" id="tisCount">未选配件</span>
+  <!-- 核心左右分栏 -->
+  <div class="til-main">
+    <!-- 左栏：分步表单 -->
+    <div class="til-form-card">
+      <!-- Step 1: 设备品类 -->
+      <div class="til-step">
+        <div class="til-step-num">1</div>
+        <div class="til-step-content">
+          <div class="til-step-title">选择设备品类</div>
+          <div class="til-option-row" id="deviceTypeGroup"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: 品牌 → 型号 → 内存 -->
+      <div class="til-step" id="stepBrand" style="display:none;">
+        <div class="til-step-num">2</div>
+        <div class="til-step-content">
+          <div class="til-step-title">选择品牌 / 型号 / 版本</div>
+          <div class="til-select-row">
+            <select class="til-select" id="brandSelect" disabled><option value="">品牌</option></select>
+            <select class="til-select" id="modelSelect" disabled><option value="">型号</option></select>
+            <select class="til-select" id="storageSelect" disabled><option value="">内存版本</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: 外观成色 -->
+      <div class="til-step" id="stepCondition" style="display:none;">
+        <div class="til-step-num">3</div>
+        <div class="til-step-content">
+          <div class="til-step-title">外观成色</div>
+          <div class="til-option-row" id="conditionGroup"></div>
+        </div>
+      </div>
+
+      <!-- Step 4: 功能状态 -->
+      <div class="til-step" id="stepFunctional" style="display:none;">
+        <div class="til-step-num">4</div>
+        <div class="til-step-content">
+          <div class="til-step-title">功能状态</div>
+          <div class="til-func-grid" id="functionalGroup"></div>
+        </div>
+      </div>
     </div>
-    <div class="tis-right">
-      <button class="btn-tradein-apply" id="btnApply" disabled>💰 应用为折扣</button>
-      <button class="btn-tradein-reset" id="btnReset">🔄 重新估价</button>
+
+    <!-- 右栏：实时估价卡 -->
+    <div class="til-price-col">
+      <div class="til-price-card" id="priceCard">
+        <div class="til-price-label">预估回收价</div>
+        <div class="til-price-value">￥<span id="priceNum">0</span></div>
+        <div class="til-price-note">价格有效期至今日 24:00 · 免费上门回收</div>
+        <button class="til-btn-primary" id="btnRecycle" disabled>立即预约回收</button>
+        <div class="til-price-detail" id="priceDetail"></div>
+      </div>
+
+      <!-- 已有抵扣提示 -->
+      <div class="til-discount-card" id="discountCard" style="display:none;">
+        <div class="til-discount-label">💰 已有旧机抵扣金</div>
+        <div class="til-discount-amount">￥<span id="discountAmt">0</span></div>
+        <button class="til-btn-outline" id="btnApplyDiscount">应用到新机配置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部优势条 -->
+  <div class="til-trust-bar">
+    <div class="til-trust-item">
+      <div class="til-trust-icon">📋</div>
+      <div class="til-trust-text">价格透明</div>
+    </div>
+    <div class="til-trust-item">
+      <div class="til-trust-icon">🚚</div>
+      <div class="til-trust-text">免费上门</div>
+    </div>
+    <div class="til-trust-item">
+      <div class="til-trust-icon">🔍</div>
+      <div class="til-trust-text">专业质检</div>
+    </div>
+    <div class="til-trust-item">
+      <div class="til-trust-icon">⚡</div>
+      <div class="til-trust-text">快速回款</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 预约回收弹窗 -->
+<div class="til-modal-overlay" id="recycleModal" style="display:none;">
+  <div class="til-modal">
+    <h2>📦 预约上门回收</h2>
+    <div class="til-modal-body">
+      <div class="til-modal-row"><span class="til-modal-label">回收机型</span><span id="rmDevice">-</span></div>
+      <div class="til-modal-row"><span class="til-modal-label">预估价格</span><strong style="font-size:20px;">￥<span id="rmPrice">0</span></strong></div>
+      <input type="text" class="til-input" id="rmName" placeholder="您的姓名" maxlength="20">
+      <input type="tel" class="til-input" id="rmPhone" placeholder="手机号码" maxlength="11">
+      <input type="text" class="til-input" id="rmAddress" placeholder="取件地址" maxlength="200">
+      <input type="date" class="til-input" id="rmDate">
+      <select class="til-select" id="rmTimeSlot" style="width:100%;">
+        <option value="">选择上门时段</option>
+        <option value="morning">上午 9:00-12:00</option>
+        <option value="afternoon">下午 13:00-17:00</option>
+        <option value="evening">晚间 17:00-19:00</option>
+      </select>
+    </div>
+    <div class="til-modal-actions">
+      <button class="til-btn-primary" id="btnConfirmRecycle">确认预约</button>
+      <button class="til-btn-outline" onclick="document.getElementById('recycleModal').style.display='none'">取消</button>
     </div>
   </div>
 </div>
 
 <!-- 折扣应用弹窗 -->
-<div class="modal-overlay" id="discountModal" style="display:none;">
-  <div class="modal">
+<div class="til-modal-overlay" id="discountModal" style="display:none;">
+  <div class="til-modal">
     <h2>💰 旧机抵扣已保存</h2>
-    <p style="color:var(--text-muted); margin:12px 0;">
-      您的旧机估价 <strong style="color:var(--accent);font-size:20px;">¥<span id="discountAmount">0</span></strong> 已记录
-    </p>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">现在去哪里选新机？</p>
-    <div style="display:flex;gap:12px;justify-content:center;">
-      <a href="recommend.html" class="btn-booking-submit" style="flex:1;text-decoration:none;text-align:center;">🎯 一键推荐</a>
-      <a href="index.html" class="btn-booking-submit" style="flex:1;text-decoration:none;text-align:center;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🖥 互动装机</a>
+    <p style="color:#666;margin:12px 0;">您的旧机估价 <strong style="color:#111;font-size:20px;">￥<span id="dmAmount">0</span></strong> 已记录</p>
+    <p style="font-size:13px;color:#666;margin-bottom:20px;">抵扣金将自动应用到新机配置中</p>
+    <div class="til-modal-actions">
+      <a href="recommend.html" class="til-btn-primary" style="text-decoration:none;text-align:center;">🎯 一键推荐配置</a>
+      <a href="index.html" class="til-btn-outline" style="text-decoration:none;text-align:center;">🖥 互动装机选配</a>
     </div>
-    <button class="btn-close" onclick="document.getElementById('discountModal').style.display='none'" style="margin-top:16px;">关闭</button>
+    <button class="til-btn-outline" onclick="document.getElementById('discountModal').style.display='none'" style="margin-top:12px;width:100%;">关闭</button>
   </div>
 </div>
 
-<script src="js/data.js"></script>
 <script src="js/tradein.js"></script>
 <script src="js/chat.js"></script>
 </body>

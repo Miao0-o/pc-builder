@@ -9,9 +9,15 @@
   // ========== DOM 注入 ==========
   const fab = document.createElement('button');
   fab.className = 'chat-fab';
-  fab.innerHTML = '💬';
-  fab.title = '装机客服';
+  fab.innerHTML = '😊';
+  fab.title = '咨询问题点我试试';
   document.body.appendChild(fab);
+
+  // tooltip 气泡
+  const tooltip = document.createElement('span');
+  tooltip.className = 'chat-tooltip';
+  tooltip.textContent = '咨询问题点我试试';
+  fab.appendChild(tooltip);
 
   const panel = document.createElement('div');
   panel.className = 'chat-panel';
@@ -22,7 +28,7 @@
     </div>
     <div class="chat-messages" id="chatMessages">
       <div class="chat-bubble chat-bubble-bot">
-        <div class="chat-bubble-text">你好！我是装机小助手 🤖<br>可以帮你：<br>· 估算装机预算<br>· 推荐配件搭配<br>· 解答硬件问题<br><br>上传你喜欢的装机效果图，我帮你预估类似配置的价格！</div>
+        <div class="chat-bubble-text">你好！我是装机小助手 😊<br>可以帮你：<br>· 估算装机预算<br>· 推荐配件搭配<br>· 解答硬件问题<br>· 旧机估价回收<br><br>输入<strong>「转人工」</strong>可转接真人客服<br>上传装机效果图可预估配置价格</div>
       </div>
     </div>
     <div class="chat-preview" id="chatPreview" style="display:none;">
@@ -146,10 +152,13 @@
     if (msg.includes('售后') || msg.includes('维修') || msg.includes('故障') || msg.includes('坏了') || msg.includes('清灰')) {
       return '如需售后维保：<br><br>· 🔧 硬件故障诊断维修<br>· 🧹 定期清灰保养<br>· ⬆️ 配置升级（加内存、换显卡等）<br><br>请去 <a href="support.html" style="color:#fff;">售后工单</a> 提交申请，我们会尽快安排师傅上门！';
     }
+    if (msg.includes('转人工') || msg.includes('人工客服') || msg.includes('真人')) {
+      return '正在为您转接人工客服...\n\n👤 <strong>客服小林</strong> 已接入对话\n\n您好！我是装机大师的客服专员，请问有什么可以帮您的？\n\n· 如需预约上门装机，请提供您的城市和联系方式\n· 如需售后维修，请描述具体故障现象\n· 如需咨询配置，请告诉我预算和用途\n\n客服在线时间：9:00 - 21:00';
+    }
     if (msg.includes('旧机') || msg.includes('回收') || msg.includes('折价') || msg.includes('以旧换新') || msg.includes('trade')) {
       return '我们有旧机回收估价服务！<br><br>勾选你的旧机配件和成色，立即计算出回收价格。回收金可以直接抵扣新机费用。<br><br>去 <a href="trade-in.html" style="color:#fff;">旧机估价</a> 看看吧！';
     }
-    return '感谢咨询！我是装机小助手，可以帮你：<br><br>· 💰 估算装机预算<br>· 🎮 推荐游戏/办公配置<br>· 🔧 解答硬件选购问题<br>· 📅 预约上门装机<br>· ♻️ 旧机回收估价<br><br>或者上传你喜欢的装机效果图，我帮你预估价格！';
+    return '感谢咨询！我是装机小助手，可以帮你：<br><br>· 💰 估算装机预算<br>· 🎮 推荐游戏/办公配置<br>· 🔧 解答硬件选购问题<br>· ♻️ 旧机回收估价<br><br>输入<strong>「转人工」</strong>转接真人客服<br>或上传装机效果图预估价格';
   }
 
   // ========== 发送消息 ==========

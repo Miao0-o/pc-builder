@@ -747,6 +747,17 @@ body {
   animation: chatPulse 3s ease-in-out infinite;
 }
 .chat-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(255,255,255,0.12); }
+.chat-fab .chat-tooltip {
+  position: absolute; right: 64px; top: 50%; transform: translateY(-50%);
+  background: #111; color: #fff; padding: 8px 14px; border-radius: 8px;
+  font-size: 12px; white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity 0.25s;
+}
+.chat-fab .chat-tooltip::after {
+  content: ''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+  border: 6px solid transparent; border-left-color: #111;
+}
+.chat-fab:hover .chat-tooltip { opacity: 1; }
 @keyframes chatPulse {
   0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
   50% { box-shadow: 0 4px 28px rgba(255,255,255,0.15); }
@@ -832,19 +843,7 @@ body {
   .chat-fab { bottom: 18px; right: 18px; width: 48px; height: 48px; font-size: 20px; }
 }
 
-/* ========== 同城预约页 ========== */
-.booking-page {
-  max-width: 900px; margin: 0 auto; padding: 40px 24px 100px; position: relative; z-index: 1;
-}
-.booking-page h1 { text-align: center; font-size: 28px; margin-bottom: 6px; }
-.booking-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 32px; }
-.booking-layout { display: grid; grid-template-columns: 1fr 360px; gap: 24px; }
-.booking-form-card, .booking-history-card {
-  background: var(--card-bg); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px;
-}
-.booking-form-card h3, .booking-history-card h3 { margin-bottom: 20px; font-size: 17px; }
-
+/* ========== 通用表单组件 (support页面复用) ========== */
 .form-group { margin-bottom: 18px; }
 .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
 .form-row { display: flex; gap: 10px; }
@@ -860,35 +859,6 @@ body {
   display: flex !important; align-items: center; gap: 8px; cursor: pointer;
   font-size: 14px !important; color: var(--text) !important;
 }
-
-.service-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.type-card { cursor: pointer; }
-.type-card input { display: none; }
-.type-card-inner {
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px 10px; text-align: center; transition: var(--transition);
-}
-.type-card:hover .type-card-inner { border-color: var(--accent-dim); }
-.type-card.selected .type-card-inner {
-  border-color: var(--accent); background: var(--panel-bg);
-  box-shadow: 0 0 0 1px var(--accent);
-}
-.type-card-icon { font-size: 28px; margin-bottom: 6px; }
-.type-card-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.type-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
-.type-card-price { font-size: 18px; font-weight: 800; color: var(--accent); margin-top: 6px; }
-
-.time-slot-group { display: flex; gap: 8px; }
-.time-slot {
-  padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border);
-  background: var(--bg); color: var(--text-muted); cursor: pointer;
-  font-size: 13px; transition: var(--transition);
-}
-.time-slot:hover { border-color: var(--accent-dim); color: var(--text); }
-.time-slot.active {
-  background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600;
-}
-
 .btn-booking-submit {
   width: 100%; padding: 14px; border-radius: var(--radius); border: none;
   background: linear-gradient(135deg, var(--text), var(--accent-dim));
@@ -896,110 +866,162 @@ body {
   transition: var(--transition);
 }
 .btn-booking-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-
 .form-msg { margin-bottom: 10px; font-size: 13px; min-height: 20px; }
 .form-msg.error { color: #ff6666; }
 .form-msg.success { color: #66ff99; }
-
-.booking-history-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; }
 .booking-empty { text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 14px; }
-.booking-history-item {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  padding: 14px; gap: 12px;
+
+/* ========== 旧机估价页 (极简黑白风) ========== */
+.tradein-body { background: #FFFFFF; }
+.tradein-page-light {
+  max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 1;
 }
-.bhi-left { flex: 1; min-width: 0; }
-.bhi-type { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-.bhi-info { font-size: 12px; color: var(--text-muted); }
-.bhi-addr { font-size: 12px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bhi-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-.bhi-status { font-size: 11px; padding: 3px 10px; border-radius: 10px; font-weight: 600; }
-.bhi-status.status-active { background: rgba(102,255,153,0.1); color: #66ff99; }
-.bhi-status.status-done { background: rgba(255,255,255,0.06); color: var(--text-muted); }
-.bhi-cancel {
-  font-size: 11px; padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border);
-  background: none; color: var(--text-muted); cursor: pointer; transition: var(--transition);
+
+/* 顶部标题 */
+.til-hero { text-align: center; padding: 40px 0 32px; }
+.til-hero h1 { font-size: 32px; font-weight: 800; color: #111; letter-spacing: 1px; margin-bottom: 8px; }
+.til-hero p { font-size: 15px; color: #666; }
+
+/* 左右分栏 */
+.til-main { display: grid; grid-template-columns: 1fr 360px; gap: 32px; align-items: start; }
+
+/* 左栏表单卡片 */
+.til-form-card {
+  background: #F5F5F5; border: 1px solid #E5E5E5; border-radius: 16px;
+  padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
-.bhi-cancel:hover { color: #ff6666; border-color: #ff6666; }
+
+/* 步骤 */
+.til-step { display: flex; gap: 16px; margin-bottom: 28px; }
+.til-step:last-child { margin-bottom: 0; }
+.til-step-num {
+  width: 28px; height: 28px; border-radius: 50%; background: #111; color: #fff;
+  font-size: 13px; font-weight: 700; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.til-step-title { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 10px; }
+.til-step-content { flex: 1; min-width: 0; }
+
+/* 选项按钮 */
+.til-option-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.til-opt {
+  padding: 12px 20px; border-radius: 12px; border: 1.5px solid #E5E5E5;
+  background: #fff; color: #111; font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s ease; text-align: left;
+  white-space: nowrap;
+}
+.til-opt:hover { border-color: #999; background: #FAFAFA; }
+.til-opt.selected { border-color: #111; background: #F5F5F5; font-weight: 700; }
+.til-opt-title { font-size: 14px; font-weight: 600; }
+.til-opt-desc { font-size: 11px; color: #999; margin-top: 2px; }
+
+/* 下拉选择 */
+.til-select-row { display: flex; gap: 10px; }
+.til-select {
+  flex: 1; padding: 10px 14px; border-radius: 10px; border: 1.5px solid #E5E5E5;
+  background: #fff; color: #111; font-size: 14px; outline: none;
+  transition: border-color 0.2s; -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23666' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.til-select:focus { border-color: #111; }
+.til-select:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* 功能状态网格 */
+.til-func-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.til-func-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border-radius: 10px; border: 1.5px solid #E5E5E5; background: #fff;
+  cursor: pointer; transition: all 0.2s; font-size: 13px; color: #111;
+}
+.til-func-item:hover { border-color: #999; }
+.til-func-item input { display: none; }
+.til-func-check {
+  width: 18px; height: 18px; border-radius: 5px; border: 2px solid #E5E5E5;
+  flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center;
+  justify-content: center;
+}
+.til-func-item.checked { border-color: #111; background: #F5F5F5; }
+.til-func-item.checked .til-func-check { background: #111; border-color: #111; }
+.til-func-item.checked .til-func-check::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+
+/* 右栏估价卡 */
+.til-price-col { position: sticky; top: 90px; }
+.til-price-card {
+  background: #fff; border: 2px solid #111; border-radius: 16px;
+  padding: 32px 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.til-price-label { font-size: 13px; color: #666; margin-bottom: 8px; }
+.til-price-value { font-size: 40px; font-weight: 900; color: #111; letter-spacing: -1px; margin-bottom: 8px; }
+.til-price-note { font-size: 12px; color: #999; margin-bottom: 20px; line-height: 1.5; }
+.til-btn-primary {
+  width: 100%; padding: 14px; border-radius: 12px; border: none;
+  background: #111; color: #fff; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+}
+.til-btn-primary:hover { background: #333; transform: translateY(-1px); }
+.til-btn-primary:disabled { background: #E5E5E5; color: #999; cursor: not-allowed; transform: none; }
+.til-btn-outline {
+  display: block; padding: 12px 20px; border-radius: 12px; border: 1.5px solid #E5E5E5;
+  background: #fff; color: #111; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.til-btn-outline:hover { border-color: #111; background: #FAFAFA; }
+.til-price-detail { margin-top: 16px; text-align: left; }
+.til-detail-row {
+  display: flex; justify-content: space-between; padding: 4px 0;
+  font-size: 12px; color: #666;
+}
+.til-detail-row.penalty { color: #999; }
+.til-detail-row.total { border-top: 1px solid #EEE; margin-top: 4px; padding-top: 6px;
+  font-weight: 700; color: #111; font-size: 13px; }
+
+/* 已有抵扣卡 */
+.til-discount-card {
+  margin-top: 16px; background: #F5F5F5; border: 1px solid #E5E5E5;
+  border-radius: 12px; padding: 20px; text-align: center;
+}
+.til-discount-label { font-size: 13px; color: #666; margin-bottom: 4px; }
+.til-discount-amount { font-size: 28px; font-weight: 800; color: #111; margin-bottom: 12px; }
+
+/* 底部优势条 */
+.til-trust-bar {
+  display: flex; justify-content: center; gap: 60px; padding: 40px 0 20px;
+  border-top: 1px solid #F0F0F0; margin-top: 48px;
+}
+.til-trust-item { display: flex; align-items: center; gap: 10px; }
+.til-trust-icon { font-size: 22px; }
+.til-trust-text { font-size: 14px; color: #666; font-weight: 500; }
+
+/* 弹窗 */
+.til-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center; z-index: 300;
+}
+.til-modal {
+  background: #fff; border-radius: 16px; padding: 32px; max-width: 440px;
+  width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.til-modal h2 { font-size: 20px; color: #111; margin-bottom: 16px; text-align: center; }
+.til-modal-body { display: flex; flex-direction: column; gap: 10px; }
+.til-modal-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666; }
+.til-modal-label { color: #999; }
+.til-input {
+  padding: 10px 14px; border-radius: 10px; border: 1.5px solid #E5E5E5;
+  background: #fff; color: #111; font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+}
+.til-input:focus { border-color: #111; }
+.til-modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+.til-modal-actions .til-btn-primary,
+.til-modal-actions .til-btn-outline { flex: 1; text-align: center; }
 
 @media (max-width: 768px) {
-  .booking-layout { grid-template-columns: 1fr; }
-  .service-type-grid { grid-template-columns: 1fr; }
-}
-
-/* ========== 旧机估价页 ========== */
-.tradein-page {
-  max-width: 800px; margin: 0 auto; padding: 40px 24px 120px; position: relative; z-index: 1;
-}
-.tradein-page h1 { text-align: center; font-size: 28px; margin-bottom: 6px; }
-.tradein-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 32px; }
-.tradein-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
-.tradein-item {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--card-bg); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px 18px;
-  transition: var(--transition);
-}
-.tradein-item:has(input:checked) { border-color: var(--accent-dim); }
-.tradein-check { cursor: pointer; display: flex; align-items: center; flex-shrink: 0; }
-.tradein-check input { display: none; }
-.tradein-check-mark {
-  width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  transition: var(--transition); flex-shrink: 0;
-}
-.tradein-check input:checked + .tradein-check-mark {
-  background: var(--accent); border-color: var(--accent);
-}
-.tradein-check input:checked + .tradein-check-mark::after {
-  content: '✓'; color: #000; font-size: 12px; font-weight: 700;
-}
-.tradein-info { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
-.tradein-icon { font-size: 24px; }
-.tradein-name { font-size: 14px; font-weight: 600; }
-.tradein-base { font-size: 11px; color: var(--text-muted); }
-.tradein-condition {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text);
-  font-size: 13px; outline: none; transition: var(--transition);
-  min-width: 150px;
-}
-.tradein-condition:focus { border-color: var(--accent-dim); }
-.tradein-condition:disabled { opacity: 0.3; cursor: not-allowed; }
-.tradein-estimate {
-  font-size: 16px; font-weight: 700; min-width: 80px; text-align: right;
-  color: var(--text-muted);
-}
-.tradein-estimate.active { color: var(--accent); }
-.tradein-summary {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
-  background: rgba(13,13,13,0.96); backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border);
-  padding: 14px 24px; display: flex; justify-content: space-between; align-items: center;
-  max-width: 900px; margin: 0 auto; border-radius: var(--radius) var(--radius) 0 0;
-}
-.tis-left { display: flex; align-items: baseline; gap: 12px; }
-.tis-label { font-size: 13px; color: var(--text-muted); }
-.tis-total { font-size: 28px; font-weight: 800; color: var(--accent); }
-.tis-count { font-size: 12px; color: var(--text-muted); }
-.tis-right { display: flex; gap: 10px; }
-.btn-tradein-apply, .btn-tradein-reset {
-  padding: 10px 24px; border-radius: var(--radius); border: 1px solid var(--border);
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition);
-}
-.btn-tradein-apply {
-  background: linear-gradient(135deg, var(--text), var(--accent-dim)); color: #000; border: none;
-}
-.btn-tradein-apply:hover { opacity: 0.88; }
-.btn-tradein-apply:disabled { opacity: 0.3; cursor: not-allowed; }
-.btn-tradein-reset { background: var(--card-bg); color: var(--text-muted); }
-.btn-tradein-reset:hover { color: var(--text); border-color: var(--accent-dim); }
-
-@media (max-width: 600px) {
-  .tradein-item { flex-wrap: wrap; }
-  .tradein-summary { flex-direction: column; gap: 10px; padding: 12px 16px; }
-  .tis-right { width: 100%; }
-  .btn-tradein-apply, .btn-tradein-reset { flex: 1; }
+  .til-main { grid-template-columns: 1fr; }
+  .til-select-row { flex-direction: column; }
+  .til-func-grid { grid-template-columns: 1fr; }
+  .til-trust-bar { gap: 24px; flex-wrap: wrap; }
+  .til-price-col { position: static; }
 }
 
 /* ========== 售后工单页 ========== */
