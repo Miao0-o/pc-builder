@@ -1,160 +1,127 @@
 // ============================================================
-// 装机大师 - 旧机在线估价 (极简黑白风)
+// 装机大师 - 旧机在线估价 (极简黑白风 · 电脑专用)
 // ============================================================
 const STORAGE_KEY = 'pcBuilder_tradeinDiscount';
 
-// ======== 设备数据 ========
-const DEVICE_DATA = {
-  phone: {
-    name: '手机', icon: '📱',
-    brands: {
-      'Apple': {
-        models: {
-          'iPhone 16 Pro Max': { basePrice: 6800, storage: {'256GB':0,'512GB':800,'1TB':1600} },
-          'iPhone 16 Pro':     { basePrice: 5200, storage: {'128GB':0,'256GB':400,'512GB':800,'1TB':1400} },
-          'iPhone 16':         { basePrice: 3800, storage: {'128GB':0,'256GB':400,'512GB':800} },
-          'iPhone 15 Pro Max': { basePrice: 4800, storage: {'256GB':0,'512GB':700,'1TB':1400} },
-          'iPhone 15 Pro':     { basePrice: 3800, storage: {'128GB':0,'256GB':400,'512GB':700} },
-          'iPhone 15':         { basePrice: 2500, storage: {'128GB':0,'256GB':350} },
-          'iPhone 14 Pro Max': { basePrice: 3500, storage: {'128GB':0,'256GB':350,'512GB':650} },
-          'iPhone 14 Pro':     { basePrice: 2800, storage: {'128GB':0,'256GB':350} },
-          'iPhone 14':         { basePrice: 1800, storage: {'128GB':0,'256GB':300} },
-          'iPhone 13':         { basePrice: 1200, storage: {'128GB':0,'256GB':250} },
-          'iPhone SE 3':       { basePrice: 700,  storage: {'64GB':0,'128GB':150} },
-        }
-      },
-      'Samsung': {
-        models: {
-          'Galaxy S25 Ultra':   { basePrice: 5200, storage: {'256GB':0,'512GB':600,'1TB':1200} },
-          'Galaxy S25+':        { basePrice: 3800, storage: {'256GB':0,'512GB':600} },
-          'Galaxy S25':         { basePrice: 2800, storage: {'128GB':0,'256GB':300} },
-          'Galaxy S24 Ultra':   { basePrice: 3800, storage: {'256GB':0,'512GB':550} },
-          'Galaxy S24':         { basePrice: 2000, storage: {'128GB':0,'256GB':280} },
-          'Galaxy Z Fold 5':    { basePrice: 4500, storage: {'256GB':0,'512GB':600} },
-          'Galaxy Z Flip 5':    { basePrice: 2200, storage: {'256GB':0,'512GB':500} },
-        }
-      },
-      'Huawei': {
-        models: {
-          'Mate 70 Pro+':   { basePrice: 4800, storage: {'512GB':0,'1TB':800} },
-          'Mate 70 Pro':    { basePrice: 3800, storage: {'256GB':0,'512GB':500} },
-          'Mate 70':        { basePrice: 2800, storage: {'256GB':0,'512GB':500} },
-          'Pura 70 Ultra':  { basePrice: 4200, storage: {'512GB':0,'1TB':800} },
-          'Pura 70 Pro':    { basePrice: 3200, storage: {'256GB':0,'512GB':450} },
-          'Mate 60 Pro':    { basePrice: 3000, storage: {'256GB':0,'512GB':450} },
-          'nova 13 Pro':    { basePrice: 1500, storage: {'256GB':0,'512GB':300} },
-        }
-      },
-      'Xiaomi': {
-        models: {
-          'Xiaomi 15 Ultra': { basePrice: 3500, storage: {'256GB':0,'512GB':400,'1TB':800} },
-          'Xiaomi 15 Pro':   { basePrice: 2600, storage: {'256GB':0,'512GB':400} },
-          'Xiaomi 15':       { basePrice: 1800, storage: {'256GB':0,'512GB':350} },
-          'Xiaomi 14 Ultra': { basePrice: 2600, storage: {'256GB':0,'512GB':400} },
-          'Redmi K80 Pro':   { basePrice: 1400, storage: {'256GB':0,'512GB':250} },
-          'Redmi Note 14 Pro': { basePrice: 700, storage: {'128GB':0,'256GB':150} },
-        }
-      },
-      'OPPO': {
-        models: {
-          'Find X8 Ultra':   { basePrice: 3000, storage: {'256GB':0,'512GB':400} },
-          'Find X8 Pro':     { basePrice: 2200, storage: {'256GB':0,'512GB':400} },
-          'Find X8':         { basePrice: 1600, storage: {'256GB':0,'512GB':300} },
-          'Reno 14 Pro':     { basePrice: 1200, storage: {'256GB':0,'512GB':250} },
-          'Reno 14':         { basePrice: 800,  storage: {'128GB':0,'256GB':150} },
-        }
-      },
-      'vivo': {
-        models: {
-          'X200 Ultra':   { basePrice: 3200, storage: {'256GB':0,'512GB':400} },
-          'X200 Pro':     { basePrice: 2400, storage: {'256GB':0,'512GB':400} },
-          'X200':         { basePrice: 1800, storage: {'256GB':0,'512GB':300} },
-          'S20 Pro':      { basePrice: 1500, storage: {'256GB':0,'512GB':250} },
-          'S20':          { basePrice: 1000, storage: {'128GB':0,'256GB':180} },
-        }
-      },
-      'Honor': {
-        models: {
-          'Magic 7 Pro':   { basePrice: 2800, storage: {'256GB':0,'512GB':400} },
-          'Magic 7':       { basePrice: 2000, storage: {'256GB':0,'512GB':350} },
-          'Magic V4':      { basePrice: 3800, storage: {'256GB':0,'512GB':500} },
-          'Honor 300 Pro': { basePrice: 1400, storage: {'256GB':0,'512GB':250} },
-          'Honor 300':     { basePrice: 900,  storage: {'128GB':0,'256GB':150} },
-        }
-      },
+// ======== 笔记本估价数据 ========
+const LAPTOP_DATA = {
+  'Apple': {
+    models: {
+      'MacBook Pro 16"':    { tiers:{ 'M4 Max':7500,'M4 Pro':6000,'M3 Max':5200,'M3 Pro':4200,'M2 Max':3800,'M1 Max':2800 } },
+      'MacBook Pro 14"':    { tiers:{ 'M4 Pro':5000,'M4':4000,'M3 Pro':3800,'M3':3000,'M2 Pro':2800,'M2':2200,'M1 Pro':2000 } },
+      'MacBook Air 15"':    { tiers:{ 'M4':3200,'M3':2500,'M2':1800 } },
+      'MacBook Air 13"':    { tiers:{ 'M4':2600,'M3':2000,'M2':1400,'M1':900 } },
     }
   },
-  tablet: {
-    name: '平板', icon: '📋',
-    brands: {
-      'Apple': {
-        models: {
-          'iPad Pro 13" M4':    { basePrice: 5500, storage: {'256GB':0,'512GB':600,'1TB':1200} },
-          'iPad Pro 11" M4':    { basePrice: 4000, storage: {'256GB':0,'512GB':600} },
-          'iPad Air 13" M2':    { basePrice: 3000, storage: {'128GB':0,'256GB':350,'512GB':600} },
-          'iPad Air 11" M2':    { basePrice: 2200, storage: {'128GB':0,'256GB':350} },
-          'iPad 10.9"':         { basePrice: 1200, storage: {'64GB':0,'256GB':300} },
-          'iPad mini 7':        { basePrice: 1800, storage: {'128GB':0,'256GB':300} },
-        }
-      },
-      'Samsung': {
-        models: {
-          'Galaxy Tab S10 Ultra': { basePrice: 4200, storage: {'256GB':0,'512GB':500} },
-          'Galaxy Tab S10+':      { basePrice: 3000, storage: {'256GB':0,'512GB':500} },
-          'Galaxy Tab S10':       { basePrice: 2000, storage: {'128GB':0,'256GB':300} },
-          'Galaxy Tab S9 FE':     { basePrice: 1200, storage: {'128GB':0,'256GB':200} },
-        }
-      },
-      'Huawei': {
-        models: {
-          'MatePad Pro 13.2"': { basePrice: 3000, storage: {'256GB':0,'512GB':400} },
-          'MatePad Pro 11"':   { basePrice: 1800, storage: {'256GB':0,'512GB':350} },
-          'MatePad Air 12"':   { basePrice: 1400, storage: {'128GB':0,'256GB':250} },
-          'MatePad SE 11"':    { basePrice: 600,  storage: {'128GB':0,'256GB':150} },
-        }
-      },
-      'Xiaomi': {
-        models: {
-          'Pad 7 Max 14"': { basePrice: 2200, storage: {'256GB':0,'512GB':350} },
-          'Pad 7 Pro 12.4"': { basePrice: 1400, storage: {'128GB':0,'256GB':250} },
-          'Pad 7 11"': { basePrice: 800, storage: {'128GB':0,'256GB':180} },
-          'Redmi Pad Pro': { basePrice: 500, storage: {'128GB':0,'256GB':120} },
-        }
-      },
-      'Lenovo': {
-        models: {
-          '小新 Pad Pro 12.7"': { basePrice: 900, storage: {'128GB':0,'256GB':150} },
-          '小新 Pad 2024':      { basePrice: 400, storage: {'64GB':0,'128GB':100} },
-          'YOGA Pad Pro':       { basePrice: 1500, storage: {'256GB':0,'512GB':300} },
-        }
-      },
+  'Lenovo': {
+    models: {
+      'ThinkPad X1 Carbon':  { tiers:{ 'Ultra 9':3500,'Ultra 7':2800,'i7-13代':2000,'i7-12代':1500,'i5-13代':1600 } },
+      'ThinkPad T14/T16':    { tiers:{ 'Ultra 7':2200,'i7-13代':1700,'i5-13代':1300,'i7-12代':1200,'i5-12代':900 } },
+      '小新 Pro 16':          { tiers:{ 'Ultra 9+4060':3200,'Ultra 7':2000,'Ultra 5':1600,'R7-7840HS':1400,'i5-13500H':1100 } },
+      '小新 Pro 14':          { tiers:{ 'Ultra 7':1800,'Ultra 5':1400,'R7-7840HS':1200,'i5-13500H':1000 } },
+      '拯救者 Y9000P':        { tiers:{ 'i9-14900HX+4060':4200,'i9+4070':5000,'i7+4060':3500,'i7-13650HX+4060':2800,'R9+4060':3200 } },
+      '拯救者 Y7000P':        { tiers:{ 'i7-14650HX+4060':3000,'i7-13650HX+4060':2500,'i5-13500H+4050':2000 } },
+      'ThinkBook 14+':        { tiers:{ 'Ultra 7':2000,'Ultra 5':1600,'R7-7840H':1400,'i5-13500H':1100 } },
     }
-  }
+  },
+  'Dell': {
+    models: {
+      'XPS 16':       { tiers:{ 'Ultra 9+4070':5000,'Ultra 7+4060':3800,'Ultra 7':3200 } },
+      'XPS 14':       { tiers:{ 'Ultra 7':3000,'Ultra 5':2300 } },
+      '灵越 16 Plus': { tiers:{ 'Ultra 7+4060':3000,'Ultra 5':1800,'i7-13700H':1600,'i5-13500H':1200 } },
+      '灵越 14 Plus': { tiers:{ 'Ultra 7':1800,'Ultra 5':1400,'i7-1360P':1300,'i5-1340P':1000 } },
+    }
+  },
+  'HP': {
+    models: {
+      '暗影精灵 10':  { tiers:{ 'i9+4080':4800,'i9+4070':4000,'i7+4070':3500,'i7+4060':3000,'i5+4050':2000 } },
+      '战99':        { tiers:{ 'Ultra 9+4060':3200,'Ultra 7':2200,'i7+4050':1800,'i5':1400 } },
+      '战66':        { tiers:{ 'Ultra 7':1500,'Ultra 5':1200,'R7-7730U':1100,'R5-7530U':800 } },
+      '星Book Pro 16':{ tiers:{ 'Ultra 7+4060':2800,'Ultra 5':1600,'i7-13700H':1500 } },
+    }
+  },
+  'ASUS': {
+    models: {
+      'ROG 枪神 8':   { tiers:{ 'i9+4080':5500,'i9+4070':4500,'i9+4060':3500 } },
+      'ROG 魔霸':     { tiers:{ 'R9+4070':4000,'R9+4060':3200,'R7+4060':2600 } },
+      '天选 5 Pro':   { tiers:{ 'i9+4070':3500,'i9+4060':2800,'R9+4060':2500,'i7+4060':2200 } },
+      '无畏 Pro 15':  { tiers:{ 'Ultra 9+4060':2600,'Ultra 7':1800,'Ultra 5':1400 } },
+      '灵耀 14':      { tiers:{ 'Ultra 9':2200,'Ultra 7':1700,'Ultra 5':1300 } },
+    }
+  },
+  'Huawei': {
+    models: {
+      'MateBook X Pro': { tiers:{ 'Ultra 9':3500,'Ultra 7':2800,'i7-1360P':1800,'i7-1260P':1400 } },
+      'MateBook 16s':   { tiers:{ 'i9-13900H':2200,'i7-13700H':1700,'i5-13500H':1200 } },
+      'MateBook 14':    { tiers:{ 'Ultra 7':1800,'Ultra 5':1400,'i7-1360P':1300,'i5':900 } },
+      'MateBook D 16':  { tiers:{ 'i7-13700H':1400,'i5-13500H':1000,'i5-12450H':700 } },
+    }
+  },
+  'Honor': {
+    models: {
+      'MagicBook Pro 16': { tiers:{ 'Ultra 7+4060':2500,'Ultra 5':1500,'i7-13700H':1300 } },
+      'MagicBook 14':     { tiers:{ 'Ultra 5':1200,'i5-13500H':900,'R7-7840HS':1000 } },
+      'MagicBook X 14':   { tiers:{ 'i5-12450H':600,'i3':400 } },
+    }
+  },
+  'Acer': {
+    models: {
+      '掠夺者·擎 Neo': { tiers:{ 'i9+4070':3200,'i9+4060':2600,'i7+4060':2200,'i5+4050':1700 } },
+      '暗影骑士·龙':   { tiers:{ 'R9+4060':2400,'R7+4060':2000,'R5+4050':1400 } },
+      '非凡 Go':       { tiers:{ 'Ultra 7':1700,'Ultra 5':1300,'i7-13700H':1200,'i5-13500H':900 } },
+    }
+  },
+  'Microsoft': {
+    models: {
+      'Surface Laptop 6': { tiers:{ 'Ultra 7':2800,'Ultra 5':2100 } },
+      'Surface Laptop 5': { tiers:{ 'i7-1265U':1500,'i5-1245U':1000 } },
+      'Surface Pro 10':   { tiers:{ 'Ultra 7':2800,'Ultra 5':2000 } },
+      'Surface Pro 9':    { tiers:{ 'i7-1265U':1500,'i5-1245U':1100 } },
+    }
+  },
+  'Xiaomi': {
+    models: {
+      'RedmiBook Pro 16': { tiers:{ 'Ultra 7':1700,'Ultra 5':1300,'i7-13700H':1200 } },
+      'RedmiBook Pro 14': { tiers:{ 'Ultra 5':1200,'i5-13500H':900,'i5-12450H':600 } },
+      'Xiaomi Book Pro':  { tiers:{ 'Ultra 7':2000,'Ultra 5':1600 } },
+    }
+  },
 };
 
-// 成色系数
-const CONDITION_OPTS = [
-  { id:'perfect', name:'外观完好', desc:'无任何划痕损伤', factor:1.0 },
-  { id:'scratch', name:'轻微划痕', desc:'屏幕/机身细微划痕', factor:0.85 },
-  { id:'dent',    name:'磕碰凹陷', desc:'边框或背板有磕碰', factor:0.65 },
-  { id:'crack',   name:'屏幕碎裂', desc:'屏幕玻璃破损', factor:0.35 },
-];
+// ======== 台式机逐配件估价 ========
+// 复用 pcComponents 中的配件数据（最低价格作为基准）
+function getDesktopParts() {
+  if (typeof pcComponents === 'undefined') return [];
+  const keys = ['cpu','gpu','motherboard','ram','storage','psu','case','cooler'];
+  const icons = { cpu:'🧠', gpu:'🎮', motherboard:'📋', ram:'📏', storage:'💾', psu:'🔌', case:'🖥️', cooler:'❄️' };
+  return keys.map(key => {
+    const comp = pcComponents[key];
+    if (!comp) return null;
+    return {
+      key, icon: icons[key] || '🔧', name: comp.shortName || comp.name,
+      options: comp.options.map(o => ({ name: o.name, price: o.price }))
+    };
+  }).filter(Boolean);
+}
 
-// 功能状态项
-const FUNCTIONAL_ITEMS = [
-  { id:'noRepair',   label:'无拆修记录',   penalty:0,    failDesc:'' },
-  { id:'noWater',    label:'无进水',        penalty:0,    failDesc:'' },
-  { id:'batteryOk',  label:'电池健康 ≥80%', penalty:0,    failDesc:'' },
-  { id:'allFunc',    label:'所有功能正常',   penalty:0,    failDesc:'' },
+// 成色系数
+const DEPRECIATION = [
+  { id:'like-new', label:'几乎全新', desc:'仅拆封/使用少于3个月', factor:0.85 },
+  { id:'good',     label:'良好',     desc:'正常使用痕迹，1-2年', factor:0.65 },
+  { id:'fair',     label:'一般',     desc:'明显使用痕迹，2-4年', factor:0.45 },
+  { id:'old',      label:'老旧',     desc:'严重磨损，4年以上', factor:0.25 },
 ];
 
 // ======== 状态 ========
 let state = {
   deviceType: null,
-  brand: null, model: null, storage: null,
-  condition: null,
+  // 笔记本
+  laptopBrand: null, laptopModel: null, laptopTier: null,
+  // 台式机
+  desktopParts: {}, // { cpu: {name, price, condition}, gpu: {...}, ... }
+  // 通用
+  overallCondition: null,
   functionalPassed: {},
-  basePrice: 0, storageAddon: 0,
 };
 
 function initTradeinPage() {
@@ -166,121 +133,215 @@ function initTradeinPage() {
 }
 
 function buildDeviceTypeOptions() {
-  const group = document.getElementById('deviceTypeGroup');
-  group.innerHTML = Object.entries(DEVICE_DATA).map(([k,v]) =>
-    `<button class="til-opt" data-type="${k}" onclick="selectDeviceType('${k}')">${v.icon} ${v.name}</button>`
-  ).join('');
+  document.getElementById('deviceTypeGroup').innerHTML = `
+    <button class="til-opt" data-type="desktop" onclick="selectDeviceType('desktop')">🖥️ 台式机</button>
+    <button class="til-opt" data-type="laptop" onclick="selectDeviceType('laptop')">💻 笔记本</button>
+  `;
 }
 
 function buildConditionOptions() {
-  const group = document.getElementById('conditionGroup');
-  group.innerHTML = CONDITION_OPTS.map(c =>
-    `<button class="til-opt" data-cond="${c.id}" onclick="selectCondition('${c.id}')">
-      <div class="til-opt-title">${c.name}</div>
+  document.getElementById('conditionGroup').innerHTML = DEPRECIATION.map(c =>
+    `<button class="til-opt" data-cond="${c.id}" onclick="selectOverallCondition('${c.id}')">
+      <div class="til-opt-title">${c.label}</div>
       <div class="til-opt-desc">${c.desc}</div>
     </button>`
   ).join('');
 }
 
 function buildFunctionalOptions() {
-  const group = document.getElementById('functionalGroup');
-  group.innerHTML = FUNCTIONAL_ITEMS.map(f =>
-    `<label class="til-func-item" id="funcItem-${f.id}">
-      <input type="checkbox" onchange="toggleFunctional('${f.id}', this.checked)">
-      <span class="til-func-check"></span>
-      <span>${f.label}</span>
-    </label>`
-  ).join('');
+  document.getElementById('functionalGroup').innerHTML = `
+    <label class="til-func-item" id="funcItem-normal">
+      <input type="checkbox" onchange="toggleFunctional('normal', this.checked)"><span class="til-func-check"></span><span>可正常开机运行</span>
+    </label>
+    <label class="til-func-item" id="funcItem-screen">
+      <input type="checkbox" onchange="toggleFunctional('screen', this.checked)"><span class="til-func-check"></span><span>屏幕/显示器正常</span>
+    </label>
+    <label class="til-func-item" id="funcItem-noise">
+      <input type="checkbox" onchange="toggleFunctional('noise', this.checked)"><span class="til-func-check"></span><span>无异常噪音/过热</span>
+    </label>
+    <label class="til-func-item" id="funcItem-ports">
+      <input type="checkbox" onchange="toggleFunctional('ports', this.checked)"><span class="til-func-check"></span><span>接口全部可用</span>
+    </label>
+  `;
 }
 
 function selectDeviceType(type) {
   state.deviceType = type;
-  state.brand = state.model = state.storage = null;
-  state.condition = null;
+  state.laptopBrand = state.laptopModel = state.laptopTier = null;
+  state.desktopParts = {};
+  state.overallCondition = null;
   state.functionalPassed = {};
-  state.basePrice = 0; state.storageAddon = 0;
 
-  // 更新选项高亮
-  document.querySelectorAll('#deviceTypeGroup .til-opt').forEach(b => {
-    b.classList.toggle('selected', b.dataset.type === type);
-  });
+  document.querySelectorAll('#deviceTypeGroup .til-opt').forEach(b =>
+    b.classList.toggle('selected', b.dataset.type === type));
 
-  // 构建品牌下拉
-  const data = DEVICE_DATA[type];
-  const brandSel = document.getElementById('brandSelect');
-  brandSel.innerHTML = '<option value="">选择品牌</option>' +
-    Object.keys(data.brands).map(b => `<option value="${b}">${b}</option>`).join('');
-  brandSel.disabled = false;
-  document.getElementById('modelSelect').innerHTML = '<option value="">选择型号</option>';
-  document.getElementById('modelSelect').disabled = true;
-  document.getElementById('storageSelect').innerHTML = '<option value="">内存版本</option>';
-  document.getElementById('storageSelect').disabled = true;
-
-  // 显示后续步骤
   document.getElementById('stepBrand').style.display = '';
   document.getElementById('stepCondition').style.display = 'none';
   document.getElementById('stepFunctional').style.display = 'none';
   resetConditionAndFunctional();
+
+  if (type === 'laptop') buildLaptopStep();
+  else buildDesktopStep();
   updatePrice();
 }
 
+// ======== 笔记本步骤 ========
+function buildLaptopStep() {
+  document.getElementById('stepBrand').querySelector('.til-step-title').textContent = '选择品牌 / 型号 / 配置';
+  const brandSel = document.getElementById('brandSelect');
+  const modelSel = document.getElementById('modelSelect');
+  const storageSel = document.getElementById('storageSelect');
+  brandSel.style.display = ''; modelSel.style.display = ''; storageSel.style.display = '';
+  brandSel.innerHTML = '<option value="">选择品牌</option>' +
+    Object.keys(LAPTOP_DATA).map(b => `<option value="${b}">${b}</option>`).join('');
+  brandSel.disabled = false;
+  document.getElementById('modelSelect').innerHTML = '<option value="">选择型号</option>';
+  document.getElementById('modelSelect').disabled = true;
+  document.getElementById('storageSelect').innerHTML = '<option value="">选择配置</option>';
+  document.getElementById('storageSelect').disabled = true;
+  // 移除台式机多余元素
+  const extra = document.getElementById('storageSelect2');
+  if (extra) extra.remove();
+  const partsDiv = document.getElementById('desktopPartsArea');
+  if (partsDiv) partsDiv.remove();
+}
+
+// ======== 台式机步骤：逐配件选择 ========
+function buildDesktopStep() {
+  document.getElementById('stepBrand').querySelector('.til-step-title').textContent = '选择配件并评估成色';
+  // 隐藏原有下拉
+  document.getElementById('brandSelect').style.display = 'none';
+  document.getElementById('modelSelect').style.display = 'none';
+  document.getElementById('storageSelect').style.display = 'none';
+  document.getElementById('brandSelect').disabled = true;
+  document.getElementById('modelSelect').disabled = true;
+  document.getElementById('storageSelect').disabled = true;
+
+  // 构建配件清单
+  const parts = getDesktopParts();
+  let html = '<div id="desktopPartsArea" class="til-parts-list">';
+  parts.forEach(part => {
+    const cheapest = part.options.reduce((a,b) => a.price < b.price ? a : b, part.options[0]);
+    const prices = [...new Set(part.options.map(o => o.price))].sort((a,b) => a-b);
+    html += `
+      <div class="til-part-row" id="partRow-${part.key}">
+        <label class="til-part-check">
+          <input type="checkbox" data-key="${part.key}" onchange="toggleDesktopPart('${part.key}', this.checked)">
+          <span class="til-part-checkmark"></span>
+        </label>
+        <span class="til-part-icon">${part.icon}</span>
+        <div class="til-part-info">
+          <div class="til-part-name">${part.name}</div>
+          <div class="til-part-base">基准价 ￥${cheapest.price.toLocaleString()} 起</div>
+        </div>
+        <select class="til-select til-part-model" id="partModel-${part.key}" data-key="${part.key}" onchange="updateDesktopPartModel('${part.key}')" disabled style="flex:1;max-width:260px;">
+          <option value="">型号</option>
+          ${part.options.map(o => `<option value="${o.name}" data-price="${o.price}">${o.name}（￥${o.price}）</option>`).join('')}
+        </select>
+        <select class="til-select til-part-cond" id="partCond-${part.key}" data-key="${part.key}" onchange="updateDesktopPartCond('${part.key}')" disabled style="max-width:140px;">
+          <option value="">整体成色</option>
+          ${DEPRECIATION.map(d => `<option value="${d.id}">${d.label}（${(d.factor*100).toFixed(0)}%）</option>`).join('')}
+        </select>
+        <span class="til-part-est" id="partEst-${part.key}">-</span>
+      </div>
+    `;
+  });
+  html += '</div>';
+  document.getElementById('stepBrand').querySelector('.til-step-content').insertAdjacentHTML('beforeend', html);
+}
+
+function toggleDesktopPart(key, checked) {
+  const row = document.getElementById('partRow-'+key);
+  const modelSel = document.getElementById('partModel-'+key);
+  const condSel = document.getElementById('partCond-'+key);
+  if (checked) {
+    row.classList.add('active');
+    modelSel.disabled = false;
+    condSel.disabled = false;
+  } else {
+    row.classList.remove('active');
+    modelSel.disabled = true;
+    condSel.disabled = true;
+    modelSel.value = '';
+    condSel.value = '';
+    delete state.desktopParts[key];
+    document.getElementById('partEst-'+key).textContent = '-';
+  }
+  updatePrice();
+}
+
+function updateDesktopPartModel(key) {
+  const sel = document.getElementById('partModel-'+key);
+  const price = parseInt(sel.selectedOptions[0]?.dataset?.price || '0');
+  const name = sel.value;
+  if (!state.desktopParts[key]) state.desktopParts[key] = {};
+  state.desktopParts[key].name = name;
+  state.desktopParts[key].price = price;
+  // 自动显示成色选择
+  if (name) document.getElementById('partCond-'+key).style.display = '';
+  updatePrice();
+}
+
+function updateDesktopPartCond(key) {
+  const sel = document.getElementById('partCond-'+key);
+  const factor = DEPRECIATION.find(d => d.id === sel.value)?.factor || 1;
+  if (!state.desktopParts[key]) state.desktopParts[key] = {};
+  state.desktopParts[key].condition = sel.value;
+  state.desktopParts[key].factor = factor;
+  updatePrice();
+}
+
+// ======== 笔记本事件 ========
 function bindEvents() {
   document.getElementById('brandSelect').addEventListener('change', function() {
-    state.brand = this.value;
-    state.model = null; state.storage = null;
-    const data = DEVICE_DATA[state.deviceType];
-    const models = data.brands[this.value]?.models || {};
-    const modelSel = document.getElementById('modelSelect');
-    modelSel.innerHTML = '<option value="">选择型号</option>' +
-      Object.keys(models).map(m => `<option value="${m}">${m}</option>`).join('');
-    modelSel.disabled = false;
-    document.getElementById('storageSelect').innerHTML = '<option value="">内存版本</option>';
-    document.getElementById('storageSelect').disabled = true;
-    resetConditionAndFunctional();
-    updatePrice();
+    if (state.deviceType === 'laptop') {
+      state.laptopBrand = this.value;
+      state.laptopModel = null; state.laptopTier = null;
+      const modelData = LAPTOP_DATA[this.value];
+      const modelSel = document.getElementById('modelSelect');
+      modelSel.innerHTML = '<option value="">选择型号</option>' +
+        (modelData ? Object.keys(modelData.models).map(m => `<option value="${m}">${m}</option>`).join('') : '');
+      modelSel.disabled = !modelData;
+      document.getElementById('storageSelect').innerHTML = '<option value="">选择配置</option>';
+      document.getElementById('storageSelect').disabled = true;
+      updatePrice();
+    }
   });
 
   document.getElementById('modelSelect').addEventListener('change', function() {
-    state.model = this.value;
-    state.storage = null;
-    const data = DEVICE_DATA[state.deviceType];
-    const modelData = data.brands[state.brand]?.models[this.value];
-    state.basePrice = modelData?.basePrice || 0;
-    const storages = modelData?.storage || {};
-    const storageSel = document.getElementById('storageSelect');
-    storageSel.innerHTML = '<option value="">选择版本</option>' +
-      Object.entries(storages).map(([k,v]) => `<option value="${k}">${k} ${v>0?'(+¥'+v+')':'(基础)'}</option>`).join('');
-    storageSel.disabled = false;
-    // 显示步骤3
-    document.getElementById('stepCondition').style.display = '';
-    document.getElementById('stepFunctional').style.display = 'none';
-    resetConditionAndFunctional();
-    updatePrice();
+    if (state.deviceType === 'laptop') {
+      state.laptopModel = this.value;
+      state.laptopTier = null;
+      const modelData = LAPTOP_DATA[state.laptopBrand]?.models[this.value];
+      const storageSel = document.getElementById('storageSelect');
+      storageSel.innerHTML = '<option value="">选择配置</option>' +
+        (modelData ? Object.keys(modelData.tiers).map(t => `<option value="${t}">${t}（¥${modelData.tiers[t]}）</option>`).join('') : '');
+      storageSel.disabled = !modelData;
+      updatePrice();
+    }
   });
 
   document.getElementById('storageSelect').addEventListener('change', function() {
-    state.storage = this.value;
-    const data = DEVICE_DATA[state.deviceType];
-    const modelData = data.brands[state.brand]?.models[state.model];
-    state.storageAddon = modelData?.storage[this.value] || 0;
-    document.getElementById('stepFunctional').style.display = '';
-    updatePrice();
+    if (state.deviceType === 'laptop') {
+      state.laptopTier = this.value;
+      document.getElementById('stepCondition').style.display = '';
+      document.getElementById('stepFunctional').style.display = '';
+      updatePrice();
+    }
   });
 
   document.getElementById('btnRecycle').addEventListener('click', openRecycleModal);
   document.getElementById('btnApplyDiscount')?.addEventListener('click', applyDiscount);
   document.getElementById('btnConfirmRecycle')?.addEventListener('click', confirmRecycle);
-
-  document.querySelectorAll('.til-modal-overlay').forEach(ov => {
-    ov.addEventListener('click', function(e) { if(e.target===this) this.style.display='none'; });
-  });
+  document.querySelectorAll('.til-modal-overlay').forEach(ov =>
+    ov.addEventListener('click', function(e) { if(e.target===this) this.style.display='none'; }));
 }
 
-function selectCondition(condId) {
-  state.condition = condId;
-  document.querySelectorAll('#conditionGroup .til-opt').forEach(b => {
-    b.classList.toggle('selected', b.dataset.cond === condId);
-  });
+function selectOverallCondition(condId) {
+  state.overallCondition = condId;
+  document.querySelectorAll('#conditionGroup .til-opt').forEach(b =>
+    b.classList.toggle('selected', b.dataset.cond === condId));
+  if (state.deviceType === 'desktop') document.getElementById('stepFunctional').style.display = '';
   updatePrice();
 }
 
@@ -292,7 +353,7 @@ function toggleFunctional(id, checked) {
 }
 
 function resetConditionAndFunctional() {
-  state.condition = null;
+  state.overallCondition = null;
   state.functionalPassed = {};
   document.querySelectorAll('#conditionGroup .til-opt').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.til-func-item').forEach(el => el.classList.remove('checked'));
@@ -303,53 +364,79 @@ function updatePrice() {
   const priceNum = document.getElementById('priceNum');
   const btnRecycle = document.getElementById('btnRecycle');
   const priceDetail = document.getElementById('priceDetail');
+  let price = 0;
+  let detailHTML = '';
 
-  // 需要型号已选
-  if (!state.model || !state.storage) {
-    priceNum.textContent = '0';
-    btnRecycle.disabled = true;
-    priceDetail.innerHTML = '';
-    return;
+  if (state.deviceType === 'laptop') {
+    if (!state.laptopTier) { priceNum.textContent = '0'; btnRecycle.disabled = true; priceDetail.innerHTML = ''; return; }
+    price = LAPTOP_DATA[state.laptopBrand]?.models[state.laptopModel]?.tiers[state.laptopTier] || 0;
+    detailHTML += `<div class="til-detail-row"><span>${state.laptopBrand} ${state.laptopModel}</span><span>￥${price.toLocaleString()}</span></div>`;
+
+    if (state.overallCondition) {
+      const cond = DEPRECIATION.find(c => c.id === state.overallCondition);
+      if (cond) {
+        const oldPrice = price;
+        price = Math.round(price * cond.factor);
+        detailHTML += `<div class="til-detail-row"><span>${cond.label}</span><span>×${(cond.factor*100).toFixed(0)}%  -¥${(oldPrice-price).toLocaleString()}</span></div>`;
+      }
+    }
+  } else if (state.deviceType === 'desktop') {
+    // 逐配件汇总
+    const parts = getDesktopParts();
+    let hasAny = false;
+    parts.forEach(part => {
+      const p = state.desktopParts[part.key];
+      if (p && p.name && p.price > 0) {
+        hasAny = true;
+        let partPrice = p.price;
+        const factor = p.factor || 1;
+        partPrice = Math.round(partPrice * factor);
+        price += partPrice;
+        const modelEl = document.getElementById('partModel-'+part.key);
+        const shortName = modelEl?.selectedOptions[0]?.text?.substring(0,20) || part.name;
+        detailHTML += `<div class="til-detail-row"><span>${part.icon} ${shortName}</span><span>￥${partPrice.toLocaleString()}</span></div>`;
+        // 更新单配件估价显示
+        const estEl = document.getElementById('partEst-'+part.key);
+        if (estEl) estEl.textContent = '￥'+partPrice.toLocaleString();
+      } else {
+        const estEl = document.getElementById('partEst-'+part.key);
+        if (estEl) estEl.textContent = '-';
+      }
+    });
+    if (!hasAny) { priceNum.textContent = '0'; btnRecycle.disabled = true; priceDetail.innerHTML = ''; return; }
   }
 
-  let price = state.basePrice + state.storageAddon;
+  if (price === 0) { priceNum.textContent = '0'; btnRecycle.disabled = true; priceDetail.innerHTML = ''; return; }
 
-  // 成色系数
-  const cond = CONDITION_OPTS.find(c => c.id === state.condition);
-  if (cond) price = Math.round(price * cond.factor);
+  // 功能扣减
+  const issues = [];
+  if (!state.functionalPassed['normal']) { price = Math.round(price * 0.78); issues.push('无法开机 -22%'); }
+  if (!state.functionalPassed['screen']) { price = Math.round(price * 0.88); issues.push('屏幕问题 -12%'); }
+  if (!state.functionalPassed['noise'])  { price = Math.round(price * 0.85); issues.push('噪音/过热 -15%'); }
+  if (!state.functionalPassed['ports'])  { price = Math.round(price * 0.94); issues.push('接口故障 -6%'); }
+  issues.forEach(i => detailHTML += `<div class="til-detail-row penalty"><span>${i}</span></div>`);
 
-  // 功能缺陷扣减
-  const penalties = [];
-  if (!state.functionalPassed['noRepair']) { price = Math.round(price * 0.85); penalties.push('拆修 -15%'); }
-  if (!state.functionalPassed['noWater'])  { price = Math.round(price * 0.75); penalties.push('进水 -25%'); }
-  if (!state.functionalPassed['batteryOk']) { price = Math.round(price * 0.90); penalties.push('电池老化 -10%'); }
-  if (!state.functionalPassed['allFunc'])  { price = Math.round(price * 0.80); penalties.push('功能异常 -20%'); }
-
+  detailHTML += `<div class="til-detail-row total"><span>最终估价</span><span>￥${price.toLocaleString()}</span></div>`;
+  priceDetail.innerHTML = detailHTML;
   priceNum.textContent = price.toLocaleString();
   btnRecycle.disabled = false;
-
-  // 明细
-  let detailHTML = '';
-  if (cond) detailHTML += `<div class="til-detail-row"><span>${cond.name}</span><span>×${(cond.factor*100).toFixed(0)}%</span></div>`;
-  penalties.forEach(p => {
-    detailHTML += `<div class="til-detail-row penalty"><span>${p}</span></div>`;
-  });
-  if (detailHTML) detailHTML += `<div class="til-detail-row total"><span>最终估价</span><span>￥${price.toLocaleString()}</span></div>`;
-  priceDetail.innerHTML = detailHTML;
-
-  // 更新预约弹窗中的价格
-  document.getElementById('rmPrice').textContent = price.toLocaleString();
   window._currentEstimate = price;
 }
 
+// ======== 弹窗逻辑 ========
 function openRecycleModal() {
-  if (!window._currentEstimate || window._currentEstimate <= 0) return;
-  const data = DEVICE_DATA[state.deviceType];
-  const brand = state.brand;
-  const model = state.model;
-  const storage = state.storage;
-  document.getElementById('rmDevice').textContent = `${data?.icon||''} ${brand} ${model} ${storage}`;
+  if (!window._currentEstimate) return;
+  let deviceDesc = '';
+  if (state.deviceType === 'laptop') {
+    deviceDesc = `💻 ${state.laptopBrand} ${state.laptopModel} ${state.laptopTier}`;
+  } else {
+    const selParts = Object.values(state.desktopParts).filter(p => p.name);
+    deviceDesc = '🖥️ 台式机：' + selParts.map(p => p.name).join(' / ');
+  }
+  document.getElementById('rmDevice').textContent = deviceDesc;
   document.getElementById('rmPrice').textContent = window._currentEstimate.toLocaleString();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('rmDate').setAttribute('min', today);
   document.getElementById('recycleModal').style.display = 'flex';
 }
 
@@ -359,28 +446,21 @@ function confirmRecycle() {
   const address = document.getElementById('rmAddress').value.trim();
   const date = document.getElementById('rmDate').value;
   const timeSlot = document.getElementById('rmTimeSlot').value;
-
   if (!name) { alert('请填写姓名'); return; }
   if (!phone || !/^1\d{10}$/.test(phone)) { alert('请填写正确的手机号码'); return; }
   if (!address) { alert('请填写取件地址'); return; }
   if (!date) { alert('请选择上门日期'); return; }
   if (!timeSlot) { alert('请选择上门时段'); return; }
-
   const order = {
     id: 'RC' + Date.now().toString(36).toUpperCase(),
-    deviceType: state.deviceType, brand: state.brand, model: state.model, storage: state.storage,
-    condition: state.condition, functionalPassed: state.functionalPassed,
-    estimate: window._currentEstimate,
+    deviceType: state.deviceType, estimate: window._currentEstimate,
     name, phone, address, date, timeSlot,
     status: '已预约', createdAt: new Date().toISOString()
   };
-
   let orders = [];
   try { orders = JSON.parse(localStorage.getItem('pcBuilder_recycleOrders') || '[]'); } catch(e) {}
   orders.unshift(order);
   localStorage.setItem('pcBuilder_recycleOrders', JSON.stringify(orders));
-
-  // 存抵扣
   saveDiscount(window._currentEstimate);
   document.getElementById('recycleModal').style.display = 'none';
   alert('✅ 预约成功！回收员将在 ' + date + ' 上门取件');
@@ -405,7 +485,7 @@ function loadExistingDiscount() {
 function applyDiscount() {
   try {
     const td = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!td || !td.amount) return;
+    if (!td?.amount) return;
     document.getElementById('dmAmount').textContent = td.amount.toLocaleString();
     document.getElementById('discountModal').style.display = 'flex';
   } catch(e) {}

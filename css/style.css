@@ -953,6 +953,43 @@ body {
 .til-func-item.checked .til-func-check { background: #111; border-color: #111; }
 .til-func-item.checked .til-func-check::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
 
+/* 台式机配件清单 */
+.til-parts-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.til-part-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: 10px;
+  border: 1px solid #E5E5E5; background: #fff;
+  transition: border-color 0.2s;
+}
+.til-part-row.active { border-color: #111; background: #FAFAFA; }
+.til-part-check { cursor: pointer; display: flex; align-items: center; flex-shrink: 0; }
+.til-part-check input { display: none; }
+.til-part-checkmark {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 2px solid #D0D0D0; display: block; transition: all 0.2s;
+}
+.til-part-row.active .til-part-checkmark { background: #111; border-color: #111; }
+.til-part-row.active .til-part-checkmark::after {
+  content: '✓'; color: #fff; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; height: 100%;
+}
+.til-part-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+.til-part-info { flex: 0 0 auto; min-width: 0; }
+.til-part-name { font-size: 13px; font-weight: 600; color: #111; white-space: nowrap; }
+.til-part-base { font-size: 11px; color: #999; }
+.til-part-model, .til-part-cond {
+  padding: 6px 10px; font-size: 12px; border-radius: 8px;
+  border: 1px solid #E5E5E5; background: #fff; color: #111;
+  outline: none; -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath d='M2 3l3 3 3-3' fill='none' stroke='%23999' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+}
+.til-part-est {
+  font-size: 15px; font-weight: 700; min-width: 70px; text-align: right;
+  color: #999; flex-shrink: 0;
+}
+.til-part-row.active .til-part-est { color: #111; }
+
 /* 右栏估价卡 */
 .til-price-col { position: sticky; top: 90px; }
 .til-price-card {
