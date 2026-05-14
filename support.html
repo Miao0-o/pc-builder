@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 售后维保工单</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html">互动装机</a>
+    <a href="recommend.html">一键推荐</a>
+    <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="booking.html">📅 同城预约</a>
+        <a href="trade-in.html">♻️ 旧机估价</a>
+        <a href="support.html" class="active">🔧 售后工单</a>
+      </div>
+    </div>
+  </div>
+  <div class="nav-total">📞 售后热线：400-888-6666</div>
+</nav>
+
+<div class="support-page">
+  <h1>🔧 售后维保工单</h1>
+  <p class="support-subtitle">硬件故障、清灰保养、配置升级，一键报修</p>
+
+  <div class="support-layout">
+    <!-- 提交工单 -->
+    <div class="support-form-card">
+      <h3>📝 提交工单</h3>
+
+      <div class="form-group">
+        <label>问题类型</label>
+        <div class="ticket-type-grid" id="ticketTypeGroup">
+          <label class="ticket-type-card">
+            <input type="radio" name="ticketType" value="repair" hidden>
+            <div class="ticket-type-inner">
+              <div class="tt-icon">🔧</div>
+              <div class="tt-name">硬件故障</div>
+            </div>
+          </label>
+          <label class="ticket-type-card">
+            <input type="radio" name="ticketType" value="clean" hidden>
+            <div class="ticket-type-inner">
+              <div class="tt-icon">🧹</div>
+              <div class="tt-name">清灰保养</div>
+            </div>
+          </label>
+          <label class="ticket-type-card">
+            <input type="radio" name="ticketType" value="upgrade" hidden>
+            <div class="ticket-type-inner">
+              <div class="tt-icon">⬆️</div>
+              <div class="tt-name">配置升级</div>
+            </div>
+          </label>
+          <label class="ticket-type-card">
+            <input type="radio" name="ticketType" value="other" hidden>
+            <div class="ticket-type-inner">
+              <div class="tt-icon">📋</div>
+              <div class="tt-name">其他问题</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>紧急程度</label>
+        <div class="urgency-group" id="urgencyGroup">
+          <label class="urgency-opt urgency-low">
+            <input type="radio" name="urgency" value="low" hidden>
+            <span>🟢 低（不急）</span>
+          </label>
+          <label class="urgency-opt urgency-mid">
+            <input type="radio" name="urgency" value="mid" hidden>
+            <span>🟡 中（本周内）</span>
+          </label>
+          <label class="urgency-opt urgency-high">
+            <input type="radio" name="urgency" value="high" hidden>
+            <span>🔴 高（尽快）</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>问题描述</label>
+        <textarea id="ticketDesc" class="form-input form-textarea" placeholder="请详细描述遇到的问题..." maxlength="500" rows="4"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>期望上门时间</label>
+        <div class="form-row">
+          <input type="date" id="ticketDate" class="form-input" min="">
+          <input type="time" id="ticketTime" class="form-input" style="max-width:160px;">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>联系方式</label>
+        <input type="text" id="ticketName" class="form-input" placeholder="您的姓名" maxlength="20">
+        <input type="tel" id="ticketPhone" class="form-input" placeholder="手机号码" maxlength="11" style="margin-top:8px;">
+      </div>
+
+      <div class="form-msg" id="ticketMsg"></div>
+      <button class="btn-booking-submit" id="btnTicketSubmit">✅ 提交工单</button>
+    </div>
+
+    <!-- 工单列表 -->
+    <div class="support-history-card">
+      <h3>📋 我的工单 (<span id="ticketCount">0</span>)</h3>
+      <div class="ticket-list" id="ticketList">
+        <div class="booking-empty">暂无工单记录</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/support.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>

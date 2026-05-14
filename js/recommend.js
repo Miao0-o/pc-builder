@@ -146,6 +146,25 @@ function initRecommendPage() {
 
   if (!budgetSlider) return;
 
+  // 检查旧机抵扣
+  let tradeinDiscount = 0;
+  try {
+    const td = JSON.parse(localStorage.getItem('pcBuilder_tradeinDiscount'));
+    if (td && td.amount > 0) tradeinDiscount = td.amount;
+  } catch(e) {}
+  window._tradeinDiscount = tradeinDiscount;
+
+  // 显示抵扣提示
+  const discountHint = document.getElementById('tradeinHint');
+  if (discountHint) {
+    if (tradeinDiscount > 0) {
+      discountHint.innerHTML = '💰 旧机抵扣 <strong>¥' + tradeinDiscount.toLocaleString() + '</strong> 已生效，将从总价中扣除';
+      discountHint.style.display = 'block';
+    } else {
+      discountHint.style.display = 'none';
+    }
+  }
+
   budgetSlider.addEventListener('input', () => {
     budgetDisplay.textContent = '¥' + Number(budgetSlider.value).toLocaleString();
   });
@@ -210,8 +229,8 @@ function renderResult(config, total, score, platform) {
       <span class="rec-platform-badge">${platform === 'intel' ? '🔵 Intel平台' : '🔴 AMD平台'}</span>
     </div>
     <div class="rec-parts-list">${rows}</div>
-    <div class="rec-summary">
-      <div class="rec-total">总价：<strong>¥${total.toLocaleString()}</strong></div>
+    <div class="rec-summary">${window._tradeinDiscount > 0 ? `<div class="rec-tradein-hint">💰 旧机抵扣：<strong>-¥${window._tradeinDiscount.toLocaleString()}</strong></div>` : ''}
+      <div class="rec-total">总价：<strong>¥${total.toLocaleString()}</strong>${window._tradeinDiscount > 0 ? ` <small style="color:var(--text-muted);">（实付约 ¥${Math.max(0,total-window._tradeinDiscount).toLocaleString()}）</small>` : ''}</div>
       <div class="rec-score">预估跑分：<strong>${score.totalWan}万分</strong> · ${score.level}</div>
       <div class="rec-comment">${score.comment}</div>
     </div>

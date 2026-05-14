@@ -16,6 +16,14 @@
     <a href="index.html">互动装机</a>
     <a href="recommend.html" class="active">一键推荐</a>
     <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="booking.html">📅 同城预约</a>
+        <a href="trade-in.html">♻️ 旧机估价</a>
+        <a href="support.html">🔧 售后工单</a>
+      </div>
+    </div>
   </div>
   <div class="nav-total">💡 小白装机，一键搞定</div>
 </nav>
@@ -98,6 +106,7 @@
       </div>
     </div>
 
+    <div class="rec-tradein-hint" id="tradeinHint" style="display:none;text-align:center;margin-bottom:12px;padding:8px 16px;background:rgba(102,255,153,0.06);border:1px solid rgba(102,255,153,0.15);border-radius:8px;font-size:13px;color:var(--text);"></div>
     <button class="rec-btn-generate" id="btnGenerate">
       🎯 生成推荐配置
     </button>
@@ -121,5 +130,6 @@
     initRecommendPage();
   });
 </script>
+<script src="js/chat.js"></script>
 </body>
 </html>

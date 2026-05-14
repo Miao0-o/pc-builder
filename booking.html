@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 同城预约</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html">互动装机</a>
+    <a href="recommend.html">一键推荐</a>
+    <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="booking.html" class="active">📅 同城预约</a>
+        <a href="trade-in.html">♻️ 旧机估价</a>
+        <a href="support.html">🔧 售后工单</a>
+      </div>
+    </div>
+  </div>
+  <div class="nav-total">📞 客服热线：400-888-6666</div>
+</nav>
+
+<div class="booking-page">
+  <h1>📅 同城预约上门装机</h1>
+  <p class="booking-subtitle">选择城市区域、服务类型和时间，专业师傅准时上门</p>
+
+  <div class="booking-layout">
+    <!-- 预约表单 -->
+    <div class="booking-form-card">
+      <h3>📝 预约信息</h3>
+
+      <div class="form-group">
+        <label>选择城市</label>
+        <div class="form-row">
+          <select id="citySelect" class="form-select">
+            <option value="">请选择城市</option>
+          </select>
+          <select id="districtSelect" class="form-select" disabled>
+            <option value="">请先选择城市</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>服务类型</label>
+        <div class="service-type-grid" id="serviceTypeGroup">
+          <label class="type-card">
+            <input type="radio" name="serviceType" value="basic" hidden>
+            <div class="type-card-inner">
+              <div class="type-card-icon">🔧</div>
+              <div class="type-card-name">基础装机</div>
+              <div class="type-card-desc">1小时快速装机<br>不含系统安装</div>
+              <div class="type-card-price">¥199</div>
+            </div>
+          </label>
+          <label class="type-card">
+            <input type="radio" name="serviceType" value="premium" hidden>
+            <div class="type-card-inner">
+              <div class="type-card-icon">⚡</div>
+              <div class="type-card-name">高级装机</div>
+              <div class="type-card-desc">含系统安装<br>走线整理</div>
+              <div class="type-card-price">¥349</div>
+            </div>
+          </label>
+          <label class="type-card">
+            <input type="radio" name="serviceType" value="vip" hidden>
+            <div class="type-card-inner">
+              <div class="type-card-icon">👑</div>
+              <div class="type-card-name">尊享装机</div>
+              <div class="type-card-desc">全套调试+超频<br>定制灯效+整年维保</div>
+              <div class="type-card-price">¥599</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-checkbox-label">
+          <input type="checkbox" id="urgentCheck"> 加急上门（2小时内到达，+¥149）
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>预约时间</label>
+        <div class="form-row">
+          <input type="date" id="bookingDate" class="form-input" min="">
+          <div class="time-slot-group" id="timeSlotGroup">
+            <button class="time-slot" data-slot="morning">上午 9-12</button>
+            <button class="time-slot" data-slot="afternoon">下午 13-17</button>
+            <button class="time-slot" data-slot="evening">晚间 18-21</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>联系信息</label>
+        <input type="text" id="bookingName" class="form-input" placeholder="您的姓名" maxlength="20">
+        <input type="tel" id="bookingPhone" class="form-input" placeholder="手机号码" maxlength="11" style="margin-top:8px;">
+        <textarea id="bookingAddress" class="form-input form-textarea" placeholder="详细地址（街道/小区/门牌号）" maxlength="200" style="margin-top:8px;"></textarea>
+        <textarea id="bookingNote" class="form-input form-textarea" placeholder="备注（选填）：特殊需求、注意事项等" maxlength="200" style="margin-top:8px;"></textarea>
+      </div>
+
+      <div class="form-msg" id="formMsg"></div>
+      <button class="btn-booking-submit" id="btnSubmit">✅ 立即预约</button>
+    </div>
+
+    <!-- 预约历史 -->
+    <div class="booking-history-card">
+      <h3>📋 我的预约 (<span id="historyCount">0</span>)</h3>
+      <div class="booking-history-list" id="historyList">
+        <div class="booking-empty">暂无预约记录</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>

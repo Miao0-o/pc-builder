@@ -217,12 +217,157 @@ function pickOption(key,name){if(selectedBuild[key]===name)delete selectedBuild[
 function _escape(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ===================== 底部总览+跑分 =====================
-function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled">${comp.icon} ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty">${comp.icon} 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;bs.disabled=cnt<8;bs.textContent=cnt===8?'📊 查看鲁大师跑分！':`📊 鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;}
+function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled">${comp.icon} ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty">${comp.icon} 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'📊 查看鲁大师跑分！':`📊 鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}}
 function _animPrice(el,from,to){if(from===to){el.textContent='¥'+to.toLocaleString();return;}const t0=performance.now();function s(n){const t=Math.min((n-t0)/400,1);el.textContent='¥'+Math.round(from+(to-from)*(1-Math.pow(1-t,3))).toLocaleString();if(t<1)requestAnimationFrame(s);}requestAnimationFrame(s);}
 function _showScore(){const sc=estimateLudashiScore(selectedBuild),m=document.getElementById('scoreModal');document.getElementById('scoreLevel').textContent=sc.level;document.getElementById('scoreComment').textContent=sc.comment;document.getElementById('scoreBreakdown').innerHTML=`<div class="score-bar-row"><span class="bar-label">处理器</span><div class="bar-track"><div class="bar-fill" id="barCpu" style="background:var(--text);"></div></div><span id="txtCpu">0万</span></div><div class="score-bar-row"><span class="bar-label">显卡</span><div class="bar-track"><div class="bar-fill" id="barGpu" style="background:var(--accent-dim);"></div></div><span id="txtGpu">0万</span></div><div class="score-bar-row"><span class="bar-label">内存</span><div class="bar-track"><div class="bar-fill" id="barRam" style="background:var(--text-muted);"></div></div><span id="txtRam">0万</span></div><div class="score-bar-row"><span class="bar-label">硬盘</span><div class="bar-track"><div class="bar-fill" id="barDisk" style="background:var(--text);"></div></div><span id="txtDisk">0万</span></div><div class="score-bar-row"><span class="bar-label">其他</span><div class="bar-track"><div class="bar-fill" id="barOther" style="background:var(--accent-dim);"></div></div><span id="txtOther">0万</span></div>`;m.style.display='flex';requestAnimationFrame(()=>{_an('scoreNum',0,sc.totalWan,1200);_ab('barCpu','txtCpu',sc.cpuWan,400);_ab('barGpu','txtGpu',sc.gpuWan,550);_ab('barRam','txtRam',sc.ramWan,700);_ab('barDisk','txtDisk',sc.diskWan,850);_ab('barOther','txtOther',sc.otherWan,1000);});}
 function _an(id,f,t,d){const el=document.getElementById(id);if(!el)return;const s=performance.now();function step(n){const p=Math.min((n-s)/d,1);el.textContent=Math.round(f+(t-f)*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
 function _ab(bid,tid,v,del){setTimeout(()=>{const b=document.getElementById(bid),t=document.getElementById(tid);if(b)b.style.width=Math.min(v/2,100)+'%';if(t){const s=performance.now();function step(n){const p=Math.min((n-s)/600,1);t.textContent=Math.round(v*(1-Math.pow(1-p,3)))+'万';if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}},del);}
 document.getElementById('scoreModal')?.addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+document.getElementById('shareModal')?.addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+
+// ===================== 配置单分享 =====================
+function _openShareModal(){
+  const id=Math.random().toString(36).substring(2,8).toUpperCase();
+  _generateShareCard(id);
+  _saveConfig(id);
+  _renderSavedConfigs();
+  document.getElementById('shareModal').style.display='flex';
+}
+
+function _generateShareCard(id){
+  const canvas=document.getElementById('shareCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=800,H=600;
+
+  // 背景
+  ctx.fillStyle='#0d0d0d';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#2a2a2a';ctx.lineWidth=2;
+  ctx.beginPath();ctx.roundRect(10,10,W-20,H-20,12);ctx.stroke();
+
+  // 标题
+  ctx.fillStyle='#f0f0f0';ctx.font='bold 28px "PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.textAlign='center';ctx.fillText('🖥 装机大师 · 配置单',W/2,56);
+
+  // 分割线
+  ctx.strokeStyle='#2a2a2a';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(60,72);ctx.lineTo(W-60,72);ctx.stroke();
+
+  // 计算总价和跑分
+  let total=0;
+  for(const key of componentOrder){
+    if(selectedBuild[key]){
+      const opt=pcComponents[key].options.find(o=>o.name===selectedBuild[key]);
+      if(opt)total+=opt.price;
+    }
+  }
+  const score=estimateLudashiScore(selectedBuild);
+
+  // 配件网格 3列×3行
+  const cols=3,startX=50,startY=95,cellW=230,cellH=130,gapX=10,gapY=8;
+  const cats=componentOrder.slice(0,9);
+  for(let i=0;i<cats.length;i++){
+    const key=cats[i],col=i%cols,row=Math.floor(i/cols);
+    const x=startX+col*(cellW+gapX),y=startY+row*(cellH+gapY);
+    const name=selectedBuild[key];
+
+    // 卡片背景
+    ctx.fillStyle='#161616';ctx.strokeStyle='#2a2a2a';ctx.lineWidth=1;
+    ctx.beginPath();ctx.roundRect(x,y,cellW,cellH,8);ctx.fill();ctx.stroke();
+
+    // 图标
+    const comp=pcComponents[key];
+    ctx.fillStyle='#f0f0f0';ctx.font='22px sans-serif';ctx.textAlign='left';
+    ctx.fillText(comp?.icon||'🔧',x+12,y+28);
+
+    // 品类名
+    ctx.fillStyle='#888888';ctx.font='12px "PingFang SC","Microsoft YaHei",sans-serif';
+    ctx.fillText(comp?.shortName||key,x+44,y+26);
+
+    // 型号（截断）
+    ctx.fillStyle='#f0f0f0';ctx.font='bold 13px "PingFang SC","Microsoft YaHei",sans-serif';
+    const shortName=name?name.replace(/NVIDIA |AMD |Intel |利民 |九州风神 |酷冷至尊 |追风者 |联力 |恩杰 |猫头鹰 |ARCTIC /g,'').substring(0,16)+(name.length>16?'…':''):'未选';
+    ctx.fillText(shortName,x+12,y+56);
+
+    // 价格
+    if(name){
+      const opt=comp?.options?.find(o=>o.name===name);
+      if(opt){
+        ctx.fillStyle='#f0f0f0';ctx.font='bold 16px sans-serif';ctx.textAlign='right';
+        ctx.fillText('¥'+opt.price.toLocaleString(),x+cellW-12,y+28);
+      }
+    }
+  }
+
+  // 底部信息
+  const bottomY=startY+3*(cellH+gapY)+30;
+  ctx.fillStyle='#f0f0f0';ctx.font='bold 18px "PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText(`总计：¥${total.toLocaleString()}  |  鲁大师 ${score.totalWan}万分  |  ${score.level}`,W/2,bottomY);
+
+  ctx.fillStyle='#888888';ctx.font='12px "PingFang SC","Microsoft YaHei",sans-serif';
+  const today=new Date().toLocaleDateString('zh-CN');
+  ctx.fillText(`生成日期：${today}  |  配置编号：${id}`,W/2,bottomY+26);
+
+  // 水印
+  ctx.fillStyle='rgba(255,255,255,0.03)';ctx.font='11px sans-serif';ctx.textAlign='right';
+  ctx.fillText('miao0-o.github.io/pc-builder',W-40,H-20);
+}
+
+function _saveConfig(id){
+  const config={};
+  let total=0;
+  for(const key of componentOrder){
+    if(selectedBuild[key])config[key]=selectedBuild[key];
+    const opt=pcComponents[key].options?.find(o=>o.name===selectedBuild[key]);
+    if(opt)total+=opt.price;
+  }
+  const score=estimateLudashiScore(selectedBuild);
+  const entry={id,config,totalPrice:total,score:{totalWan:score.totalWan,level:score.level,comment:score.comment},createdAt:new Date().toISOString()};
+
+  // 存到 shared 用于链接恢复
+  try{localStorage.setItem('pcBuilder_sharedConfig_'+id,JSON.stringify(entry));}catch(e){}
+
+  // 存到 saved list
+  let saved=[];
+  try{saved=JSON.parse(localStorage.getItem('pcBuilder_savedConfigs')||'[]');}catch(e){}
+  saved.unshift(entry);
+  if(saved.length>20)saved=saved.slice(0,20);
+  try{localStorage.setItem('pcBuilder_savedConfigs',JSON.stringify(saved));}catch(e){}
+}
+
+function _renderSavedConfigs(){
+  const el=document.getElementById('savedConfigsList');
+  if(!el)return;
+  let saved=[];
+  try{saved=JSON.parse(localStorage.getItem('pcBuilder_savedConfigs')||'[]');}catch(e){}
+  if(saved.length===0){el.innerHTML='<div style="color:var(--text-muted);text-align:center;padding:16px;">暂无保存的配置</div>';return;}
+  el.innerHTML=saved.map(s=>`<div class="saved-config-mini">
+    <span class="scm-date">${new Date(s.createdAt).toLocaleDateString('zh-CN')}</span>
+    <span class="scm-total">¥${s.totalPrice.toLocaleString()}</span>
+    <span class="scm-score">${s.score.totalWan}万分 ${s.score.level}</span>
+    <span class="scm-id">#${s.id}</span>
+  </div>`).join('');
+}
+
+document.getElementById('btnDownload')?.addEventListener('click',()=>{
+  const canvas=document.getElementById('shareCanvas');
+  if(!canvas)return;
+  canvas.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='装机配置单.png';
+    a.click();URL.revokeObjectURL(url);
+  },'image/png');
+});
+
+document.getElementById('btnCopyLink')?.addEventListener('click',async()=>{
+  const saved=[];
+  try{saved=JSON.parse(localStorage.getItem('pcBuilder_savedConfigs')||'[]');}catch(e){}
+  if(saved.length===0){alert('请先生成配置单');return;}
+  const id=saved[0].id;
+  const url=window.location.origin+window.location.pathname+'#config/'+id;
+  try{await navigator.clipboard.writeText(url);alert('✅ 链接已复制！\n'+url);}catch(e){prompt('复制此链接分享：',url);}
+});
 
 // ===================== 渲染循环 =====================
 function _animate(){requestAnimationFrame(_animate);controls.update();_updateLabels();const t=performance.now()*.001;caseGroup.traverse(c=>{if(c.name==='fan-blade'){c.rotation.z+=(c.parent?.userData?.rotSpeed||1)*.03;}});const ring=scene.getObjectByName('glowRing');if(ring)ring.material.opacity=.35+Math.sin(t*1.5)*.2;emissiveObjects.forEach((o,i)=>{if(!o.material?.emissive)return;if(o.userData?.rainbow){o.material.emissive.setHSL((t*.12+i*.25)%1,.85,.55);}});renderer.render(scene,camera);}
@@ -231,7 +376,7 @@ function _onResize(){const c=document.getElementById('case3D');if(!c)return;came
 // ===================== 工具 =====================
 function _dispose(g){g.traverse(c=>{if(c.geometry)c.geometry.dispose();if(c.material){[c.material].flat().forEach(m=>{Object.values(m).forEach(v=>{if(v?.isTexture)v.dispose();});m.dispose();});}});}
 function _short(k,f){const o=pcComponents[k].options.find(o=>o.name===f);if(!o)return f;const p=f.split(' ');return p.length>=3?p.slice(0,3).join(' '):f.slice(0,16)+'...';}
-function _loadPreselected(){try{const d=localStorage.getItem('pcBuilderPreselect');if(!d)return;const cfg=JSON.parse(d);for(const[k,n]of Object.entries(cfg)){if(pcComponents[k]){selectedBuild[k]=n;if(componentGroups[k]){_focusOnObject(k);break;}}}localStorage.removeItem('pcBuilderPreselect');_renderSummary();}catch(e){}}
+function _loadPreselected(){try{const d=localStorage.getItem('pcBuilderPreselect');if(d){const cfg=JSON.parse(d);for(const[k,n]of Object.entries(cfg)){if(pcComponents[k]){selectedBuild[k]=n;if(componentGroups[k]){_focusOnObject(k);break;}}}localStorage.removeItem('pcBuilderPreselect');_renderSummary();return;}if(window.location.hash){const m=window.location.hash.match(/^#config\/([A-Z0-9]{6})$/);if(m){const sd=localStorage.getItem('pcBuilder_sharedConfig_'+m[1]);if(sd){const sc=JSON.parse(sd);for(const[k,n]of Object.entries(sc.config)){if(pcComponents[k])selectedBuild[k]=n;}_renderSummary();}}}}catch(e){}}
 function initServicePage(){document.querySelectorAll('.service-card').forEach((c,i)=>{c.style.animationDelay=`${.2+i*.12}s`;});}
 
 if(document.getElementById('case3D')){initParticles();init3DScene();_renderSummary();_loadPreselected();}

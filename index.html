@@ -16,6 +16,14 @@
     <a href="index.html" class="active">互动装机</a>
     <a href="recommend.html">一键推荐</a>
     <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="booking.html">📅 同城预约</a>
+        <a href="trade-in.html">♻️ 旧机估价</a>
+        <a href="support.html">🔧 售后工单</a>
+      </div>
+    </div>
   </div>
   <div class="nav-total">配置总价：<span id="navTotal">¥0</span></div>
 </nav>
@@ -51,6 +59,7 @@
 <div class="build-summary" id="buildSummary">
   <div class="summary-parts" id="summaryParts"></div>
   <button class="btn-score" id="btnScore" disabled>📊 鲁大师预估跑分</button>
+  <button class="btn-share-config" id="btnShare" style="display:none;">📋 分享配置单</button>
   <div class="summary-total">总计：<span id="summaryTotal">¥0</span></div>
 </div>
 
@@ -68,6 +77,23 @@
   </div>
 </div>
 
+<!-- 配置单分享弹窗 -->
+<div class="modal-overlay" id="shareModal" style="display:none;">
+  <div class="modal" style="max-width:860px;">
+    <h2>📋 我的装机配置单</h2>
+    <div class="share-canvas-wrap">
+      <canvas id="shareCanvas" width="800" height="600"></canvas>
+    </div>
+    <div class="share-actions">
+      <button class="btn-share-dl" id="btnDownload">📥 下载图片</button>
+      <button class="btn-share-copy" id="btnCopyLink">🔗 复制链接</button>
+    </div>
+    <div class="share-saved-title">📁 已保存的配置单</div>
+    <div class="share-saved-list" id="savedConfigsList"></div>
+    <button class="btn-close" onclick="document.getElementById('shareModal').style.display='none'">关闭</button>
+  </div>
+</div>
+
 <script type="importmap">
 {
   "imports": {
@@ -77,5 +103,6 @@
 </script>
 <script src="js/data.js"></script>
 <script type="module" src="js/main.js"></script>
+<script src="js/chat.js"></script>
 </body>
 </html>

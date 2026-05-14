@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 旧机自助估价</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html">互动装机</a>
+    <a href="recommend.html">一键推荐</a>
+    <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="booking.html">📅 同城预约</a>
+        <a href="trade-in.html" class="active">♻️ 旧机估价</a>
+        <a href="support.html">🔧 售后工单</a>
+      </div>
+    </div>
+  </div>
+  <div class="nav-total">💡 旧机折价，换新更划算</div>
+</nav>
+
+<div class="tradein-page">
+  <h1>♻️ 旧机自助估价</h1>
+  <p class="tradein-subtitle">勾选你的旧配件并选择成色，立即算出回收价格</p>
+
+  <div class="tradein-cards" id="tradeinCards"></div>
+
+  <div class="tradein-summary" id="tradeinSummary">
+    <div class="tis-left">
+      <span class="tis-label">估价合计</span>
+      <span class="tis-total">¥<span id="tisTotal">0</span></span>
+      <span class="tis-count" id="tisCount">未选配件</span>
+    </div>
+    <div class="tis-right">
+      <button class="btn-tradein-apply" id="btnApply" disabled>💰 应用为折扣</button>
+      <button class="btn-tradein-reset" id="btnReset">🔄 重新估价</button>
+    </div>
+  </div>
+</div>
+
+<!-- 折扣应用弹窗 -->
+<div class="modal-overlay" id="discountModal" style="display:none;">
+  <div class="modal">
+    <h2>💰 旧机抵扣已保存</h2>
+    <p style="color:var(--text-muted); margin:12px 0;">
+      您的旧机估价 <strong style="color:var(--accent);font-size:20px;">¥<span id="discountAmount">0</span></strong> 已记录
+    </p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">现在去哪里选新机？</p>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <a href="recommend.html" class="btn-booking-submit" style="flex:1;text-decoration:none;text-align:center;">🎯 一键推荐</a>
+      <a href="index.html" class="btn-booking-submit" style="flex:1;text-decoration:none;text-align:center;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🖥 互动装机</a>
+    </div>
+    <button class="btn-close" onclick="document.getElementById('discountModal').style.display='none'" style="margin-top:16px;">关闭</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/tradein.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>
