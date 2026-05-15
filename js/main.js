@@ -3,6 +3,10 @@
 // ============================================================
 import * as THREE from 'three';
 import { OrbitControls } from './lib/OrbitControls.js';
+import { compatEngine } from './compat-engine.js';
+import { PriceCalc } from './price-calc.js';
+import { saveConfig } from './config-manager.js';
+import { showToast, showError } from './error-banner.js';
 
 // GLTFLoader懒加载
 let _GLTFLoader=null,_gltfLdr=null;
@@ -217,7 +221,63 @@ function pickOption(key,name){if(selectedBuild[key]===name)delete selectedBuild[
 function _escape(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ===================== 底部总览+跑分 =====================
-function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled">${comp.icon} ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty">${comp.icon} 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'📊 查看鲁大师跑分！':`📊 鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}}
+function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled">${comp.icon} ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty">${comp.icon} 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'📊 查看鲁大师跑分！':`📊 鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}_runCompatCheck();}
+
+function _runCompatCheck() {
+  const parts = {};
+  for (const [key, name] of Object.entries(selectedBuild)) {
+    const comp = pcComponents[key];
+    if (!comp) continue;
+    const option = comp.options.find(o => o.name === name);
+    if (option) parts[key] = option;
+  }
+
+  const report = compatEngine.checkAll(parts);
+  _updateCompatIndicator(report);
+  return report;
+}
+
+function _updateCompatIndicator(report) {
+  const indicator = document.getElementById('compatIndicator');
+  const dot = document.getElementById('compatDot');
+  const text = document.getElementById('compatText');
+  const btnShare = document.getElementById('btnShare');
+
+  if (!indicator || !dot || !text) return;
+
+  const { summary } = report;
+  const partCount = Object.keys(selectedBuild).filter(k => selectedBuild[k]).length;
+
+  if (partCount < 2) {
+    indicator.style.display = 'none';
+    return;
+  }
+
+  indicator.style.display = 'flex';
+  if (summary.status === 'compatible') {
+    dot.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#66ff99;box-shadow:0 0 8px rgba(102,255,153,0.4);';
+    text.textContent = '全部兼容';
+    text.style.color = '#66ff99';
+  } else if (summary.status === 'warning') {
+    dot.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#ffcc66;box-shadow:0 0 8px rgba(255,204,102,0.4);';
+    text.textContent = `${summary.warns} 个注意项`;
+    text.style.color = '#ffcc66';
+  } else {
+    dot.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#ff6666;box-shadow:0 0 8px rgba(255,102,102,0.4);animation:pulse-red 2s infinite;';
+    text.textContent = `${summary.blocks} 个冲突`;
+    text.style.color = '#ff6666';
+  }
+
+  if (btnShare) {
+    btnShare.style.opacity = summary.isReady ? '1' : '0.5';
+    btnShare.style.pointerEvents = summary.isReady ? 'auto' : 'none';
+  }
+}
+
+const compatStyle = document.createElement('style');
+compatStyle.textContent = '@keyframes pulse-red { 0%,100%{box-shadow:0 0 8px rgba(255,102,102,0.4)} 50%{box-shadow:0 0 18px rgba(255,102,102,0.8)} }';
+document.head.appendChild(compatStyle);
+
 function _animPrice(el,from,to){if(from===to){el.textContent='¥'+to.toLocaleString();return;}const t0=performance.now();function s(n){const t=Math.min((n-t0)/400,1);el.textContent='¥'+Math.round(from+(to-from)*(1-Math.pow(1-t,3))).toLocaleString();if(t<1)requestAnimationFrame(s);}requestAnimationFrame(s);}
 function _showScore(){const sc=estimateLudashiScore(selectedBuild),m=document.getElementById('scoreModal');document.getElementById('scoreLevel').textContent=sc.level;document.getElementById('scoreComment').textContent=sc.comment;document.getElementById('scoreBreakdown').innerHTML=`<div class="score-bar-row"><span class="bar-label">处理器</span><div class="bar-track"><div class="bar-fill" id="barCpu" style="background:var(--text);"></div></div><span id="txtCpu">0万</span></div><div class="score-bar-row"><span class="bar-label">显卡</span><div class="bar-track"><div class="bar-fill" id="barGpu" style="background:var(--accent-dim);"></div></div><span id="txtGpu">0万</span></div><div class="score-bar-row"><span class="bar-label">内存</span><div class="bar-track"><div class="bar-fill" id="barRam" style="background:var(--text-muted);"></div></div><span id="txtRam">0万</span></div><div class="score-bar-row"><span class="bar-label">硬盘</span><div class="bar-track"><div class="bar-fill" id="barDisk" style="background:var(--text);"></div></div><span id="txtDisk">0万</span></div><div class="score-bar-row"><span class="bar-label">其他</span><div class="bar-track"><div class="bar-fill" id="barOther" style="background:var(--accent-dim);"></div></div><span id="txtOther">0万</span></div>`;m.style.display='flex';requestAnimationFrame(()=>{_an('scoreNum',0,sc.totalWan,1200);_ab('barCpu','txtCpu',sc.cpuWan,400);_ab('barGpu','txtGpu',sc.gpuWan,550);_ab('barRam','txtRam',sc.ramWan,700);_ab('barDisk','txtDisk',sc.diskWan,850);_ab('barOther','txtOther',sc.otherWan,1000);});}
 function _an(id,f,t,d){const el=document.getElementById(id);if(!el)return;const s=performance.now();function step(n){const p=Math.min((n-s)/d,1);el.textContent=Math.round(f+(t-f)*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
@@ -229,7 +289,7 @@ document.getElementById('shareModal')?.addEventListener('click',function(e){if(e
 function _openShareModal(){
   const id=Math.random().toString(36).substring(2,8).toUpperCase();
   _generateShareCard(id);
-  _saveConfig(id);
+  _saveConfigV2(id);
   _renderSavedConfigs();
   document.getElementById('shareModal').style.display='flex';
 }
@@ -314,26 +374,41 @@ function _generateShareCard(id){
   ctx.fillText('miao0-o.github.io/pc-builder',W-40,H-20);
 }
 
-function _saveConfig(id){
-  const config={};
-  let total=0;
-  for(const key of componentOrder){
-    if(selectedBuild[key])config[key]=selectedBuild[key];
-    const opt=pcComponents[key].options?.find(o=>o.name===selectedBuild[key]);
-    if(opt)total+=opt.price;
+async function _saveConfigV2(id) {
+  const partsSnapshot = {};
+  for (const key of componentOrder) {
+    if (selectedBuild[key]) {
+      const comp = pcComponents[key];
+      const option = comp.options.find(o => o.name === selectedBuild[key]);
+      if (option) {
+        partsSnapshot[key] = {
+          name: option.name,
+          price: option.price,
+          specs: option.specs,
+          icon: comp.icon,
+          structuredSpecs: option.structuredSpecs || null,
+        };
+      }
+    }
   }
-  const score=estimateLudashiScore(selectedBuild);
-  const entry={id,config,totalPrice:total,score:{totalWan:score.totalWan,level:score.level,comment:score.comment},createdAt:new Date().toISOString()};
 
-  // 存到 shared 用于链接恢复
-  try{localStorage.setItem('pcBuilder_sharedConfig_'+id,JSON.stringify(entry));}catch(e){}
+  const { total } = PriceCalc.getTotal(selectedBuild);
+  const benchmark = estimateLudashiScore(selectedBuild);
+  const platform = selectedBuild.cpu?.includes('AMD') || selectedBuild.cpu?.includes('锐龙') ? 'amd' : 'intel';
 
-  // 存到 saved list
-  let saved=[];
-  try{saved=JSON.parse(localStorage.getItem('pcBuilder_savedConfigs')||'[]');}catch(e){}
-  saved.unshift(entry);
-  if(saved.length>20)saved=saved.slice(0,20);
-  try{localStorage.setItem('pcBuilder_savedConfigs',JSON.stringify(saved));}catch(e){}
+  try {
+    const result = await saveConfig({
+      name: '我的配置 ' + id,
+      partsSnapshot,
+      totalPrice: total,
+      benchmark: { totalWan: benchmark.totalWan, level: benchmark.level, comment: benchmark.comment },
+      platform,
+      isPublic: false,
+    });
+    showToast('配置已保存' + (result.share_code ? '，分享码: ' + result.share_code : ''), 'success');
+  } catch (err) {
+    showError(err);
+  }
 }
 
 function _renderSavedConfigs(){

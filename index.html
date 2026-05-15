@@ -66,6 +66,11 @@
   <div class="summary-total">总计：<span id="summaryTotal">¥0</span></div>
 </div>
 
+<div class="compat-indicator" id="compatIndicator" style="display:none;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;font-size:13px;font-weight:600;backdrop-filter:blur(10px);position:fixed;bottom:72px;left:50%;transform:translateX(-50%);z-index:101;">
+  <span id="compatDot"></span>
+  <span id="compatText"></span>
+</div>
+
 <!-- 跑分弹窗 -->
 <div class="modal-overlay" id="scoreModal" style="display:none;">
   <div class="modal">
@@ -107,5 +112,9 @@
 <script src="js/data.js"></script>
 <script type="module" src="js/main.js"></script>
 <script src="js/chat.js"></script>
+<script type="module">
+  import { initFeedback } from './js/feedback.js';
+  initFeedback();
+</script>
 </body>
 </html>
