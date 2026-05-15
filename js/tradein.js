@@ -289,6 +289,8 @@ function updateDesktopPartCond(key) {
   if (!state.desktopParts[key]) state.desktopParts[key] = {};
   state.desktopParts[key].condition = sel.value;
   state.desktopParts[key].factor = factor;
+  // Show functional step when at least one part has condition evaluated
+  document.getElementById('stepFunctional').style.display = '';
   updatePrice();
 }
 
