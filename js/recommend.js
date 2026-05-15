@@ -158,7 +158,7 @@ function initRecommendPage() {
   const discountHint = document.getElementById('tradeinHint');
   if (discountHint) {
     if (tradeinDiscount > 0) {
-      discountHint.innerHTML = '💰 旧机抵扣 <strong>¥' + tradeinDiscount.toLocaleString() + '</strong> 已生效，将从总价中扣除';
+      discountHint.innerHTML = '<i data-lucide="dollar-sign" class="icon-sm"></i> 旧机抵扣 <strong>¥' + tradeinDiscount.toLocaleString() + '</strong> 已生效，将从总价中扣除';if(typeof lucide!=='undefined')lucide.createIcons();
       discountHint.style.display = 'block';
     } else {
       discountHint.style.display = 'none';
@@ -206,14 +206,14 @@ function renderResult(config, total, score, platform) {
   if (!resultArea) return;
 
   const categoryNames = { cpu:'处理器', gpu:'显卡', motherboard:'主板', ram:'内存', storage:'硬盘', psu:'电源', case:'机箱', cooler:'散热器' };
-  const icons = { cpu:'🧠', gpu:'🎮', motherboard:'📋', ram:'📏', storage:'💾', psu:'🔌', case:'🖥️', cooler:'❄️' };
+  const icons = { cpu:'cpu', gpu:'gamepad-2', motherboard:'layout-template', ram:'memory-stick', storage:'hard-drive', psu:'plug-zap', case:'monitor', cooler:'fan' };
 
   let rows = '';
   for (const [key, opt] of Object.entries(config)) {
     if (!opt) continue;
     rows += `
       <div class="rec-part-row">
-        <span class="rec-part-icon">${icons[key]}</span>
+        <span class="rec-part-icon"><i data-lucide="${icons[key]}" class="icon-lg"></i></span>
         <div class="rec-part-info">
           <span class="rec-part-cat">${categoryNames[key]}</span>
           <span class="rec-part-name">${opt.name}</span>

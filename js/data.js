@@ -8,7 +8,7 @@ const pcComponents = {
   case: {
     id: 'case',
     name: '机箱 Case',
-    icon: '🖥️',
+    icon: 'monitor',
     shortName: '机箱',
     position: { top: '5%', left: '5%', width: '88%', height: '85%' },
     description: '机箱是所有配件的"房子"。它不仅决定电脑的外观颜值，更影响散热效果、噪音控制和未来的升级空间。选机箱是装机的第一步，因为机箱大小决定了能装多大的主板、多长的显卡、多大的散热器。',
@@ -50,7 +50,7 @@ const pcComponents = {
   cpu: {
     id: 'cpu',
     name: 'CPU 中央处理器',
-    icon: '🧠',
+    icon: 'cpu',
     shortName: 'CPU',
     position: { top: '18%', left: '42%', width: '14%', height: '12%' },
     description: 'CPU是电脑的"大脑"，所有的计算、指令处理都由它完成。CPU性能直接决定电脑的反应速度和多任务处理能力。目前消费级CPU市场由Intel和AMD两家主导，各有优劣。',
@@ -91,7 +91,7 @@ const pcComponents = {
   gpu: {
     id: 'gpu',
     name: '显卡 GPU',
-    icon: '🎮',
+    icon: 'gamepad-2',
     shortName: '显卡',
     position: { top: '38%', left: '38%', width: '22%', height: '10%' },
     description: '显卡负责处理所有的图像和画面输出。游戏画面的流畅度、画质高低、视频渲染速度，几乎全看显卡。显卡是装机中预算占比最大（通常30%-50%）的配件，也是溢价最严重的配件。',
@@ -131,7 +131,7 @@ const pcComponents = {
   motherboard: {
     id: 'motherboard',
     name: '主板 Motherboard',
-    icon: '📋',
+    icon: 'layout-template',
     shortName: '主板',
     position: { top: '25%', left: '25%', width: '48%', height: '50%' },
     description: '主板是所有配件的"地基"，CPU、内存、显卡、硬盘都插在上面。主板决定了你能用什么CPU、能插多少内存、能接几个硬盘、扩展性如何。',
@@ -173,7 +173,7 @@ const pcComponents = {
   ram: {
     id: 'ram',
     name: '内存 RAM',
-    icon: '📏',
+    icon: 'memory-stick',
     shortName: '内存',
     position: { top: '22%', left: '60%', width: '6%', height: '22%' },
     description: '内存是CPU的"临时工作台"，所有正在运行的程序和数据都暂存在内存里。内存不够时电脑会变卡（因为要用硬盘做虚拟内存，速度差100倍）。2026年主流是DDR5，DDR4已逐步淘汰。',
@@ -213,7 +213,7 @@ const pcComponents = {
   storage: {
     id: 'storage',
     name: '硬盘 Storage',
-    icon: '💾',
+    icon: 'hard-drive',
     shortName: '硬盘',
     position: { top: '58%', left: '52%', width: '12%', height: '8%' },
     description: '硬盘是电脑的"仓库"，你的所有文件、游戏、照片都在里面。2026年装机强烈建议全固态（SSD），机械硬盘只适合存电影/备份。NVMe M.2 SSD是最主流的选择，指甲盖大小，速度是机械硬盘的100倍以上。',
@@ -253,7 +253,7 @@ const pcComponents = {
   psu: {
     id: 'psu',
     name: '电源 PSU',
-    icon: '🔌',
+    icon: 'plug-zap',
     shortName: '电源',
     position: { top: '62%', left: '20%', width: '18%', height: '14%' },
     description: '电源是整台电脑的"心脏"，把220V市电转换成各配件需要的低压直流电。电源是装机中最不能省钱的配件——劣质电源轻则死机重启，重则一波带走主板显卡，甚至起火。',
@@ -293,7 +293,7 @@ const pcComponents = {
   cooler: {
     id: 'cooler',
     name: 'CPU散热器 Cooler',
-    icon: '❄️',
+    icon: 'fan',
     shortName: '散热器',
     position: { top: '14%', left: '40%', width: '16%', height: '10%' },
     description: 'CPU散热器负责给CPU降温。CPU在高负载时会产生大量热量，如果散热不够，CPU会自动降频保护（俗称"撞温度墙"），电脑就会变卡。散热器分风冷和水冷两大类。',
@@ -334,7 +334,7 @@ const pcComponents = {
   fan: {
     id: 'fan',
     name: '散热风扇 Case Fan',
-    icon: '🌀',
+    icon: 'wind',
     shortName: '风扇',
     position: { top: '50%', left: '5%', width: '90%', height: '10%' },
     description: '机箱散热风扇负责机箱内部的空气流通。合理的风道设计（前进后出、下进上出）能把CPU和显卡产生的热量快速排出机箱，让整机温度降低5-15°C。风扇是装机成本最低但效果最显著的散热升级手段。',

@@ -11,7 +11,7 @@
 <canvas id="particleCanvas"></canvas>
 
 <nav class="nav">
-  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-logo"><i data-lucide="monitor" class="icon-md"></i> 装机大师</div>
   <div class="nav-links">
     <a href="index.html">互动装机</a>
     <a href="recommend.html">一键推荐</a>
@@ -19,22 +19,22 @@
     <div class="nav-dropdown">
       <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
       <div class="nav-dropdown-menu">
-        <a href="trade-in.html">♻️ 旧机估价</a>
-        <a href="support.html" class="active">🔧 售后工单</a>
+        <a href="trade-in.html"><i data-lucide="refresh-cw" class="icon-sm"></i> 旧机估价</a>
+        <a href="support.html" class="active"><i data-lucide="wrench" class="icon-sm"></i> 售后工单</a>
       </div>
     </div>
   </div>
-  <div class="nav-total">📞 售后热线：400-888-6666</div>
+  <div class="nav-total"><i data-lucide="phone" class="icon-sm"></i> 售后热线：400-888-6666</div>
 </nav>
 
 <div class="support-page">
-  <h1>🔧 售后维保工单</h1>
+  <h1><i data-lucide="wrench" class="icon-xl"></i> 售后维保工单</h1>
   <p class="support-subtitle">硬件故障、清灰保养、配置升级，一键报修</p>
 
   <div class="support-layout">
     <!-- 提交工单 -->
     <div class="support-form-card">
-      <h3>📝 提交工单</h3>
+      <h3><i data-lucide="file-text" class="icon-md"></i> 提交工单</h3>
 
       <div class="form-group">
         <label>问题类型</label>
@@ -42,28 +42,28 @@
           <label class="ticket-type-card">
             <input type="radio" name="ticketType" value="repair" hidden>
             <div class="ticket-type-inner">
-              <div class="tt-icon">🔧</div>
+              <div class="tt-icon"><i data-lucide="wrench" class="icon-md"></i></div>
               <div class="tt-name">硬件故障</div>
             </div>
           </label>
           <label class="ticket-type-card">
             <input type="radio" name="ticketType" value="clean" hidden>
             <div class="ticket-type-inner">
-              <div class="tt-icon">🧹</div>
+              <div class="tt-icon"><i data-lucide="spray-can" class="icon-md"></i></div>
               <div class="tt-name">清灰保养</div>
             </div>
           </label>
           <label class="ticket-type-card">
             <input type="radio" name="ticketType" value="upgrade" hidden>
             <div class="ticket-type-inner">
-              <div class="tt-icon">⬆️</div>
+              <div class="tt-icon"><i data-lucide="arrow-up" class="icon-md"></i></div>
               <div class="tt-name">配置升级</div>
             </div>
           </label>
           <label class="ticket-type-card">
             <input type="radio" name="ticketType" value="other" hidden>
             <div class="ticket-type-inner">
-              <div class="tt-icon">📋</div>
+              <div class="tt-icon"><i data-lucide="layout-template" class="icon-md"></i></div>
               <div class="tt-name">其他问题</div>
             </div>
           </label>
@@ -75,15 +75,15 @@
         <div class="urgency-group" id="urgencyGroup">
           <label class="urgency-opt urgency-low">
             <input type="radio" name="urgency" value="low" hidden>
-            <span>🟢 低（不急）</span>
+            <span><i data-lucide="circle" class="icon-sm" style="color:#66ff99;"></i> 低（不急）</span>
           </label>
           <label class="urgency-opt urgency-mid">
             <input type="radio" name="urgency" value="mid" hidden>
-            <span>🟡 中（本周内）</span>
+            <span><i data-lucide="circle" class="icon-sm" style="color:#ffcc66;"></i> 中（本周内）</span>
           </label>
           <label class="urgency-opt urgency-high">
             <input type="radio" name="urgency" value="high" hidden>
-            <span>🔴 高（尽快）</span>
+            <span><i data-lucide="circle" class="icon-sm" style="color:#ff6666;"></i> 高（尽快）</span>
           </label>
         </div>
       </div>
@@ -108,12 +108,12 @@
       </div>
 
       <div class="form-msg" id="ticketMsg"></div>
-      <button class="btn-booking-submit" id="btnTicketSubmit">✅ 提交工单</button>
+      <button class="btn-booking-submit" id="btnTicketSubmit"><i data-lucide="check-circle" class="icon-sm"></i> 提交工单</button>
     </div>
 
     <!-- 工单列表 -->
     <div class="support-history-card">
-      <h3>📋 我的工单 (<span id="ticketCount">0</span>)</h3>
+      <h3><i data-lucide="layout-template" class="icon-md"></i> 我的工单 (<span id="ticketCount">0</span>)</h3>
       <div class="ticket-list" id="ticketList">
         <div class="booking-empty">暂无工单记录</div>
       </div>
@@ -123,5 +123,7 @@
 
 <script src="js/support.js"></script>
 <script src="js/chat.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

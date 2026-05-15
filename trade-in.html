@@ -9,7 +9,7 @@
 <body class="tradein-body">
 
 <nav class="nav">
-  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-logo"><i data-lucide="monitor" class="icon-md"></i> 装机大师</div>
   <div class="nav-links">
     <a href="index.html">互动装机</a>
     <a href="recommend.html">一键推荐</a>
@@ -17,12 +17,12 @@
     <div class="nav-dropdown">
       <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
       <div class="nav-dropdown-menu">
-        <a href="trade-in.html" class="active">♻️ 旧机估价</a>
-        <a href="support.html">🔧 售后工单</a>
+        <a href="trade-in.html" class="active"><i data-lucide="refresh-cw" class="icon-sm"></i> 旧机估价</a>
+        <a href="support.html"><i data-lucide="wrench" class="icon-sm"></i> 售后工单</a>
       </div>
     </div>
   </div>
-  <div class="nav-total">💡 旧机折价，换新更划算</div>
+  <div class="nav-total"><i data-lucide="lightbulb" class="icon-sm"></i> 旧机折价，换新更划算</div>
 </nav>
 
 <div class="tradein-page-light">
@@ -90,7 +90,7 @@
 
       <!-- 已有抵扣提示 -->
       <div class="til-discount-card" id="discountCard" style="display:none;">
-        <div class="til-discount-label">💰 已有旧机抵扣金</div>
+        <div class="til-discount-label"><i data-lucide="dollar-sign" class="icon-sm"></i> 已有旧机抵扣金</div>
         <div class="til-discount-amount">￥<span id="discountAmt">0</span></div>
         <button class="til-btn-outline" id="btnApplyDiscount">应用到新机配置</button>
       </div>
@@ -100,19 +100,19 @@
   <!-- 底部优势条 -->
   <div class="til-trust-bar">
     <div class="til-trust-item">
-      <div class="til-trust-icon">📋</div>
+      <div class="til-trust-icon"><i data-lucide="layout-template" class="icon-lg"></i></div>
       <div class="til-trust-text">价格透明</div>
     </div>
     <div class="til-trust-item">
-      <div class="til-trust-icon">🚚</div>
+      <div class="til-trust-icon"><i data-lucide="truck" class="icon-lg"></i></div>
       <div class="til-trust-text">免费上门</div>
     </div>
     <div class="til-trust-item">
-      <div class="til-trust-icon">🔍</div>
+      <div class="til-trust-icon"><i data-lucide="search" class="icon-lg"></i></div>
       <div class="til-trust-text">专业质检</div>
     </div>
     <div class="til-trust-item">
-      <div class="til-trust-icon">⚡</div>
+      <div class="til-trust-icon"><i data-lucide="zap" class="icon-lg"></i></div>
       <div class="til-trust-text">快速回款</div>
     </div>
   </div>
@@ -122,7 +122,7 @@
 <!-- 预约回收弹窗 -->
 <div class="til-modal-overlay" id="recycleModal" style="display:none;">
   <div class="til-modal">
-    <h2>📦 预约上门回收</h2>
+    <h2><i data-lucide="package" class="icon-lg"></i> 预约上门回收</h2>
     <div class="til-modal-body">
       <div class="til-modal-row"><span class="til-modal-label">回收机型</span><span id="rmDevice">-</span></div>
       <div class="til-modal-row"><span class="til-modal-label">预估价格</span><strong style="font-size:20px;">￥<span id="rmPrice">0</span></strong></div>
@@ -147,12 +147,12 @@
 <!-- 折扣应用弹窗 -->
 <div class="til-modal-overlay" id="discountModal" style="display:none;">
   <div class="til-modal">
-    <h2>💰 旧机抵扣已保存</h2>
+    <h2><i data-lucide="dollar-sign" class="icon-lg"></i> 旧机抵扣已保存</h2>
     <p style="color:#666;margin:12px 0;">您的旧机估价 <strong style="color:#111;font-size:20px;">￥<span id="dmAmount">0</span></strong> 已记录</p>
     <p style="font-size:13px;color:#666;margin-bottom:20px;">抵扣金将自动应用到新机配置中</p>
     <div class="til-modal-actions">
-      <a href="recommend.html" class="til-btn-primary" style="text-decoration:none;text-align:center;">🎯 一键推荐配置</a>
-      <a href="index.html" class="til-btn-outline" style="text-decoration:none;text-align:center;">🖥 互动装机选配</a>
+      <a href="recommend.html" class="til-btn-primary" style="text-decoration:none;text-align:center;"><i data-lucide="target" class="icon-sm"></i> 一键推荐配置</a>
+      <a href="index.html" class="til-btn-outline" style="text-decoration:none;text-align:center;"><i data-lucide="monitor" class="icon-sm"></i> 互动装机选配</a>
     </div>
     <button class="til-btn-outline" onclick="document.getElementById('discountModal').style.display='none'" style="margin-top:12px;width:100%;">关闭</button>
   </div>
@@ -160,5 +160,7 @@
 
 <script src="js/tradein.js"></script>
 <script src="js/chat.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

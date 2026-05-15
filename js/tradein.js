@@ -93,7 +93,7 @@ const LAPTOP_DATA = {
 function getDesktopParts() {
   if (typeof pcComponents === 'undefined') return [];
   const keys = ['cpu','gpu','motherboard','ram','storage','psu','case','cooler'];
-  const icons = { cpu:'🧠', gpu:'🎮', motherboard:'📋', ram:'📏', storage:'💾', psu:'🔌', case:'🖥️', cooler:'❄️' };
+  const icons = { cpu:'cpu', gpu:'gamepad-2', motherboard:'layout-template', ram:'memory-stick', storage:'hard-drive', psu:'plug-zap', case:'monitor', cooler:'fan' };
   return keys.map(key => {
     const comp = pcComponents[key];
     if (!comp) return null;
@@ -229,7 +229,7 @@ function buildDesktopStep() {
           <input type="checkbox" data-key="${part.key}" onchange="toggleDesktopPart('${part.key}', this.checked)">
           <span class="til-part-checkmark"></span>
         </label>
-        <span class="til-part-icon">${part.icon}</span>
+        <span class="til-part-icon"><i data-lucide="${part.icon}" style="width:18px;height:18px;"></i></span>
         <div class="til-part-info">
           <div class="til-part-name">${part.name}</div>
           <div class="til-part-base">基准价 ￥${cheapest.price.toLocaleString()} 起</div>
@@ -248,6 +248,7 @@ function buildDesktopStep() {
   });
   html += '</div>';
   document.getElementById('stepBrand').querySelector('.til-step-content').insertAdjacentHTML('beforeend', html);
+  if(typeof lucide!=='undefined')lucide.createIcons();
 }
 
 function toggleDesktopPart(key, checked) {
@@ -394,7 +395,7 @@ function updatePrice() {
         price += partPrice;
         const modelEl = document.getElementById('partModel-'+part.key);
         const shortName = modelEl?.selectedOptions[0]?.text?.substring(0,20) || part.name;
-        detailHTML += `<div class="til-detail-row"><span>${part.icon} ${shortName}</span><span>￥${partPrice.toLocaleString()}</span></div>`;
+        detailHTML += `<div class="til-detail-row"><span>${shortName}</span><span>￥${partPrice.toLocaleString()}</span></div>`;
         // 更新单配件估价显示
         const estEl = document.getElementById('partEst-'+part.key);
         if (estEl) estEl.textContent = '￥'+partPrice.toLocaleString();
@@ -428,10 +429,10 @@ function openRecycleModal() {
   if (!window._currentEstimate) return;
   let deviceDesc = '';
   if (state.deviceType === 'laptop') {
-    deviceDesc = `💻 ${state.laptopBrand} ${state.laptopModel} ${state.laptopTier}`;
+    deviceDesc = `${state.laptopBrand} ${state.laptopModel} ${state.laptopTier}`;
   } else {
     const selParts = Object.values(state.desktopParts).filter(p => p.name);
-    deviceDesc = '🖥️ 台式机：' + selParts.map(p => p.name).join(' / ');
+    deviceDesc = '台式机：' + selParts.map(p => p.name).join(' / ');
   }
   document.getElementById('rmDevice').textContent = deviceDesc;
   document.getElementById('rmPrice').textContent = window._currentEstimate.toLocaleString();
@@ -463,7 +464,7 @@ function confirmRecycle() {
   localStorage.setItem('pcBuilder_recycleOrders', JSON.stringify(orders));
   saveDiscount(window._currentEstimate);
   document.getElementById('recycleModal').style.display = 'none';
-  alert('✅ 预约成功！回收员将在 ' + date + ' 上门取件');
+  alert('预约成功！回收员将在 ' + date + ' 上门取件');
 }
 
 function saveDiscount(amount) {

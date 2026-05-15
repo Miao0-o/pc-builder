@@ -7,7 +7,7 @@ const TYPE_NAMES = {
   repair: '硬件故障', clean: '清灰保养', upgrade: '配置升级', other: '其他问题'
 };
 const TYPE_ICONS = {
-  repair: '🔧', clean: '🧹', upgrade: '⬆️', other: '📋'
+  repair: 'wrench', clean: 'spray-can', upgrade: 'arrow-up', other: 'layout-template'
 };
 const URGENCY_NAMES = { low: '低', mid: '中', high: '高' };
 const URGENCY_COLORS = { low: '#66ff99', mid: '#ffcc66', high: '#ff6666' };
@@ -77,7 +77,7 @@ function handleSubmit() {
     showTicketMsg('存储空间不足', 'error'); return;
   }
 
-  showTicketMsg('✅ 工单提交成功！我们会尽快联系您', 'success');
+  showTicketMsg('工单提交成功！我们会尽快联系您', 'success');
   resetTicketForm();
   renderTicketList();
 }

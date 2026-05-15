@@ -23,8 +23,8 @@
     <div class="nav-dropdown">
       <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
       <div class="nav-dropdown-menu">
-        <a href="trade-in.html">♻️ 旧机估价</a>
-        <a href="support.html">🔧 售后工单</a>
+        <a href="trade-in.html"><i data-lucide="refresh-cw" class="icon-sm"></i> 旧机估价</a>
+        <a href="support.html"><i data-lucide="wrench" class="icon-sm"></i> 售后工单</a>
       </div>
     </div>
   </div>
@@ -36,11 +36,11 @@
   <!-- 左侧：3D机箱 -->
   <div class="pc-display">
     <div class="pc-title">你的专属台式机</div>
-    <div class="pc-subtitle">🖱 左键拖拽旋转 · 滚轮缩放 · 指向配件查看详情</div>
+    <div class="pc-subtitle">左键拖拽旋转 · 滚轮缩放 · 指向配件查看详情</div>
     <div class="case-3d-container" id="case3D">
-      <div class="case-loading">⏳ 加载中...</div>
+      <div class="case-loading"><i data-lucide="clock" class="icon-sm"></i> 加载中...</div>
       <div id="compLabels"></div>
-      <button class="btn-reset-view" id="btnResetView" title="返回全景">↩ 返回全景</button>
+      <button class="btn-reset-view" id="btnResetView" title="返回全景"><i data-lucide="arrow-left" class="icon-sm"></i> 返回全景</button>
     </div>
   </div>
 
@@ -49,7 +49,7 @@
     <div class="picker-panel" id="pickerPanel"></div>
     <div class="detail-panel" id="detailPanel">
     <div class="panel-placeholder" id="panelPlaceholder">
-      <div class="placeholder-icon">🖱️</div>
+      <div class="placeholder-icon"><i data-lucide="mouse-pointer-2" class="icon-2xl"></i></div>
       <h3>将鼠标指向机箱中的配件</h3>
       <p>指向配件的部位会高亮放大<br>点击查看详细介绍和在售列表</p>
     </div>
@@ -61,8 +61,8 @@
 <!-- 底部总览栏 -->
 <div class="build-summary" id="buildSummary">
   <div class="summary-parts" id="summaryParts"></div>
-  <button class="btn-score" id="btnScore" disabled>📊 鲁大师预估跑分</button>
-  <button class="btn-share-config" id="btnShare" style="display:none;">📋 分享配置单</button>
+  <button class="btn-score" id="btnScore" disabled><i data-lucide="bar-chart-3" class="icon-sm"></i> 鲁大师预估跑分</button>
+  <button class="btn-share-config" id="btnShare" style="display:none;"><i data-lucide="layout-template" class="icon-sm"></i> 分享配置单</button>
   <div class="summary-total">总计：<span id="summaryTotal">¥0</span></div>
 </div>
 
@@ -74,7 +74,7 @@
 <!-- 跑分弹窗 -->
 <div class="modal-overlay" id="scoreModal" style="display:none;">
   <div class="modal">
-    <h2>📊 鲁大师性能预估</h2>
+    <h2><i data-lucide="bar-chart-3" class="icon-lg"></i> 鲁大师性能预估</h2>
     <div class="score-circle">
       <div class="score-inner"><span id="scoreNum">0</span><small>万分</small></div>
     </div>
@@ -88,15 +88,15 @@
 <!-- 配置单分享弹窗 -->
 <div class="modal-overlay" id="shareModal" style="display:none;">
   <div class="modal" style="max-width:860px;">
-    <h2>📋 我的装机配置单</h2>
+    <h2><i data-lucide="layout-template" class="icon-lg"></i> 我的装机配置单</h2>
     <div class="share-canvas-wrap">
       <canvas id="shareCanvas" width="800" height="600"></canvas>
     </div>
     <div class="share-actions">
-      <button class="btn-share-dl" id="btnDownload">📥 下载图片</button>
-      <button class="btn-share-copy" id="btnCopyLink">🔗 复制链接</button>
+      <button class="btn-share-dl" id="btnDownload"><i data-lucide="download" class="icon-sm"></i> 下载图片</button>
+      <button class="btn-share-copy" id="btnCopyLink"><i data-lucide="link" class="icon-sm"></i> 复制链接</button>
     </div>
-    <div class="share-saved-title">📁 已保存的配置单</div>
+    <div class="share-saved-title"><i data-lucide="folder" class="icon-sm"></i> 已保存的配置单</div>
     <div class="share-saved-list" id="savedConfigsList"></div>
     <button class="btn-close" onclick="document.getElementById('shareModal').style.display='none'">关闭</button>
   </div>
@@ -116,5 +116,7 @@
   import { initFeedback } from './js/feedback.js';
   initFeedback();
 </script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

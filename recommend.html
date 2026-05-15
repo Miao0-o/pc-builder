@@ -11,7 +11,7 @@
 <canvas id="particleCanvas"></canvas>
 
 <nav class="nav">
-  <div class="nav-logo">🖥 装机大师</div>
+  <div class="nav-logo"><i data-lucide="monitor" class="icon-md"></i> 装机大师</div>
   <div class="nav-links">
     <a href="index.html">互动装机</a>
     <a href="recommend.html" class="active">一键推荐</a>
@@ -19,18 +19,18 @@
     <div class="nav-dropdown">
       <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
       <div class="nav-dropdown-menu">
-        <a href="trade-in.html">♻️ 旧机估价</a>
-        <a href="support.html">🔧 售后工单</a>
+        <a href="trade-in.html"><i data-lucide="refresh-cw" class="icon-sm"></i> 旧机估价</a>
+        <a href="support.html"><i data-lucide="wrench" class="icon-sm"></i> 售后工单</a>
       </div>
     </div>
   </div>
-  <div class="nav-total">💡 小白装机，一键搞定</div>
+  <div class="nav-total"><i data-lucide="lightbulb" class="icon-sm"></i> 小白装机，一键搞定</div>
 </nav>
 
 <div class="recommend-page">
 
   <div class="rec-hero">
-    <h1>🪄 一键装机推荐</h1>
+    <h1><i data-lucide="sparkles" class="icon-xl"></i> 一键装机推荐</h1>
     <p class="rec-hero-sub">像买笔记本一样简单——告诉预算和用途，自动生成最佳配置</p>
   </div>
 
@@ -38,7 +38,7 @@
   <div class="rec-input-card">
     <!-- 预算滑块 -->
     <div class="rec-section">
-      <div class="rec-section-title">💰 你的预算</div>
+      <div class="rec-section-title"><i data-lucide="dollar-sign" class="icon-sm"></i> 你的预算</div>
       <div class="rec-budget-slider-wrap">
         <input type="range" id="budgetSlider" class="rec-slider"
                min="3000" max="20000" step="500" value="6000">
@@ -51,35 +51,35 @@
 
     <!-- 用途选择 -->
     <div class="rec-section">
-      <div class="rec-section-title">🎯 主要用途（可多选）</div>
+      <div class="rec-section-title"><i data-lucide="target" class="icon-sm"></i> 主要用途（可多选）</div>
       <div class="rec-usage-grid">
         <label class="rec-usage-card">
           <input type="checkbox" id="useOffice" checked>
-          <span class="rec-usage-icon">📝</span>
+          <span class="rec-usage-icon"><i data-lucide="file-text" class="icon-lg"></i></span>
           <span class="rec-usage-name">办公影音</span>
           <span class="rec-usage-desc">Word/Excel/上网/看剧</span>
         </label>
         <label class="rec-usage-card">
           <input type="checkbox" id="useLightGame">
-          <span class="rec-usage-icon">🎮</span>
+          <span class="rec-usage-icon"><i data-lucide="gamepad-2" class="icon-lg"></i></span>
           <span class="rec-usage-name">轻度游戏</span>
           <span class="rec-usage-desc">LOL/原神/CS2</span>
         </label>
         <label class="rec-usage-card">
           <input type="checkbox" id="useAAAGame">
-          <span class="rec-usage-icon">🔥</span>
+          <span class="rec-usage-icon"><i data-lucide="flame" class="icon-lg"></i></span>
           <span class="rec-usage-name">3A大作</span>
           <span class="rec-usage-desc">黑神话/赛博朋克/GTA6</span>
         </label>
         <label class="rec-usage-card">
           <input type="checkbox" id="useVideo">
-          <span class="rec-usage-icon">🎬</span>
+          <span class="rec-usage-icon"><i data-lucide="film" class="icon-lg"></i></span>
           <span class="rec-usage-name">视频剪辑</span>
           <span class="rec-usage-desc">PR/达芬奇/剪映</span>
         </label>
         <label class="rec-usage-card">
           <input type="checkbox" id="useAI">
-          <span class="rec-usage-icon">🤖</span>
+          <span class="rec-usage-icon"><i data-lucide="bot" class="icon-lg"></i></span>
           <span class="rec-usage-name">AI/3D创作</span>
           <span class="rec-usage-desc">SD绘图/Blender/编程</span>
         </label>
@@ -88,7 +88,7 @@
 
     <!-- 平台偏好 -->
     <div class="rec-section">
-      <div class="rec-section-title">⚙️ CPU平台偏好</div>
+      <div class="rec-section-title"><i data-lucide="settings" class="icon-sm"></i> CPU平台偏好</div>
       <div class="rec-platform-group">
         <label class="rec-platform-option">
           <input type="radio" name="platform" value="any" checked>
@@ -107,14 +107,14 @@
 
     <div class="rec-tradein-hint" id="tradeinHint" style="display:none;text-align:center;margin-bottom:12px;padding:8px 16px;background:rgba(102,255,153,0.06);border:1px solid rgba(102,255,153,0.15);border-radius:8px;font-size:13px;color:var(--text);"></div>
     <button class="rec-btn-generate" id="btnGenerate">
-      🎯 生成推荐配置
+      <i data-lucide="target" class="icon-sm"></i> 生成推荐配置
     </button>
   </div>
 
   <!-- 结果区 -->
   <div class="rec-result-card" id="resultArea">
     <div class="rec-result-placeholder">
-      <div class="rec-placeholder-icon">🪄</div>
+      <div class="rec-placeholder-icon"><i data-lucide="sparkles" class="icon-2xl"></i></div>
       <h3>选择预算和用途，点击生成</h3>
       <p>系统会自动匹配兼容、均衡、高性价比的整机配置</p>
     </div>
@@ -130,5 +130,7 @@
   });
 </script>
 <script src="js/chat.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

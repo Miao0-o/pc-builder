@@ -23,7 +23,7 @@
   panel.className = 'chat-panel';
   panel.innerHTML = `
     <div class="chat-header">
-      <span>💬 装机助手</span>
+      <span><i data-lucide="bot" class="icon-sm"></i> 装机助手</span>
       <button class="chat-close">✕</button>
     </div>
     <div class="chat-messages" id="chatMessages">
@@ -37,7 +37,7 @@
     </div>
     <div class="chat-input-area">
       <input type="file" accept="image/*" id="chatFileInput" style="display:none;">
-      <button class="chat-btn-upload" id="chatBtnUpload" title="上传图片">📎</button>
+      <button class="chat-btn-upload" id="chatBtnUpload" title="上传图片"><i data-lucide="paperclip" style="width:16px;height:16px;"></i></button>
       <input type="text" class="chat-input" id="chatInput" placeholder="输入你的问题..." maxlength="500">
       <button class="chat-btn-send" id="chatBtnSend">发送</button>
     </div>

@@ -34,40 +34,40 @@ let glassOpacity=0.2;
 // ===================== 选配数据库 =====================
 const PART_OPTIONS = {
   case: [
-    {id:'case-default',name:'ATX海景房',glb:'models/case.glb',icon:'🖥️',color:0x8a8a8a,preview:'银灰铝合金+钢化玻璃'},
+    {id:'case-default',name:'ATX海景房',glb:'models/case.glb',icon:'monitor',color:0x8a8a8a,preview:'银灰铝合金+钢化玻璃'},
   ],
   gpu: [
-    {id:'gpu-dual',name:'双风扇显卡',glb:'models/gpu-dual.glb',icon:'🎮',color:0x555555,preview:'中端双风扇·30cm级',size:[.1,.45,2.4]},
-    {id:'gpu-triple',name:'三风扇显卡',glb:'models/gpu-triple.glb',icon:'🎮',color:0x5a5a5a,preview:'高端三风扇·33cm级',size:[.1,.45,3.1]},
-    {id:'gpu-flagship',name:'旗舰显卡',glb:'models/gpu-flagship.glb',icon:'🔥',color:0x4a4a4a,preview:'三槽旗舰·35cm级',size:[.14,.48,3.3]},
+    {id:'gpu-dual',name:'双风扇显卡',glb:'models/gpu-dual.glb',icon:'gamepad-2',color:0x555555,preview:'中端双风扇·30cm级',size:[.1,.45,2.4]},
+    {id:'gpu-triple',name:'三风扇显卡',glb:'models/gpu-triple.glb',icon:'gamepad-2',color:0x5a5a5a,preview:'高端三风扇·33cm级',size:[.1,.45,3.1]},
+    {id:'gpu-flagship',name:'旗舰显卡',glb:'models/gpu-flagship.glb',icon:'zap',color:0x4a4a4a,preview:'三槽旗舰·35cm级',size:[.14,.48,3.3]},
   ],
   motherboard: [
-    {id:'mb-default',name:'ATX主板(黑)',glb:'models/motherboard.glb',icon:'📋',color:0x1a3a1a,preview:'标准ATX·黑色PCB'},
-    {id:'mb-white',name:'ATX主板(白)',glb:'models/motherboard.glb',icon:'📋',color:0xcccccc,preview:'标准ATX·白色PCB',colorOverride:0xcccccc},
+    {id:'mb-default',name:'ATX主板(黑)',glb:'models/motherboard.glb',icon:'layout-template',color:0x1a3a1a,preview:'标准ATX·黑色PCB'},
+    {id:'mb-white',name:'ATX主板(白)',glb:'models/motherboard.glb',icon:'layout-template',color:0xcccccc,preview:'标准ATX·白色PCB',colorOverride:0xcccccc},
   ],
   fan: [
-    {id:'fan-blue',name:'RGB风扇(蓝)',glb:'models/fan.glb',icon:'🌀',emissive:0x3366ff,preview:'12cm·蓝色灯效'},
-    {id:'fan-purple',name:'RGB风扇(紫)',glb:'models/fan.glb',icon:'🌀',emissive:0x9933ff,preview:'12cm·紫色灯效'},
-    {id:'fan-red',name:'RGB风扇(红)',glb:'models/fan.glb',icon:'🌀',emissive:0xff3366,preview:'12cm·红色灯效'},
-    {id:'fan-rainbow',name:'RGB风扇(彩虹)',glb:'models/fan.glb',icon:'🌈',emissive:'rainbow',preview:'12cm·彩虹渐变'},
+    {id:'fan-blue',name:'RGB风扇(蓝)',glb:'models/fan.glb',icon:'wind',emissive:0x3366ff,preview:'12cm·蓝色灯效'},
+    {id:'fan-purple',name:'RGB风扇(紫)',glb:'models/fan.glb',icon:'wind',emissive:0x9933ff,preview:'12cm·紫色灯效'},
+    {id:'fan-red',name:'RGB风扇(红)',glb:'models/fan.glb',icon:'wind',emissive:0xff3366,preview:'12cm·红色灯效'},
+    {id:'fan-rainbow',name:'RGB风扇(彩虹)',glb:'models/fan.glb',icon:'palette',emissive:'rainbow',preview:'12cm·彩虹渐变'},
   ],
   cpu: [
-    {id:'cpu-intel',name:'Intel CPU',glb:'models/cpu.glb',icon:'🧠',color:0x555555,preview:'LGA1700'},
-    {id:'cpu-amd',name:'AMD CPU',glb:'models/cpu.glb',icon:'🧠',color:0x888888,preview:'AM5'},
+    {id:'cpu-intel',name:'Intel CPU',glb:'models/cpu.glb',icon:'cpu',color:0x555555,preview:'LGA1700'},
+    {id:'cpu-amd',name:'AMD CPU',glb:'models/cpu.glb',icon:'cpu',color:0x888888,preview:'AM5'},
   ],
   cooler: [
-    {id:'cooler-air',name:'双塔风冷',glb:'models/cooler.glb',icon:'❄️',color:0x606060,preview:'双塔6热管'},
-    {id:'cooler-aio',name:'240水冷',glb:'models/cooler.glb',icon:'💧',color:0x444444,preview:'240mm一体水冷'},
+    {id:'cooler-air',name:'双塔风冷',glb:'models/cooler.glb',icon:'fan',color:0x606060,preview:'双塔6热管'},
+    {id:'cooler-aio',name:'240水冷',glb:'models/cooler.glb',icon:'droplets',color:0x444444,preview:'240mm一体水冷'},
   ],
   ram: [
-    {id:'ram-black',name:'DDR5内存(黑)',glb:'models/ram.glb',icon:'📏',color:0x333333,preview:'16GB×2 无灯'},
-    {id:'ram-rgb',name:'DDR5内存(RGB)',glb:'models/ram.glb',icon:'📏',color:0x444444,preview:'16GB×2 RGB',rgb:true},
+    {id:'ram-black',name:'DDR5内存(黑)',glb:'models/ram.glb',icon:'memory-stick',color:0x333333,preview:'16GB×2 无灯'},
+    {id:'ram-rgb',name:'DDR5内存(RGB)',glb:'models/ram.glb',icon:'memory-stick',color:0x444444,preview:'16GB×2 RGB',rgb:true},
   ],
   storage: [
-    {id:'ssd-default',name:'NVMe SSD',glb:'models/ssd.glb',icon:'💾',color:0x505050,preview:'M.2 2280'},
+    {id:'ssd-default',name:'NVMe SSD',glb:'models/ssd.glb',icon:'hard-drive',color:0x505050,preview:'M.2 2280'},
   ],
   psu: [
-    {id:'psu-default',name:'ATX电源',glb:'models/psu.glb',icon:'🔌',color:0x5a5a5a,preview:'750W金牌全模组'},
+    {id:'psu-default',name:'ATX电源',glb:'models/psu.glb',icon:'plug-zap',color:0x5a5a5a,preview:'750W金牌全模组'},
   ],
 };
 
@@ -89,7 +89,7 @@ const mGhost=(h,o)=>new THREE.MeshStandardMaterial({color:h,roughness:.5,metalne
 function initParticles(){const cv=document.getElementById('particleCanvas');if(!cv)return;const ctx=cv.getContext('2d'),pts=[];for(let i=0;i<35;i++)pts.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,s:Math.random()*1.2+.3,v:Math.random()*.25+.05,o:Math.random()*.25+.05});function rs(){cv.width=window.innerWidth;cv.height=window.innerHeight;}rs();window.addEventListener('resize',rs);(function a(){ctx.clearRect(0,0,cv.width,cv.height);pts.forEach(p=>{p.y-=p.v;if(p.y<-10){p.y=cv.height+10;p.x=Math.random()*cv.width;}ctx.fillStyle=`rgba(255,255,255,${p.o})`;ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();});requestAnimationFrame(a);})();}
 
 // ===================== 场景初始化 =====================
-function init3DScene(){const ct=document.getElementById('case3D');if(!ct)return;const ld=ct.querySelector('.case-loading');try{_doInit(ct,ld);}catch(e){console.error(e);if(ld){ld.innerHTML='❌ '+e.message;ld.style.color='#f44';}}}
+function init3DScene(){const ct=document.getElementById('case3D');if(!ct)return;const ld=ct.querySelector('.case-loading');try{_doInit(ct,ld);}catch(e){console.error(e);if(ld){ld.innerHTML='Failed: '+e.message;ld.style.color='#f44';}}}
 function _doInit(ct,ld){
   scene=new THREE.Scene();scene.background=new THREE.Color(0x0a0a12);scene.fog=new THREE.Fog(0x0a0a12,14,32);
   camera=new THREE.PerspectiveCamera(38,ct.clientWidth/ct.clientHeight,.1,100);camera.position.set(-10,3.5,1);camera.lookAt(0,2.4,0);
@@ -137,21 +137,24 @@ function _buildCables(cw,ch){const m=new THREE.MeshStandardMaterial({color:0x1a1
 function _buildPickerUI(){
   const panel=document.getElementById('pickerPanel');if(!panel)return;
   const cats=[
-    {key:'case',name:'机箱',icon:'🖥️'},{key:'gpu',name:'显卡',icon:'🎮'},{key:'motherboard',name:'主板',icon:'📋'},
-    {key:'cpu',name:'CPU',icon:'🧠'},{key:'cooler',name:'散热器',icon:'❄️'},{key:'ram',name:'内存',icon:'📏'},
-    {key:'storage',name:'硬盘',icon:'💾'},{key:'psu',name:'电源',icon:'🔌'},{key:'fan',name:'风扇灯效',icon:'🌀'},
+    {key:'case',name:'机箱',icon:'monitor'},{key:'gpu',name:'显卡',icon:'gamepad-2'},{key:'motherboard',name:'主板',icon:'layout-template'},
+    {key:'cpu',name:'CPU',icon:'cpu'},{key:'cooler',name:'散热器',icon:'fan'},{key:'ram',name:'内存',icon:'memory-stick'},
+    {key:'storage',name:'硬盘',icon:'hard-drive'},{key:'psu',name:'电源',icon:'plug-zap'},{key:'fan',name:'风扇灯效',icon:'wind'},
   ];
-  let html='<div class="picker-title">🎨 配件选择器</div><div class="picker-grid">';
+  let html='<div class="picker-title"><i data-lucide="sparkles" class="icon-lg"></i> 配件选择器</div><div class="picker-grid">';
   for(const cat of cats){
     const opts=PART_OPTIONS[cat.key]||[];const cur=currentPicks[cat.key];
-    html+=`<div class="picker-cat"><div class="picker-cat-name">${cat.icon} ${cat.name}</div><div class="picker-opts">`;
+    html+=`<div class="picker-cat"><div class="picker-cat-name"><i data-lucide="${cat.icon}" class="icon-sm"></i> ${cat.name}</div><div class="picker-opts">`;
     for(const opt of opts){
-      html+=`<button class="picker-opt${cur===opt.id?' active':''}" data-cat="${cat.key}" data-id="${opt.id}" title="${opt.preview}">${opt.icon} ${opt.name}</button>`;
+      html+=`<button class="picker-opt${cur===opt.id?' active':''}" data-cat="${cat.key}" data-id="${opt.id}" title="${opt.preview}"><i data-lucide="${opt.icon}" class="icon-sm"></i> ${opt.name}</button>`;
     }
     html+=`</div></div>`;
   }
   html+='</div>';
   panel.innerHTML=html;
+
+  // Initialize Lucide icons
+  if(typeof lucide!=='undefined')lucide.createIcons();
 
   // 点击事件
   panel.querySelectorAll('.picker-opt').forEach(btn=>{btn.addEventListener('click',()=>{const cat=btn.dataset.cat,id=btn.dataset.id;_applyPick(cat,id);_buildPickerUI();});});
@@ -212,16 +215,16 @@ function _setupKeybinds(){window.addEventListener('keydown',e=>{if(e.key==='c'||
 function _rebuildCase(){while(caseGroup.children.length>0)caseGroup.remove(caseGroup.children[0]);allFanMeshes.length=0;emissiveObjects.length=0;for(const k of Object.keys(componentGroups))delete componentGroups[k];for(const k of Object.keys(compWorldPos))delete compWorldPos[k];_buildCase();_buildAllComponents();_createLabels();if(selectedPart&&componentGroups[selectedPart])_setGroupStyle(componentGroups[selectedPart],'real');}
 
 // ===================== 详情面板 =====================
-function _showDetail(key){activeComponentKey=key;currentTab='intro';const comp=pcComponents[key],pan=document.getElementById('detailPanel'),ph=document.getElementById('panelPlaceholder');if(ph)ph.style.display='none';pan.innerHTML=_buildDetailHTML(comp,key);_renderTabContent();}
-function _showGeneric(key){const info={case:{icon:'🖥️',name:'机箱外壳',desc:'海景房全景机箱。'},'fan-front-0':{icon:'🌀',name:'前置RGB风扇#1',desc:'进风扇。'},'fan-front-1':{icon:'🌀',name:'前置RGB风扇#2',desc:'进风扇。'},'fan-front-2':{icon:'🌀',name:'前置RGB风扇#3',desc:'进风扇。'},'fan-rear':{icon:'🌀',name:'后置排风扇',desc:'排风扇。'}};const item=info[key]||{icon:'🔧',name:key,desc:'硬件部件'};activeComponentKey=key;const pan=document.getElementById('detailPanel'),ph=document.getElementById('panelPlaceholder');if(ph)ph.style.display='none';pan.innerHTML=`<div class="detail-content"><div class="detail-header"><span class="part-icon-big">${item.icon}</span><h2>${item.name}</h2></div><div class="detail-intro"><p>${item.desc}</p></div></div>`;}
-function _buildDetailHTML(comp,key){return`<div class="detail-content"><div class="detail-header"><span class="part-icon-big">${comp.icon}</span><h2>${comp.name}</h2></div><div class="detail-tabs"><button class="detail-tab active" id="tabIntro" onclick="window.switchTab('intro')">📖 介绍</button><button class="detail-tab" id="tabBuy" onclick="window.switchTab('buy')">🛒 在售</button></div><div id="tabContent"></div></div>`;}
-function switchTab(tab){currentTab=tab;document.getElementById('tabIntro')?.classList.toggle('active',tab==='intro');document.getElementById('tabBuy')?.classList.toggle('active',tab==='buy');_renderTabContent();}window.switchTab=switchTab;
-function _renderTabContent(){const comp=pcComponents[activeComponentKey],c=document.getElementById('tabContent');if(!c)return;const chosen=selectedBuild[activeComponentKey]||null;if(currentTab==='intro'){c.innerHTML=`<div class="detail-tab-content"><div class="detail-intro"><p>${comp.description}</p></div>${(comp.knowledge||[]).map(k=>`<div class="knowledge-card"><div class="kc-title">${k.title}</div><div class="kc-text">${k.text}</div>${k.example?`<div class="kc-example">${k.example}</div>`:''}</div>`).join('')}${comp.specs?`<div class="knowledge-card"><div class="kc-title">📋 关键参数</div><table class="spec-table">${comp.specs.map(s=>`<tr><th>${s[0]}</th><td>${s[1]}</td></tr>`).join('')}</table></div>`:''}</div>`;}else{c.innerHTML=`<div class="detail-tab-content"><div class="options-title">🏪 市售热门型号</div>${comp.options.map(opt=>{const is=chosen===opt.name;return`<div class="option-card${is?' chosen':''}" onclick="window.pickOption('${activeComponentKey}','${_escape(opt.name)}')">${is?'<span class="choose-badge">✓ 已选</span>':''}<div class="opt-icon-placeholder">${comp.icon}</div><div class="option-info"><h4>${opt.name}</h4><div class="option-specs">${opt.specs}</div><span class="option-tier">${opt.tier}</span><div class="buy-links"><a href="https://search.jd.com/Search?keyword=${encodeURIComponent(opt.name)}&enc=utf-8" target="_blank" class="buy-link jd" onclick="event.stopPropagation()">🔴京东</a><a href="https://s.taobao.com/search?q=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link tb" onclick="event.stopPropagation()">🟠淘宝</a><a href="https://mobile.yangkeduo.com/search_result.html?search_key=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link pdd" onclick="event.stopPropagation()">🔵拼多多</a></div></div><div class="option-price">¥${opt.price.toLocaleString()}</div></div>`}).join('')}</div>`;}}
+function _showDetail(key){activeComponentKey=key;currentTab='intro';const comp=pcComponents[key],pan=document.getElementById('detailPanel'),ph=document.getElementById('panelPlaceholder');if(ph)ph.style.display='none';pan.innerHTML=_buildDetailHTML(comp,key);_renderTabContent();if(typeof lucide!=='undefined')lucide.createIcons();}
+function _showGeneric(key){const info={case:{icon:'monitor',name:'机箱外壳',desc:'海景房全景机箱。'},'fan-front-0':{icon:'wind',name:'前置RGB风扇#1',desc:'进风扇。'},'fan-front-1':{icon:'wind',name:'前置RGB风扇#2',desc:'进风扇。'},'fan-front-2':{icon:'wind',name:'前置RGB风扇#3',desc:'进风扇。'},'fan-rear':{icon:'wind',name:'后置排风扇',desc:'排风扇。'}};const item=info[key]||{icon:'wrench',name:key,desc:'硬件部件'};activeComponentKey=key;const pan=document.getElementById('detailPanel'),ph=document.getElementById('panelPlaceholder');if(ph)ph.style.display='none';pan.innerHTML=`<div class="detail-content"><div class="detail-header"><span class="part-icon-big"><i data-lucide="${item.icon}" class="icon-2xl"></i></span><h2>${item.name}</h2></div><div class="detail-intro"><p>${item.desc}</p></div></div>`;if(typeof lucide!=='undefined')lucide.createIcons();}
+function _buildDetailHTML(comp,key){return`<div class="detail-content"><div class="detail-header"><span class="part-icon-big"><i data-lucide="${comp.icon}" class="icon-2xl"></i></span><h2>${comp.name}</h2></div><div class="detail-tabs"><button class="detail-tab active" id="tabIntro" onclick="window.switchTab('intro')"><i data-lucide="book-open" class="icon-sm"></i> 介绍</button><button class="detail-tab" id="tabBuy" onclick="window.switchTab('buy')"><i data-lucide="store" class="icon-sm"></i> 在售</button></div><div id="tabContent"></div></div>`;}
+function switchTab(tab){currentTab=tab;document.getElementById('tabIntro')?.classList.toggle('active',tab==='intro');document.getElementById('tabBuy')?.classList.toggle('active',tab==='buy');_renderTabContent();if(typeof lucide!=='undefined')lucide.createIcons();}window.switchTab=switchTab;
+function _renderTabContent(){const comp=pcComponents[activeComponentKey],c=document.getElementById('tabContent');if(!c)return;const chosen=selectedBuild[activeComponentKey]||null;if(currentTab==='intro'){c.innerHTML=`<div class="detail-tab-content"><div class="detail-intro"><p>${comp.description}</p></div>${(comp.knowledge||[]).map(k=>`<div class="knowledge-card"><div class="kc-title">${k.title}</div><div class="kc-text">${k.text}</div>${k.example?`<div class="kc-example">${k.example}</div>`:''}</div>`).join('')}${comp.specs?`<div class="knowledge-card"><div class="kc-title"><i data-lucide="layout-template" class="icon-sm"></i> 关键参数</div><table class="spec-table">${comp.specs.map(s=>`<tr><th>${s[0]}</th><td>${s[1]}</td></tr>`).join('')}</table></div>`:''}</div>`;}else{c.innerHTML=`<div class="detail-tab-content"><div class="options-title"><i data-lucide="store" class="icon-sm"></i> 市售热门型号</div>${comp.options.map(opt=>{const is=chosen===opt.name;return`<div class="option-card${is?' chosen':''}" onclick="window.pickOption('${activeComponentKey}','${_escape(opt.name)}')">${is?'<span class="choose-badge">✓ 已选</span>':''}<div class="opt-icon-placeholder"><i data-lucide="${comp.icon}" style="width:40px;height:40px;"></i></div><div class="option-info"><h4>${opt.name}</h4><div class="option-specs">${opt.specs}</div><span class="option-tier">${opt.tier}</span><div class="buy-links"><a href="https://search.jd.com/Search?keyword=${encodeURIComponent(opt.name)}&enc=utf-8" target="_blank" class="buy-link jd" onclick="event.stopPropagation()">🔴京东</a><a href="https://s.taobao.com/search?q=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link tb" onclick="event.stopPropagation()">🟠淘宝</a><a href="https://mobile.yangkeduo.com/search_result.html?search_key=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link pdd" onclick="event.stopPropagation()">🔵拼多多</a></div></div><div class="option-price">¥${opt.price.toLocaleString()}</div></div>`}).join('')}</div>`;}}
 function pickOption(key,name){if(selectedBuild[key]===name)delete selectedBuild[key];else selectedBuild[key]=name;if(key==='fan'){const fanOpt=PART_OPTIONS['fan']?.find(o=>o.name===name);if(fanOpt)_updateFanColors(fanOpt);}if(selectedBuild[key])_focusOnObject(key);_renderSummary();_renderTabContent();_updateLabels();}window.pickOption=pickOption;
 function _escape(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ===================== 底部总览+跑分 =====================
-function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled">${comp.icon} ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty">${comp.icon} 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'📊 查看鲁大师跑分！':`📊 鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}_runCompatCheck();}
+function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled"><i data-lucide="${comp.icon}" class="icon-sm"></i> ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty"><i data-lucide="${comp.icon}" class="icon-sm"></i> 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'查看鲁大师跑分！':`鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}_runCompatCheck();if(typeof lucide!=='undefined')lucide.createIcons();}
 
 function _runCompatCheck() {
   const parts = {};
@@ -307,7 +310,7 @@ function _generateShareCard(id){
 
   // 标题
   ctx.fillStyle='#f0f0f0';ctx.font='bold 28px "PingFang SC","Microsoft YaHei",sans-serif';
-  ctx.textAlign='center';ctx.fillText('🖥 装机大师 · 配置单',W/2,56);
+  ctx.textAlign='center';ctx.fillText('装机大师 · 配置单',W/2,56);
 
   // 分割线
   ctx.strokeStyle='#2a2a2a';ctx.lineWidth=1;
@@ -337,12 +340,8 @@ function _generateShareCard(id){
 
     // 图标
     const comp=pcComponents[key];
-    ctx.fillStyle='#f0f0f0';ctx.font='22px sans-serif';ctx.textAlign='left';
-    ctx.fillText(comp?.icon||'🔧',x+12,y+28);
-
-    // 品类名
     ctx.fillStyle='#888888';ctx.font='12px "PingFang SC","Microsoft YaHei",sans-serif';
-    ctx.fillText(comp?.shortName||key,x+44,y+26);
+    ctx.fillText(comp?.shortName||key,x+12,y+26);
 
     // 型号（截断）
     ctx.fillStyle='#f0f0f0';ctx.font='bold 13px "PingFang SC","Microsoft YaHei",sans-serif';
@@ -441,7 +440,7 @@ document.getElementById('btnCopyLink')?.addEventListener('click',async()=>{
   if(saved.length===0){alert('请先生成配置单');return;}
   const id=saved[0].id;
   const url=window.location.origin+window.location.pathname+'#config/'+id;
-  try{await navigator.clipboard.writeText(url);alert('✅ 链接已复制！\n'+url);}catch(e){prompt('复制此链接分享：',url);}
+  try{await navigator.clipboard.writeText(url);alert('链接已复制！\n'+url);}catch(e){prompt('复制此链接分享：',url);}
 });
 
 // ===================== 渲染循环 =====================
