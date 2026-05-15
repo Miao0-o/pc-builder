@@ -101,7 +101,6 @@ function _doInit(ct,ld){
   _buildCase();_buildAllComponents();_createLabels();_setupKeybinds();
   document.getElementById('btnResetView')?.addEventListener('click',_resetView);
   renderer.domElement.addEventListener('pointermove',_onPointerMove);renderer.domElement.addEventListener('dblclick',_onDblClick);renderer.domElement.addEventListener('click',_onClick);window.addEventListener('resize',_onResize);
-  _buildPickerUI();
   if(ld)ld.style.display='none';_animate();
 }
 
@@ -134,32 +133,6 @@ function _buildFans(cw,ch,cd){const fc=[0x3366ff,0x9933ff,0xff3366];for(let j=0;
 function _buildCables(cw,ch){const m=new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:.7,metalness:.05});for(let i=0;i<5;i++){const cv=new THREE.CatmullRomCurve3([new THREE.Vector3(cw/2-.2,ch*.52+i*.06,1.5),new THREE.Vector3(cw/2-.3,ch*.48+i*.06,1.2),new THREE.Vector3(cw/2-.35,ch*.42,.8)]);caseGroup.add(new THREE.Mesh(new THREE.TubeGeometry(cv,12,.02,8,false),m)).castShadow=true;}}
 
 // ===================== 选配面板 UI =====================
-function _buildPickerUI(){
-  const panel=document.getElementById('pickerPanel');if(!panel)return;
-  const cats=[
-    {key:'case',name:'机箱',icon:'monitor'},{key:'gpu',name:'显卡',icon:'gamepad-2'},{key:'motherboard',name:'主板',icon:'layout-template'},
-    {key:'cpu',name:'CPU',icon:'cpu'},{key:'cooler',name:'散热器',icon:'fan'},{key:'ram',name:'内存',icon:'memory-stick'},
-    {key:'storage',name:'硬盘',icon:'hard-drive'},{key:'psu',name:'电源',icon:'plug-zap'},{key:'fan',name:'风扇灯效',icon:'wind'},
-  ];
-  let html='<div class="picker-title"><i data-lucide="sparkles" class="icon-lg"></i> 配件选择器</div><div class="picker-grid">';
-  for(const cat of cats){
-    const opts=PART_OPTIONS[cat.key]||[];const cur=currentPicks[cat.key];
-    html+=`<div class="picker-cat"><div class="picker-cat-name"><i data-lucide="${cat.icon}" class="icon-sm"></i> ${cat.name}</div><div class="picker-opts">`;
-    for(const opt of opts){
-      html+=`<button class="picker-opt${cur===opt.id?' active':''}" data-cat="${cat.key}" data-id="${opt.id}" title="${opt.preview}"><i data-lucide="${opt.icon}" class="icon-sm"></i> ${opt.name}</button>`;
-    }
-    html+=`</div></div>`;
-  }
-  html+='</div>';
-  panel.innerHTML=html;
-
-  // Initialize Lucide icons
-  if(typeof lucide!=='undefined')lucide.createIcons();
-
-  // 点击事件
-  panel.querySelectorAll('.picker-opt').forEach(btn=>{btn.addEventListener('click',()=>{const cat=btn.dataset.cat,id=btn.dataset.id;_applyPick(cat,id);_buildPickerUI();});});
-}
-
 function _applyPick(cat,id){
   currentPicks[cat]=id;const opt=PART_OPTIONS[cat].find(o=>o.id===id);if(!opt)return;
   // 更新3D场景
@@ -224,7 +197,14 @@ function pickOption(key,name){if(selectedBuild[key]===name)delete selectedBuild[
 function _escape(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ===================== 底部总览+跑分 =====================
-function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<span class="summary-part filled"><i data-lucide="${comp.icon}" class="icon-sm"></i> ${_short(key,selectedBuild[key])}</span>`;}return`<span class="summary-part empty"><i data-lucide="${comp.icon}" class="icon-sm"></i> 未选</span>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'查看鲁大师跑分！':`鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}_runCompatCheck();if(typeof lucide!=='undefined')lucide.createIcons();}
+function _focusOnComponent(key){
+  if(componentGroups[key])_focusOnObject(key);
+  else if(pcComponents[key])_showDetail(key);
+  _renderSummary();
+}
+window._focusOnComponent=_focusOnComponent;
+
+function _renderSummary(){const sp=document.getElementById('summaryParts'),st=document.getElementById('summaryTotal'),nt=document.getElementById('navTotal'),bs=document.getElementById('btnScore');let total=0,cnt=0;sp.innerHTML=componentOrder.map(key=>{const comp=pcComponents[key];if(selectedBuild[key]){const opt=comp.options.find(o=>o.name===selectedBuild[key]);total+=opt?opt.price:0;cnt++;return`<button class="summary-part filled" onclick="_focusOnComponent('${key}')"><i data-lucide="${comp.icon}" class="icon-sm"></i> ${_short(key,selectedBuild[key])}</button>`;}return`<button class="summary-part empty" onclick="_focusOnComponent('${key}')"><i data-lucide="${comp.icon}" class="icon-sm"></i> 未选</button>`;}).join('');_animPrice(st,prevTotalPrice,total);_animPrice(nt,prevTotalPrice,total);prevTotalPrice=total;const shareBtn=document.getElementById('btnShare');bs.disabled=cnt<8;bs.textContent=cnt===8?'查看鲁大师跑分！':`鲁大师预估跑分（已选${cnt}/8）`;bs.classList.toggle('ready',cnt===8);bs.onclick=_showScore;if(shareBtn){shareBtn.style.display=cnt>=9?'inline-flex':'none';shareBtn.onclick=_openShareModal;}_runCompatCheck();if(typeof lucide!=='undefined')lucide.createIcons();}
 
 function _runCompatCheck() {
   const parts = {};
