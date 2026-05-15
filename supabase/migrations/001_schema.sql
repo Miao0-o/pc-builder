@@ -17,6 +17,23 @@ CREATE POLICY "profiles_read_own" ON profiles FOR SELECT USING (auth.uid() = id)
 CREATE POLICY "profiles_update_own" ON profiles FOR UPDATE USING (auth.uid() = id);
 CREATE POLICY "profiles_insert_own" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
 
+-- Auto-set updated_at on row update
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_profiles_updated_at
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+CREATE TRIGGER trg_configs_updated_at
+  BEFORE UPDATE ON configs
+  FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
 -- Auto-create profile on signup
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
@@ -37,6 +54,8 @@ CREATE TABLE IF NOT EXISTS configs (
   name            TEXT NOT NULL DEFAULT '我的配置',
   status          TEXT NOT NULL DEFAULT 'draft'
                   CHECK (status IN ('draft','published','private','trashed')),
+  CONSTRAINT chk_total_price_non_negative CHECK (total_price >= 0),
+  CONSTRAINT chk_benchmark_score_non_negative CHECK (benchmark_score >= 0),
   parts_snapshot  JSONB NOT NULL DEFAULT '{}',
   total_price     INT NOT NULL DEFAULT 0,
   benchmark_score INT NOT NULL DEFAULT 0,
@@ -73,13 +92,22 @@ CREATE POLICY "configs_delete_own" ON configs FOR DELETE USING (
 
 -- Generate unique 6-char share code
 CREATE OR REPLACE FUNCTION gen_share_code()
-RETURNS TEXT AS $$
+RETURNS TEXT
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 DECLARE
   chars TEXT := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   code TEXT;
   done BOOLEAN := false;
+  max_iterations INT := 100;
+  iteration INT := 0;
 BEGIN
   WHILE NOT done LOOP
+    iteration := iteration + 1;
+    IF iteration > max_iterations THEN
+      RAISE EXCEPTION 'Failed to generate unique share code after % attempts', max_iterations;
+    END IF;
     code := '';
     FOR i IN 1..6 LOOP
       code := code || substr(chars, floor(random() * length(chars) + 1)::int, 1);
