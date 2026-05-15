@@ -161,3 +161,7 @@ CREATE TABLE IF NOT EXISTS rate_limits (
   window_start TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX idx_ratelimit_user ON rate_limits(user_id, endpoint);
+
+ALTER TABLE rate_limits ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "rate_limits_read_own" ON rate_limits FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "rate_limits_insert_own" ON rate_limits FOR INSERT WITH CHECK (auth.uid() = user_id);
