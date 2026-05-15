@@ -115,6 +115,31 @@
   import { initFeedback } from './js/feedback.js';
   initFeedback();
 </script>
+<script src="js/showcase.js"></script>
+<!-- 成品方案展示区 -->
+<section class="showcase-section">
+  <div class="showcase-header">
+    <h2><i data-lucide="sparkles" class="icon-lg"></i> 成品方案展示</h2>
+    <p>精选装机方案，看中直接购买</p>
+  </div>
+
+  <div class="filter-bar" id="showcaseFilters">
+    <span class="filter-label">预算：</span>
+    <button class="filter-chip active" data-budget="all">全部</button>
+    <button class="filter-chip" data-budget="3-5k">3k-5k</button>
+    <button class="filter-chip" data-budget="5-8k">5k-8k</button>
+    <button class="filter-chip" data-budget="8-12k">8k-12k</button>
+    <button class="filter-chip" data-budget="12k+">12k+</button>
+    <span class="filter-label" style="margin-left:16px;">用途：</span>
+    <button class="filter-chip active" data-usage="all">全部</button>
+    <button class="filter-chip" data-usage="gaming">游戏电竞</button>
+    <button class="filter-chip" data-usage="office">办公设计</button>
+    <button class="filter-chip" data-usage="ai">AI创作</button>
+  </div>
+
+  <div class="showcase-grid" id="showcaseGrid"></div>
+</section>
+
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
