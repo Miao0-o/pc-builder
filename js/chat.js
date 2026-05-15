@@ -9,7 +9,7 @@
   // ========== DOM 注入 ==========
   const fab = document.createElement('button');
   fab.className = 'chat-fab';
-  fab.innerHTML = '😊';
+  fab.innerHTML = '<i data-lucide="bot" style="width:24px;height:24px;color:#d4af37;"></i>';
   fab.title = '咨询问题点我试试';
   document.body.appendChild(fab);
 
@@ -28,7 +28,7 @@
     </div>
     <div class="chat-messages" id="chatMessages">
       <div class="chat-bubble chat-bubble-bot">
-        <div class="chat-bubble-text">你好！我是装机小助手 😊<br>可以帮你：<br>· 估算装机预算<br>· 推荐配件搭配<br>· 解答硬件问题<br>· 旧机估价回收<br><br>输入<strong>「转人工」</strong>可转接真人客服<br>上传装机效果图可预估配置价格</div>
+        <div class="chat-bubble-text">你好！我是装机小助手<br>可以帮你：<br>· 估算装机预算<br>· 推荐配件搭配<br>· 解答硬件问题<br>· 旧机估价回收<br><br>输入<strong>「转人工」</strong>可转接真人客服<br>上传装机效果图可预估配置价格</div>
       </div>
     </div>
     <div class="chat-preview" id="chatPreview" style="display:none;">
