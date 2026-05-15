@@ -39,10 +39,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '鑫谷 无尽版 Pro 黑色', price: 199, specs: '中塔ATX / 显卡限长350mm / 侧透钢化玻璃 / SPCC板材0.6mm', score: 40000, tier: '百元性价比之王', shape: 'mid-tower-basic' },
-      { name: '追风者 G360A 白色', price: 399, specs: '中塔ATX / 显卡限长380mm / 3×ARGB风扇预装 / 0.7mm板材', score: 55000, tier: '高颜值ARGB', shape: 'mid-tower-rgb' },
-      { name: '联力 LANCOOL 216 黑色', price: 499, specs: '中塔ATX / 显卡限长392mm / 前2×16cm+后14cm风扇 / 0.8mm板材', score: 60000, tier: '500元散热王者', shape: 'mid-tower-premium' },
-      { name: '恩杰 H5 Flow 黑色', price: 599, specs: '中塔ATX / 显卡限长365mm / 独特下置风扇位 / SECC板材', score: 62000, tier: '恩杰品质', shape: 'mid-tower-nzxt' }
+      { name: '鑫谷 无尽版 Pro 黑色', price: 199, specs: '中塔ATX / 显卡限长350mm / 侧透钢化玻璃 / SPCC板材0.6mm', score: 40000, tier: '百元性价比之王', shape: 'mid-tower-basic', structuredSpecs: { formFactor: 'ATX', supportedMB: ['ATX', 'M-ATX', 'ITX'], gpuMaxLength: 350, coolerMaxHeight: 165, radiatorSupport: ['240', '280', '360'], material: 'SPCC', thickness: 0.6, sidePanel: 'tempered-glass', fanSlots: 6 } },
+      { name: '追风者 G360A 白色', price: 399, specs: '中塔ATX / 显卡限长380mm / 3×ARGB风扇预装 / 0.7mm板材', score: 55000, tier: '高颜值ARGB', shape: 'mid-tower-rgb', structuredSpecs: { formFactor: 'ATX', supportedMB: ['ATX', 'M-ATX', 'ITX'], gpuMaxLength: 380, coolerMaxHeight: 170, radiatorSupport: ['240', '280', '360'], material: 'SPCC', thickness: 0.7, sidePanel: 'tempered-glass', fanSlots: 7 } },
+      { name: '联力 LANCOOL 216 黑色', price: 499, specs: '中塔ATX / 显卡限长392mm / 前2×16cm+后14cm风扇 / 0.8mm板材', score: 60000, tier: '500元散热王者', shape: 'mid-tower-premium', structuredSpecs: { formFactor: 'ATX', supportedMB: ['ATX', 'M-ATX', 'ITX'], gpuMaxLength: 392, coolerMaxHeight: 180, radiatorSupport: ['240', '280', '360'], material: 'SPCC', thickness: 0.8, sidePanel: 'tempered-glass', fanSlots: 7 } },
+      { name: '恩杰 H5 Flow 黑色', price: 599, specs: '中塔ATX / 显卡限长365mm / 独特下置风扇位 / SECC板材', score: 62000, tier: '恩杰品质', shape: 'mid-tower-nzxt', structuredSpecs: { formFactor: 'ATX', supportedMB: ['ATX', 'M-ATX', 'ITX'], gpuMaxLength: 365, coolerMaxHeight: 170, radiatorSupport: ['240', '280'], material: 'SECC', thickness: 0.7, sidePanel: 'tempered-glass', fanSlots: 6 } }
     ]
   },
 
@@ -80,10 +80,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: 'Intel 酷睿 i5-14600KF', price: 1699, specs: '14核20线程 / 最高5.3GHz / 24MB L3 / 125W / LGA1700', score: 280000, tier: '中端游戏首选', shape: 'cpu-intel' },
-      { name: 'Intel 酷睿 i7-14700KF', price: 2599, specs: '20核28线程 / 最高5.6GHz / 33MB L3 / 125W / LGA1700', score: 380000, tier: '高端游戏+生产力', shape: 'cpu-intel' },
-      { name: 'AMD 锐龙 R5 7600X', price: 1399, specs: '6核12线程 / 最高5.3GHz / 32MB L3 / 105W / AM5', score: 250000, tier: 'AMD性价比之选', shape: 'cpu-amd' },
-      { name: 'AMD 锐龙 R7 7800X3D', price: 2899, specs: '8核16线程 / 96MB L3缓存 / 120W / AM5', score: 360000, tier: '游戏最强U', shape: 'cpu-amd' }
+      { name: 'Intel 酷睿 i5-14600KF', price: 1699, specs: '14核20线程 / 最高5.3GHz / 24MB L3 / 125W / LGA1700', score: 280000, tier: '中端游戏首选', shape: 'cpu-intel', structuredSpecs: { socket: 'LGA1700', platform: 'intel', generation: 14, cores: 14, threads: 20, baseClock: 3.5, boostClock: 5.3, tdp: 125, hasIGPU: false, l3Cache: 24, memorySupport: ['DDR5', 'DDR4'] } },
+      { name: 'Intel 酷睿 i7-14700KF', price: 2599, specs: '20核28线程 / 最高5.6GHz / 33MB L3 / 125W / LGA1700', score: 380000, tier: '高端游戏+生产力', shape: 'cpu-intel', structuredSpecs: { socket: 'LGA1700', platform: 'intel', generation: 14, cores: 20, threads: 28, baseClock: 3.4, boostClock: 5.6, tdp: 125, hasIGPU: false, l3Cache: 33, memorySupport: ['DDR5', 'DDR4'] } },
+      { name: 'AMD 锐龙 R5 7600X', price: 1399, specs: '6核12线程 / 最高5.3GHz / 32MB L3 / 105W / AM5', score: 250000, tier: 'AMD性价比之选', shape: 'cpu-amd', structuredSpecs: { socket: 'AM5', platform: 'amd', generation: 7000, cores: 6, threads: 12, baseClock: 4.7, boostClock: 5.3, tdp: 105, hasIGPU: true, l3Cache: 32, memorySupport: ['DDR5'] } },
+      { name: 'AMD 锐龙 R7 7800X3D', price: 2899, specs: '8核16线程 / 96MB L3缓存 / 120W / AM5', score: 360000, tier: '游戏最强U', shape: 'cpu-amd', structuredSpecs: { socket: 'AM5', platform: 'amd', generation: 7000, cores: 8, threads: 16, baseClock: 4.2, boostClock: 5.0, tdp: 120, hasIGPU: true, l3Cache: 96, memorySupport: ['DDR5'] } }
     ]
   },
 
@@ -120,10 +120,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: 'NVIDIA RTX 4060 8G', price: 2399, specs: '8GB GDDR6 / 3072 CUDA / 115W / 双风扇 / 支持DLSS3', score: 320000, tier: '1080P入门甜品', shape: 'gpu-dual' },
-      { name: 'NVIDIA RTX 4060 Ti 8G', price: 3299, specs: '8GB GDDR6 / 4352 CUDA / 160W / 双/三风扇 / DLSS3', score: 380000, tier: '2K入门', shape: 'gpu-triple' },
-      { name: 'NVIDIA RTX 4070 Super 12G', price: 4799, specs: '12GB GDDR6X / 7168 CUDA / 220W / 三风扇 / DLSS3', score: 520000, tier: '4K入门/2K高刷', shape: 'gpu-triple' },
-      { name: 'AMD RX 7700 XT 12G', price: 2999, specs: '12GB GDDR6 / 3456流处理器 / 245W / 三风扇', score: 400000, tier: 'AMD性价比2K卡', shape: 'gpu-triple' }
+      { name: 'NVIDIA RTX 4060 8G', price: 2399, specs: '8GB GDDR6 / 3072 CUDA / 115W / 双风扇 / 支持DLSS3', score: 320000, tier: '1080P入门甜品', shape: 'gpu-dual', structuredSpecs: { chipset: 'RTX 4060', vram: 8, vramType: 'GDDR6', tdp: 115, length: 240, slotWidth: 2, pcieGen: 4, hasDLSS3: true, powerConnector: '8-pin' } },
+      { name: 'NVIDIA RTX 4060 Ti 8G', price: 3299, specs: '8GB GDDR6 / 4352 CUDA / 160W / 双/三风扇 / DLSS3', score: 380000, tier: '2K入门', shape: 'gpu-triple', structuredSpecs: { chipset: 'RTX 4060 Ti', vram: 8, vramType: 'GDDR6', tdp: 160, length: 270, slotWidth: 2, pcieGen: 4, hasDLSS3: true, powerConnector: '8-pin' } },
+      { name: 'NVIDIA RTX 4070 Super 12G', price: 4799, specs: '12GB GDDR6X / 7168 CUDA / 220W / 三风扇 / DLSS3', score: 520000, tier: '4K入门/2K高刷', shape: 'gpu-triple', structuredSpecs: { chipset: 'RTX 4070 Super', vram: 12, vramType: 'GDDR6X', tdp: 220, length: 310, slotWidth: 2.5, pcieGen: 4, hasDLSS3: true, powerConnector: '12VHPWR' } },
+      { name: 'AMD RX 7700 XT 12G', price: 2999, specs: '12GB GDDR6 / 3456流处理器 / 245W / 三风扇', score: 400000, tier: 'AMD性价比2K卡', shape: 'gpu-triple', structuredSpecs: { chipset: 'RX 7700 XT', vram: 12, vramType: 'GDDR6', tdp: 245, length: 300, slotWidth: 2.5, pcieGen: 4, hasDLSS3: false, powerConnector: '8-pin x2' } }
     ]
   },
 
@@ -162,10 +162,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '微星 MAG B760M MORTAR WIFI', price: 1099, specs: 'B760 / LGA1700 / 4×DDR5 / 2×M.2 / M-ATX / WiFi6', score: 100000, tier: 'Intel热门中端板', shape: 'mb-matx' },
-      { name: '华硕 TUF GAMING B760M-PLUS WIFI', price: 1299, specs: 'B760 / LGA1700 / 4×DDR5 / 2×M.2 / M-ATX / WiFi6', score: 105000, tier: '军规用料扎实', shape: 'mb-matx' },
-      { name: '技嘉 B650M AORUS ELITE AX', price: 1199, specs: 'B650 / AM5 / 4×DDR5 / 2×M.2 / M-ATX / WiFi6E', score: 105000, tier: 'AMD中端标杆', shape: 'mb-matx' },
-      { name: '微星 PRO Z790-P WIFI', price: 1699, specs: 'Z790 / LGA1700 / 4×DDR5 / 4×M.2 / ATX / WiFi6E', score: 120000, tier: 'Z790入门超频板', shape: 'mb-atx' }
+      { name: '微星 MAG B760M MORTAR WIFI', price: 1099, specs: 'B760 / LGA1700 / 4×DDR5 / 2×M.2 / M-ATX / WiFi6', score: 100000, tier: 'Intel热门中端板', shape: 'mb-matx', structuredSpecs: { socket: 'LGA1700', chipset: 'B760', formFactor: 'M-ATX', memoryType: 'DDR5', memorySlots: 4, memoryMaxSpeed: 7200, m2Slots: 2, pcieGen: 4, wifi: true, platform: 'intel' } },
+      { name: '华硕 TUF GAMING B760M-PLUS WIFI', price: 1299, specs: 'B760 / LGA1700 / 4×DDR5 / 2×M.2 / M-ATX / WiFi6', score: 105000, tier: '军规用料扎实', shape: 'mb-matx', structuredSpecs: { socket: 'LGA1700', chipset: 'B760', formFactor: 'M-ATX', memoryType: 'DDR5', memorySlots: 4, memoryMaxSpeed: 7200, m2Slots: 2, pcieGen: 4, wifi: true, platform: 'intel' } },
+      { name: '技嘉 B650M AORUS ELITE AX', price: 1199, specs: 'B650 / AM5 / 4×DDR5 / 2×M.2 / M-ATX / WiFi6E', score: 105000, tier: 'AMD中端标杆', shape: 'mb-matx', structuredSpecs: { socket: 'AM5', chipset: 'B650', formFactor: 'M-ATX', memoryType: 'DDR5', memorySlots: 4, memoryMaxSpeed: 6400, m2Slots: 2, pcieGen: 4, wifi: true, platform: 'amd' } },
+      { name: '微星 PRO Z790-P WIFI', price: 1699, specs: 'Z790 / LGA1700 / 4×DDR5 / 4×M.2 / ATX / WiFi6E', score: 120000, tier: 'Z790入门超频板', shape: 'mb-atx', structuredSpecs: { socket: 'LGA1700', chipset: 'Z790', formFactor: 'ATX', memoryType: 'DDR5', memorySlots: 4, memoryMaxSpeed: 7600, m2Slots: 4, pcieGen: 5, wifi: true, platform: 'intel' } }
     ]
   },
 
@@ -202,10 +202,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '金士顿 FURY Beast 16GB DDR5 6000', price: 449, specs: '16GB(16×1) / DDR5 6000MHz / CL36 / 无灯', score: 120000, tier: '入门DDR5', shape: 'ram-stick' },
-      { name: '芝奇 幻锋戟 32GB DDR5 6000', price: 849, specs: '32GB(16×2) / DDR5 6000MHz / CL30 / RGB灯', score: 150000, tier: '高性能双通道RGB', shape: 'ram-stick-rgb' },
-      { name: '海盗船 复仇者 32GB DDR5 6400', price: 999, specs: '32GB(16×2) / DDR5 6400MHz / CL32 / 无灯', score: 160000, tier: '极速高频条', shape: 'ram-stick' },
-      { name: '金百达 银爵 32GB DDR5 6000', price: 699, specs: '32GB(16×2) / DDR5 6000MHz / CL30 / 无灯', score: 145000, tier: '国产性价比双通道', shape: 'ram-stick' }
+      { name: '金士顿 FURY Beast 16GB DDR5 6000', price: 449, specs: '16GB(16×1) / DDR5 6000MHz / CL36 / 无灯', score: 120000, tier: '入门DDR5', shape: 'ram-stick', structuredSpecs: { type: 'DDR5', capacity: 16, speed: 6000, sticks: 1, cl: 36, rgb: false } },
+      { name: '芝奇 幻锋戟 32GB DDR5 6000', price: 849, specs: '32GB(16×2) / DDR5 6000MHz / CL30 / RGB灯', score: 150000, tier: '高性能双通道RGB', shape: 'ram-stick-rgb', structuredSpecs: { type: 'DDR5', capacity: 32, speed: 6000, sticks: 2, cl: 30, rgb: true } },
+      { name: '海盗船 复仇者 32GB DDR5 6400', price: 999, specs: '32GB(16×2) / DDR5 6400MHz / CL32 / 无灯', score: 160000, tier: '极速高频条', shape: 'ram-stick', structuredSpecs: { type: 'DDR5', capacity: 32, speed: 6400, sticks: 2, cl: 32, rgb: false } },
+      { name: '金百达 银爵 32GB DDR5 6000', price: 699, specs: '32GB(16×2) / DDR5 6000MHz / CL30 / 无灯', score: 145000, tier: '国产性价比双通道', shape: 'ram-stick', structuredSpecs: { type: 'DDR5', capacity: 32, speed: 6000, sticks: 2, cl: 30, rgb: false } }
     ]
   },
 
@@ -242,10 +242,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '西部数据 SN770 1TB', price: 459, specs: '1TB / NVMe PCIe4.0 / 读5150MB/s / 写4900MB/s / 无缓存', score: 110000, tier: '高性价比', shape: 'ssd-m2' },
-      { name: '三星 990 EVO Plus 1TB', price: 549, specs: '1TB / NVMe PCIe4.0 / 读7250MB/s / 写6300MB/s / 无缓存', score: 130000, tier: '旗舰速度', shape: 'ssd-m2' },
-      { name: '致态 TiPlus7100 2TB', price: 899, specs: '2TB / NVMe PCIe4.0 / 读7000MB/s / 写6000MB/s / 无缓存', score: 140000, tier: '国产旗舰2TB', shape: 'ssd-m2' },
-      { name: '三星 990 PRO 2TB', price: 1299, specs: '2TB / NVMe PCIe4.0 / 读7450MB/s / 写6900MB/s / 独立缓存', score: 160000, tier: '顶级性能', shape: 'ssd-m2-premium' }
+      { name: '西部数据 SN770 1TB', price: 459, specs: '1TB / NVMe PCIe4.0 / 读5150MB/s / 写4900MB/s / 无缓存', score: 110000, tier: '高性价比', shape: 'ssd-m2', structuredSpecs: { type: 'NVMe', capacity: 1024, interface: 'M.2', protocol: 'PCIe 4.0', readSpeed: 5150, writeSpeed: 4900, hasCache: false } },
+      { name: '三星 990 EVO Plus 1TB', price: 549, specs: '1TB / NVMe PCIe4.0 / 读7250MB/s / 写6300MB/s / 无缓存', score: 130000, tier: '旗舰速度', shape: 'ssd-m2', structuredSpecs: { type: 'NVMe', capacity: 1024, interface: 'M.2', protocol: 'PCIe 4.0', readSpeed: 7250, writeSpeed: 6300, hasCache: false } },
+      { name: '致态 TiPlus7100 2TB', price: 899, specs: '2TB / NVMe PCIe4.0 / 读7000MB/s / 写6000MB/s / 无缓存', score: 140000, tier: '国产旗舰2TB', shape: 'ssd-m2', structuredSpecs: { type: 'NVMe', capacity: 2048, interface: 'M.2', protocol: 'PCIe 4.0', readSpeed: 7000, writeSpeed: 6000, hasCache: false } },
+      { name: '三星 990 PRO 2TB', price: 1299, specs: '2TB / NVMe PCIe4.0 / 读7450MB/s / 写6900MB/s / 独立缓存', score: 160000, tier: '顶级性能', shape: 'ssd-m2-premium', structuredSpecs: { type: 'NVMe', capacity: 2048, interface: 'M.2', protocol: 'PCIe 4.0', readSpeed: 7450, writeSpeed: 6900, hasCache: true } }
     ]
   },
 
@@ -282,10 +282,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '长城 G7 650W 金牌全模组', price: 499, specs: '650W / 80PLUS金牌 / 全模组 / 日系电容 / 7年保', score: 80000, tier: '主流性价比', shape: 'psu-standard' },
-      { name: '海韵 FOCUS GX-750 金牌', price: 749, specs: '750W / 80PLUS金牌 / 全模组 / 日系电容 / 10年保 / ATX3.0', score: 90000, tier: '品质标杆', shape: 'psu-premium' },
-      { name: '振华 LEADEX III 850W 金牌', price: 899, specs: '850W / 80PLUS金牌 / 全模组 / 日系电容 / 10年保', score: 95000, tier: '高配安心之选', shape: 'psu-premium' },
-      { name: '海韵 VERTEX GX-1000 金牌', price: 1399, specs: '1000W / 80PLUS金牌 / 全模组 / ATX3.0 / 12年保', score: 105000, tier: '旗舰级战未来', shape: 'psu-premium' }
+      { name: '长城 G7 650W 金牌全模组', price: 499, specs: '650W / 80PLUS金牌 / 全模组 / 日系电容 / 7年保', score: 80000, tier: '主流性价比', shape: 'psu-standard', structuredSpecs: { wattage: 650, rating: '80PLUS Gold', modular: 'full', atxVersion: '3.0', has12VHPWR: false, warranty: 7 } },
+      { name: '海韵 FOCUS GX-750 金牌', price: 749, specs: '750W / 80PLUS金牌 / 全模组 / 日系电容 / 10年保 / ATX3.0', score: 90000, tier: '品质标杆', shape: 'psu-premium', structuredSpecs: { wattage: 750, rating: '80PLUS Gold', modular: 'full', atxVersion: '3.0', has12VHPWR: true, warranty: 10 } },
+      { name: '振华 LEADEX III 850W 金牌', price: 899, specs: '850W / 80PLUS金牌 / 全模组 / 日系电容 / 10年保', score: 95000, tier: '高配安心之选', shape: 'psu-premium', structuredSpecs: { wattage: 850, rating: '80PLUS Gold', modular: 'full', atxVersion: '2.4', has12VHPWR: false, warranty: 10 } },
+      { name: '海韵 VERTEX GX-1000 金牌', price: 1399, specs: '1000W / 80PLUS金牌 / 全模组 / ATX3.0 / 12年保', score: 105000, tier: '旗舰级战未来', shape: 'psu-premium', structuredSpecs: { wattage: 1000, rating: '80PLUS Gold', modular: 'full', atxVersion: '3.0', has12VHPWR: true, warranty: 12 } }
     ]
   },
 
@@ -323,10 +323,10 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '利民 PA120 SE 双塔风冷', price: 149, specs: '双塔双风扇 / 6热管 / 解热265W / ≤25.6dB / 高度155mm', score: 50000, tier: '百元风冷之王', shape: 'cooler-air-dual' },
-      { name: '九州风神 冰堡垒 240 水冷', price: 469, specs: '240mm一体水冷 / ARGB风扇 / 解热300W / ≤30dB', score: 65000, tier: '入门水冷高颜值', shape: 'cooler-aio-240' },
-      { name: '九州风神 冰堡垒 360 水冷', price: 649, specs: '360mm一体水冷 / ARGB风扇 / 解热350W+ / ≤32dB', score: 72000, tier: '大冷排强劲散热', shape: 'cooler-aio-360' },
-      { name: '恩杰 Kraken X53 240 RGB', price: 799, specs: '240mm一体水冷 / 1.54寸LCD屏幕 / 6年保 / Asetek7代泵', score: 75000, tier: '旗舰带屏幕', shape: 'cooler-aio-240-nzxt' }
+      { name: '利民 PA120 SE 双塔风冷', price: 149, specs: '双塔双风扇 / 6热管 / 解热265W / ≤25.6dB / 高度155mm', score: 50000, tier: '百元风冷之王', shape: 'cooler-air-dual', structuredSpecs: { type: 'air', height: 155, tdp: 265, fans: 2, noise: 25.6, radiatorSize: null } },
+      { name: '九州风神 冰堡垒 240 水冷', price: 469, specs: '240mm一体水冷 / ARGB风扇 / 解热300W / ≤30dB', score: 65000, tier: '入门水冷高颜值', shape: 'cooler-aio-240', structuredSpecs: { type: 'aio', height: null, tdp: 300, fans: 2, noise: 30, radiatorSize: '240' } },
+      { name: '九州风神 冰堡垒 360 水冷', price: 649, specs: '360mm一体水冷 / ARGB风扇 / 解热350W+ / ≤32dB', score: 72000, tier: '大冷排强劲散热', shape: 'cooler-aio-360', structuredSpecs: { type: 'aio', height: null, tdp: 350, fans: 3, noise: 32, radiatorSize: '360' } },
+      { name: '恩杰 Kraken X53 240 RGB', price: 799, specs: '240mm一体水冷 / 1.54寸LCD屏幕 / 6年保 / Asetek7代泵', score: 75000, tier: '旗舰带屏幕', shape: 'cooler-aio-240-nzxt', structuredSpecs: { type: 'aio', height: null, tdp: 300, fans: 2, noise: 28, radiatorSize: '240' } }
     ]
   },
 
@@ -376,12 +376,12 @@ const pcComponents = {
       }
     ],
     options: [
-      { name: '利民 TL-C12C-S 黑色×3', price: 117, specs: '12cm / 1500RPM / 66CFM / ≤25.6dB / 来福轴承 / 4pin PWM', score: 15000, tier: '入门性价比', shape: 'fan' },
-      { name: 'ARCTIC P12 PWM PST ×3', price: 177, specs: '12cm / 1800RPM / 56CFM / ≤22.5dB / FDB轴承 / 4pin PWM', score: 22000, tier: '静音性能王', shape: 'fan' },
-      { name: '酷冷至尊 MF120 Halo ×3', price: 207, specs: '12cm / 1800RPM / 55CFM / ≤30dB/ ARGB双面光环 / 来福轴承', score: 20000, tier: 'ARGB高颜值', shape: 'fan' },
-      { name: '猫头鹰 NF-A12x25 PWM', price: 199, specs: '12cm / 2000RPM / 60CFM / ≤22.6dB / SSO磁悬浮轴承 / 6年保', score: 28000, tier: '顶级静音王', shape: 'fan' },
-      { name: '联力 积木SL120 V2 ×3', price: 597, specs: '12cm / 2000RPM / 64CFM / ≤29dB / ARGB磁吸拼接 / FDB轴承', score: 32000, tier: 'RGB天花板', shape: 'fan' },
-      { name: '追风者 D30 120 ×3', price: 357, specs: '12cm / 2000RPM / 64CFM / ≤31dB / ARGB 30mm厚扇 / FDB轴承', score: 26000, tier: '30mm厚扇大性能', shape: 'fan' }
+      { name: '利民 TL-C12C-S 黑色×3', price: 117, specs: '12cm / 1500RPM / 66CFM / ≤25.6dB / 来福轴承 / 4pin PWM', score: 15000, tier: '入门性价比', shape: 'fan', structuredSpecs: { size: 120, rpm: 1500, airflow: 66, pressure: 1.5, noise: 25.6, bearing: 'rifle', pwm: true, argb: false } },
+      { name: 'ARCTIC P12 PWM PST ×3', price: 177, specs: '12cm / 1800RPM / 56CFM / ≤22.5dB / FDB轴承 / 4pin PWM', score: 22000, tier: '静音性能王', shape: 'fan', structuredSpecs: { size: 120, rpm: 1800, airflow: 56, pressure: 1.8, noise: 22.5, bearing: 'fdb', pwm: true, argb: false } },
+      { name: '酷冷至尊 MF120 Halo ×3', price: 207, specs: '12cm / 1800RPM / 55CFM / ≤30dB/ ARGB双面光环 / 来福轴承', score: 20000, tier: 'ARGB高颜值', shape: 'fan', structuredSpecs: { size: 120, rpm: 1800, airflow: 55, pressure: 1.6, noise: 30, bearing: 'rifle', pwm: true, argb: true } },
+      { name: '猫头鹰 NF-A12x25 PWM', price: 199, specs: '12cm / 2000RPM / 60CFM / ≤22.6dB / SSO磁悬浮轴承 / 6年保', score: 28000, tier: '顶级静音王', shape: 'fan', structuredSpecs: { size: 120, rpm: 2000, airflow: 60, pressure: 2.3, noise: 22.6, bearing: 'sso2', pwm: true, argb: false } },
+      { name: '联力 积木SL120 V2 ×3', price: 597, specs: '12cm / 2000RPM / 64CFM / ≤29dB / ARGB磁吸拼接 / FDB轴承', score: 32000, tier: 'RGB天花板', shape: 'fan', structuredSpecs: { size: 120, rpm: 2000, airflow: 64, pressure: 2.5, noise: 29, bearing: 'fdb', pwm: true, argb: true } },
+      { name: '追风者 D30 120 ×3', price: 357, specs: '12cm / 2000RPM / 64CFM / ≤31dB / ARGB 30mm厚扇 / FDB轴承', score: 26000, tier: '30mm厚扇大性能', shape: 'fan', structuredSpecs: { size: 120, rpm: 2000, airflow: 64, pressure: 2.8, noise: 31, bearing: 'fdb', pwm: true, argb: true } }
     ]
   }
 };
