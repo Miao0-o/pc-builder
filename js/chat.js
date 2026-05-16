@@ -9,7 +9,7 @@
   // ========== DOM 注入 ==========
   const fab = document.createElement('button');
   fab.className = 'chat-fab';
-  fab.innerHTML = '<i data-lucide="headset" style="width:24px;height:24px;color:#d4af37;"></i>'; style="width:24px;height:24px;color:#d4af37;"></i>';
+  fab.innerHTML = '<i data-lucide="headset" style="width:24px;height:24px;color:#d4af37;"></i>';
   fab.title = '咨询问题点我试试';
   document.body.appendChild(fab);
 
