@@ -247,6 +247,16 @@ function _escape(s){const d=document.createElement('div');d.textContent=s;return
 function _focusOnComponent(key){
   if(componentGroups[key])_focusOnObject(key);
   else if(pcComponents[key])_showDetail(key);
+  // Switch to in-store tab
+  setTimeout(function(){
+    if(document.getElementById('tabBuy')){
+      currentTab='buy';
+      document.getElementById('tabBuy').classList.add('active');
+      document.getElementById('tabIntro')?.classList.remove('active');
+      _renderTabContent();
+      if(typeof lucide!=='undefined')lucide.createIcons();
+    }
+  },100);
   _renderSummary();
 }
 window._focusOnComponent=_focusOnComponent;

@@ -4164,13 +4164,12 @@ body::after {
 /* ========== Compatibility Indicator ========== */
 .compat-indicator {
   display: flex; align-items: center; gap: 8px;
-  padding: 8px 16px;
-  background: rgba(17,24,39,0.95);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px; font-size: 13px; font-weight: 600;
-  backdrop-filter: blur(12px);
-  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 101;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; font-size: 12px; font-weight: 600;
   white-space: nowrap;
+  margin-left: 8px;
 }
 .compat-report-panel {
   position: fixed; bottom: 80px; left: 0; right: 0;
