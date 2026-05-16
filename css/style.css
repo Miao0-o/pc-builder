@@ -4528,3 +4528,27 @@ i[data-lucide]:hover {
 .cart-add-btn:hover {
   background: rgba(212,175,55,0.15); border-color: #d4af37;
 }
+
+/* ========== Case label (always prominent) ========== */
+.comp-label-case {
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 16px;
+  padding: 6px 14px !important;
+  backdrop-filter: blur(8px);
+  pointer-events: auto !important;
+}
+.comp-label-case .comp-label-dot {
+  width: 10px !important; height: 10px !important;
+  background: #7c3aed !important;
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.6) !important;
+}
+.comp-label-case .comp-label-text {
+  font-size: 14px !important; font-weight: 700 !important;
+  color: #f0f0f0 !important;
+}
+.comp-label-case:hover {
+  background: rgba(124, 58, 237, 0.25) !important;
+  border-color: #7c3aed !important;
+  transform: scale(1.05);
+}
