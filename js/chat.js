@@ -22,12 +22,15 @@
     var startX, startY, startLeft, startTop, dragging = false;
     
     function onStart(e) {
-      if (e.target.tagName === 'I' || e.target.tagName === 'svg' || e.target.tagName === 'path') return; // let icon clicks through
+      if (e.target.tagName === 'I' || e.target.tagName === 'svg' || e.target.tagName === 'path') return;
       dragging = false;
+      var rect = el.getBoundingClientRect();
+      el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px';
+      el.style.right = 'auto'; el.style.bottom = 'auto';
       startX = e.touches ? e.touches[0].clientX : e.clientX;
       startY = e.touches ? e.touches[0].clientY : e.clientY;
-      startLeft = parseInt(el.style.left) || 0;
-      startTop = parseInt(el.style.top) || 0;
+      startLeft = rect.left;
+      startTop = rect.top;
       el.style.transition = 'none';
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onEnd);

@@ -62,7 +62,10 @@ export function initFeedback() {
     var sx, sy, sl, st, dragging;
     el.addEventListener('mousedown', function(e) {
       if (e.target !== el && e.target.tagName !== 'svg' && e.target.tagName !== 'path') return;
-      sx = e.clientX; sy = e.clientY; sl = parseInt(el.style.left)||0; st = parseInt(el.style.top)||0;
+      var rect = el.getBoundingClientRect();
+      el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px';
+      el.style.right = 'auto'; el.style.bottom = 'auto';
+      sx = e.clientX; sy = e.clientY; sl = rect.left; st = rect.top;
       el.style.transition = 'none';
       function mv(e) {
         var dx = e.clientX - sx, dy = e.clientY - sy;
