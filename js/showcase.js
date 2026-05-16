@@ -210,7 +210,7 @@ function renderCards(builds) {
       '<div class="sc-score">预估 ' + build.score + '万分 · ' + build.level + '</div>' +
       '<div class="sc-actions">' +
         '<button class="sc-btn-detail" onclick="var p=this.parentElement.parentElement.querySelector(\'.sc-parts-expand\');p.classList.toggle(\'open\');this.textContent=p.classList.contains(\'open\')?\'收起\':\'查看配置详情\';if(typeof lucide!==\'undefined\')lucide.createIcons();">查看配置详情</button>' +
-        '<button class="sc-btn-buy" onclick="alert(\'即将跳转购买页面\')">立即购买</button>' +
+        '<button class="sc-btn-buy" onclick="localStorage.setItem(\'pcBuilder_showcaseBuy\',JSON.stringify({name:\'' + build.name.replace(/'/g,"\\'") + '\',price:' + build.price + ',parts:' + JSON.stringify(build.parts) + '}));window.location.href=\'service.html?from=cart\'">立即购买</button>' +
       '</div>' +
       '<div class="sc-parts-expand">' + partsHTML +
         '<div class="sc-buy-links">' + buyHTML + '</div>' +
