@@ -15,9 +15,9 @@
   // ========== 拖拽功能 ==========
   (function makeDraggable(el, storageKey) {
     var pos = { x: 0, y: 0 };
-    try { var saved = JSON.parse(localStorage.getItem(storageKey)); if (saved) pos = saved; } catch(e) {}
-    el.style.right = 'auto'; el.style.bottom = 'auto';
-    el.style.left = pos.x + 'px'; el.style.top = pos.y + 'px';
+    localStorage.removeItem(storageKey);
+    
+    
     
     var startX, startY, startLeft, startTop, dragging = false;
     

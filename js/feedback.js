@@ -58,8 +58,7 @@ export function initFeedback() {
   // 拖拽
   (function makeDraggable(el, storageKey) {
     var pos = {};
-    try { pos = JSON.parse(localStorage.getItem(storageKey)); } catch(e) {}
-    if (pos && pos.x) { el.style.right = 'auto'; el.style.bottom = 'auto'; el.style.left = pos.x + 'px'; el.style.top = pos.y + 'px'; }
+    if (localStorage.getItem(storageKey)) localStorage.removeItem(storageKey);
     var sx, sy, sl, st, dragging;
     el.addEventListener('mousedown', function(e) {
       if (e.target !== el && e.target.tagName !== 'svg' && e.target.tagName !== 'path') return;
