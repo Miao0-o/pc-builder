@@ -210,7 +210,7 @@ function renderCards(builds) {
       '<div class="sc-score">预估 ' + build.score + '万分 · ' + build.level + '</div>' +
       '<div class="sc-actions">' +
         '<button class="sc-btn-detail" onclick="var p=this.parentElement.parentElement.querySelector(\'.sc-parts-expand\');p.classList.toggle(\'open\');this.textContent=p.classList.contains(\'open\')?\'收起\':\'查看配置详情\';if(typeof lucide!==\'undefined\')lucide.createIcons();">查看配置详情</button>' +
-        '<button class="sc-btn-cart" onclick="event.stopPropagation();var parts=' + JSON.stringify(build.parts) + ';for(var i=0;i<parts.length;i++){if(parts[i].price>0)cartAdd(parts[i].name,parts[i].price,parts[i].icon,parts[i].cat);}">加入购物车</button>' +
+        '<button class="sc-btn-cart" onclick="event.stopPropagation();window._scParts=window._scParts||{};window._scParts[' + JSON.stringify(build.id) + ']=' + JSON.stringify(build.parts) + ';var ps=window._scParts[' + JSON.stringify(build.id) + '];for(var i=0;i<ps.length;i++){if(ps[i].price>0&&typeof cartAdd!==\'undefined\')cartAdd(ps[i].name,ps[i].price,ps[i].icon,ps[i].cat);}">加入购物车</button>' +
         '<button class="sc-btn-buy" onclick="localStorage.setItem(\'pcBuilder_showcaseBuy\',JSON.stringify({name:\'' + build.name.replace(/'/g,"\\'") + '\',price:' + build.price + ',parts:' + JSON.stringify(build.parts) + '}));window.location.href=\'service.html?from=cart\'">立即购买</button>' +
       '</div>' +
       '<div class="sc-parts-expand">' + partsHTML +

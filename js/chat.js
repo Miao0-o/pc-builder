@@ -56,11 +56,8 @@
       document.removeEventListener('touchmove', onMove);
       document.removeEventListener('touchend', onEnd);
       if (dragging) {
+        fab._wasDragged = true;
         try { localStorage.setItem(storageKey, JSON.stringify({x: parseInt(el.style.left), y: parseInt(el.style.top)})); } catch(e) {}
-      }
-      // if not dragged, it was a click
-      if (!dragging) {
-        setTimeout(function() { el.dispatchEvent(new Event('click-no-drag')); }, 0);
       }
     }
     
@@ -271,6 +268,7 @@
   previewRemove.addEventListener('click', clearPreview);
 
   fab.addEventListener('click', () => {
+    if (fab._wasDragged) { fab._wasDragged = false; return; }
     open = !open;
     panel.classList.toggle('chat-open', open);
     fab.style.display = open ? 'none' : 'flex';

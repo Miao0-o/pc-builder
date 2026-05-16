@@ -53,7 +53,7 @@ export function initFeedback() {
   `;
   fab.addEventListener('mouseenter', () => fab.style.transform = 'scale(1.1)');
   fab.addEventListener('mouseleave', () => fab.style.transform = 'scale(1)');
-  fab.addEventListener('click', () => showForm());
+  fab.addEventListener('click', function() { if (!fab._wasDragged) showForm(); fab._wasDragged = false; });
   document.body.appendChild(fab);
   // 拖拽
   (function makeDraggable(el, storageKey) {
@@ -73,7 +73,7 @@ export function initFeedback() {
       function up() {
         el.style.transition = ''; document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up);
         if (dragging) try { localStorage.setItem(storageKey, JSON.stringify({x:parseInt(el.style.left),y:parseInt(el.style.top)})); } catch(e) {}
-        setTimeout(function(){ dragging = false; }, 0);
+        var wasDrag = dragging; fab._wasDragged = wasDrag; setTimeout(function(){ dragging = false; }, 0);
       }
       document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
     });
