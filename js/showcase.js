@@ -178,6 +178,10 @@ function getActiveFilter(type) {
 }
 
 function renderCards(builds) {
+  // Store parts for cart lookup
+  for (var i = 0; i < builds.length; i++) {
+    window._scBuildParts[builds[i].id] = builds[i].parts;
+  }
   var grid = document.getElementById('showcaseGrid');
   if (!grid) return;
   grid.innerHTML = '';
@@ -210,7 +214,7 @@ function renderCards(builds) {
       '<div class="sc-score">预估 ' + build.score + '万分 · ' + build.level + '</div>' +
       '<div class="sc-actions">' +
         '<button class="sc-btn-detail" onclick="var p=this.parentElement.parentElement.querySelector(\'.sc-parts-expand\');p.classList.toggle(\'open\');this.textContent=p.classList.contains(\'open\')?\'收起\':\'查看配置详情\';if(typeof lucide!==\'undefined\')lucide.createIcons();">查看配置详情</button>' +
-        '<button class="sc-btn-cart" onclick="event.stopPropagation();window._scParts=window._scParts||{};window._scParts[' + JSON.stringify(build.id) + ']=' + JSON.stringify(build.parts) + ';var ps=window._scParts[' + JSON.stringify(build.id) + '];for(var i=0;i<ps.length;i++){if(ps[i].price>0&&typeof cartAdd!==\'undefined\')cartAdd(ps[i].name,ps[i].price,ps[i].icon,ps[i].cat);}">加入购物车</button>' +
+        '<button class="sc-btn-cart" onclick="window._addShowcaseToCart(\'' + build.id + '\')">加入购物车</button>' +
         '<button class="sc-btn-buy" onclick="localStorage.setItem(\'pcBuilder_showcaseBuy\',JSON.stringify({name:\'' + build.name.replace(/'/g,"\\'") + '\',price:' + build.price + ',parts:' + JSON.stringify(build.parts) + '}));window.location.href=\'service.html?from=cart\'">立即购买</button>' +
       '</div>' +
       '<div class="sc-parts-expand">' + partsHTML +
@@ -224,3 +228,16 @@ function renderCards(builds) {
 }
 
 document.addEventListener('DOMContentLoaded', initShowcase);
+
+// Global helper to add showcase build parts to cart
+window._scBuildParts = {};
+window._addShowcaseToCart = function(buildId) {
+  var parts = window._scBuildParts[buildId];
+  if (!parts) return;
+  for (var i = 0; i < parts.length; i++) {
+    var p = parts[i];
+    if (p.price > 0 && typeof cartAdd !== 'undefined') {
+      cartAdd(p.name, p.price, p.icon, p.cat);
+    }
+  }
+};
