@@ -192,7 +192,52 @@ function _showDetail(key){activeComponentKey=key;currentTab='intro';const comp=p
 function _showGeneric(key){const info={case:{icon:'monitor',name:'机箱外壳',desc:'海景房全景机箱。'},'fan-front-0':{icon:'wind',name:'前置RGB风扇#1',desc:'进风扇。'},'fan-front-1':{icon:'wind',name:'前置RGB风扇#2',desc:'进风扇。'},'fan-front-2':{icon:'wind',name:'前置RGB风扇#3',desc:'进风扇。'},'fan-rear':{icon:'wind',name:'后置排风扇',desc:'排风扇。'}};const item=info[key]||{icon:'wrench',name:key,desc:'硬件部件'};activeComponentKey=key;const pan=document.getElementById('detailPanel'),ph=document.getElementById('panelPlaceholder');if(ph)ph.style.display='none';pan.innerHTML=`<div class="detail-content"><div class="detail-header"><span class="part-icon-big"><i data-lucide="${item.icon}" class="icon-2xl"></i></span><h2>${item.name}</h2></div><div class="detail-intro"><p>${item.desc}</p></div></div>`;if(typeof lucide!=='undefined')lucide.createIcons();}
 function _buildDetailHTML(comp,key){return`<div class="detail-content"><div class="detail-header"><span class="part-icon-big"><i data-lucide="${comp.icon}" class="icon-2xl"></i></span><h2>${comp.name}</h2></div><div class="detail-tabs"><button class="detail-tab active" id="tabIntro" onclick="window.switchTab('intro')"><i data-lucide="book-open" class="icon-sm"></i> 介绍</button><button class="detail-tab" id="tabBuy" onclick="window.switchTab('buy')"><i data-lucide="store" class="icon-sm"></i> 在售</button></div><div id="tabContent"></div></div>`;}
 function switchTab(tab){currentTab=tab;document.getElementById('tabIntro')?.classList.toggle('active',tab==='intro');document.getElementById('tabBuy')?.classList.toggle('active',tab==='buy');_renderTabContent();if(typeof lucide!=='undefined')lucide.createIcons();}window.switchTab=switchTab;
-function _renderTabContent(){const comp=pcComponents[activeComponentKey],c=document.getElementById('tabContent');if(!c)return;const chosen=selectedBuild[activeComponentKey]||null;if(currentTab==='intro'){c.innerHTML=`<div class="detail-tab-content"><div class="detail-intro"><p>${comp.description}</p></div>${(comp.knowledge||[]).map(k=>`<div class="knowledge-card"><div class="kc-title">${k.title}</div><div class="kc-text">${k.text}</div>${k.example?`<div class="kc-example">${k.example}</div>`:''}</div>`).join('')}${comp.specs?`<div class="knowledge-card"><div class="kc-title"><i data-lucide="layout-template" class="icon-sm"></i> 关键参数</div><table class="spec-table">${comp.specs.map(s=>`<tr><th>${s[0]}</th><td>${s[1]}</td></tr>`).join('')}</table></div>`:''}</div>`;}else{c.innerHTML=`<div class="detail-tab-content"><div class="options-title"><i data-lucide="store" class="icon-sm"></i> 市售热门型号</div>${comp.options.map(opt=>{const is=chosen===opt.name;return`<div class="option-card${is?' chosen':''}" onclick="window.pickOption('${activeComponentKey}','${_escape(opt.name)}')">${is?'<span class="choose-badge">✓ 已选</span>':''}<div class="opt-icon-placeholder"><i data-lucide="${comp.icon}" style="width:40px;height:40px;"></i></div><div class="option-info"><h4>${opt.name}</h4><div class="option-specs">${opt.specs}</div><span class="option-tier">${opt.tier}</span><div class="buy-links"><a href="https://search.jd.com/Search?keyword=${encodeURIComponent(opt.name)}&enc=utf-8" target="_blank" class="buy-link jd" onclick="event.stopPropagation()">🔴京东</a><a href="https://s.taobao.com/search?q=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link tb" onclick="event.stopPropagation()">🟠淘宝</a><a href="https://mobile.yangkeduo.com/search_result.html?search_key=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link pdd" onclick="event.stopPropagation()">🔵拼多多</a></div></div><div class="option-price">¥${opt.price.toLocaleString()}</div></div>`}).join('')}</div>`;}}
+function _partBrandStyle(cat,optName){
+  const map={
+    case:      {bg:'#1a1a2e',fg:'#7c8aff',brand:'Case'},
+    cpu:       {bg:'#0f1a2e',fg:'#4da6ff',brand:'Intel/AMD'},
+    gpu:       {bg:'#1a2e0f',fg:'#4dff6e',brand:'NVIDIA/AMD'},
+    motherboard:{bg:'#1a1a1a',fg:'#cccccc',brand:'M/B'},
+    ram:       {bg:'#2e1a2e',fg:'#ff6eb4',brand:'DDR5'},
+    storage:   {bg:'#1a2028',fg:'#70db70',brand:'SSD'},
+    psu:       {bg:'#2e2e1a',fg:'#ffcc00',brand:'PSU'},
+    cooler:    {bg:'#1a2428',fg:'#66ccff',brand:'Cooler'},
+    fan:       {bg:'#1a1228',fg:'#b366ff',brand:'Fan'}
+  };
+  var m=map[cat]||map['case'];
+  // Extract brand from name
+  var brand='';
+  if(optName.includes('Intel')||optName.includes('i5')||optName.includes('i7')||optName.includes('i9'))brand='Intel';
+  else if(optName.includes('AMD')||optName.includes('锐龙')||optName.includes('R5')||optName.includes('R7'))brand='AMD';
+  else if(optName.includes('NVIDIA')||optName.includes('RTX')||optName.includes('N卡'))brand='NVIDIA';
+  else if(optName.includes('AMD')&&optName.includes('RX'))brand='AMD';
+  else if(optName.includes('微星')||optName.includes('MSI'))brand='MSI';
+  else if(optName.includes('华硕')||optName.includes('TUF'))brand='ASUS';
+  else if(optName.includes('技嘉')||optName.includes('AORUS'))brand='GIGABYTE';
+  else if(optName.includes('金士顿')||optName.includes('FURY'))brand='Kingston';
+  else if(optName.includes('芝奇'))brand='G.Skill';
+  else if(optName.includes('海盗船')||optName.includes('复仇者'))brand='Corsair';
+  else if(optName.includes('金百达'))brand='KingBank';
+  else if(optName.includes('西部数据')||optName.includes('SN'))brand='WD';
+  else if(optName.includes('三星')||optName.includes('Samsung')||optName.includes('990'))brand='Samsung';
+  else if(optName.includes('致态')||optName.includes('TiPlus'))brand='YMTC';
+  else if(optName.includes('长城'))brand='GreatWall';
+  else if(optName.includes('海韵')||optName.includes('Seasonic'))brand='Seasonic';
+  else if(optName.includes('振华'))brand='SuperFlower';
+  else if(optName.includes('鑫谷'))brand='Segotep';
+  else if(optName.includes('追风者')||optName.includes('Phanteks'))brand='Phanteks';
+  else if(optName.includes('联力')||optName.includes('LANCOOL'))brand='LianLi';
+  else if(optName.includes('恩杰')||optName.includes('NZXT')||optName.includes('Kraken'))brand='NZXT';
+  else if(optName.includes('利民')||optName.includes('PA120'))brand='Thermalright';
+  else if(optName.includes('九州风神')||optName.includes('冰堡垒'))brand='DeepCool';
+  else if(optName.includes('猫头鹰')||optName.includes('Noctua'))brand='Noctua';
+  else if(optName.includes('ARCTIC')||optName.includes('P12'))brand='ARCTIC';
+  else if(optName.includes('酷冷至尊')||optName.includes('Halo'))brand='CoolerMaster';
+  else brand=m.brand;
+  return {bg:m.bg,fg:m.fg,brand:brand};
+}
+
+function _renderTabContent(){const comp=pcComponents[activeComponentKey],c=document.getElementById('tabContent');if(!c)return;const chosen=selectedBuild[activeComponentKey]||null;if(currentTab==='intro'){c.innerHTML=`<div class="detail-tab-content"><div class="detail-intro"><p>${comp.description}</p></div>${(comp.knowledge||[]).map(k=>`<div class="knowledge-card"><div class="kc-title">${k.title}</div><div class="kc-text">${k.text}</div>${k.example?`<div class="kc-example">${k.example}</div>`:''}</div>`).join('')}${comp.specs?`<div class="knowledge-card"><div class="kc-title"><i data-lucide="layout-template" class="icon-sm"></i> 关键参数</div><table class="spec-table">${comp.specs.map(s=>`<tr><th>${s[0]}</th><td>${s[1]}</td></tr>`).join('')}</table></div>`:''}</div>`;}else{c.innerHTML=`<div class="detail-tab-content"><div class="options-title"><i data-lucide="store" class="icon-sm"></i> 市售热门型号</div>${comp.options.map(opt=>{const is=chosen===opt.name;var bs=_partBrandStyle(activeComponentKey,opt.name);return`<div class="option-card${is?' chosen':''}" onclick="window.pickOption('${activeComponentKey}','${_escape(opt.name)}')">${is?'<span class="choose-badge">✓ 已选</span>':''}<div class="opt-icon-placeholder" style="background:linear-gradient(135deg,${bs.bg},${bs.bg}dd);box-shadow:0 0 24px ${bs.fg}18;border:1px solid ${bs.fg}22;"><i data-lucide="${comp.icon}" style="width:32px;height:32px;color:${bs.fg};opacity:0.9;"></i><span class="opt-brand-tag" style="color:${bs.fg};opacity:0.7;">${bs.brand}</span></div><div class="option-info"><h4>${opt.name}</h4><div class="option-specs">${opt.specs}</div><span class="option-tier">${opt.tier}</span><div class="buy-links"><a href="https://search.jd.com/Search?keyword=${encodeURIComponent(opt.name)}&enc=utf-8" target="_blank" class="buy-link jd" onclick="event.stopPropagation()">京东</a><a href="https://s.taobao.com/search?q=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link tb" onclick="event.stopPropagation()">淘宝</a><a href="https://mobile.yangkeduo.com/search_result.html?search_key=${encodeURIComponent(opt.name)}" target="_blank" class="buy-link pdd" onclick="event.stopPropagation()">拼多多</a></div></div><div class="option-price">¥${opt.price.toLocaleString()}</div></div>`}).join('')}</div>`;}}
 function pickOption(key,name){if(selectedBuild[key]===name)delete selectedBuild[key];else selectedBuild[key]=name;if(key==='fan'){const fanOpt=PART_OPTIONS['fan']?.find(o=>o.name===name);if(fanOpt)_updateFanColors(fanOpt);}if(selectedBuild[key])_focusOnObject(key);_renderSummary();_renderTabContent();_updateLabels();}window.pickOption=pickOption;
 function _escape(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
