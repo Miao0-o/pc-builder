@@ -13,7 +13,7 @@ const BUDGET_ALLOC = {
 
 // 兼容组：Intel平台
 const INTEL_COMBOS = {
-  cpu: [0, 1, 4, 8, 9, 10, 11],
+  cpu: [0, 1, 4, 8, 9],           // LGA1700 only (no LGA1851 boards available)
   gpu: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
   motherboard: [0, 1, 3, 4, 5, 7],
   ram: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
