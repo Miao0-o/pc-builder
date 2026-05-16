@@ -4554,3 +4554,14 @@ i[data-lucide]:hover {
 }
 
 .options-count { font-size: 11px; color: #555; margin-left: 8px; font-weight: 400; }
+
+/* ========== Sort Buttons ========== */
+.sort-btns { margin-left: auto; display: flex; gap: 4px; }
+.sort-btn {
+  padding: 3px 10px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08); background: transparent;
+  color: #666; cursor: pointer; font-size: 11px; font-family: inherit;
+  transition: all 0.2s;
+}
+.sort-btn:hover { border-color: rgba(255,255,255,0.15); color: #aaa; }
+.sort-btn.active { background: rgba(124,58,237,0.12); border-color: #7c3aed; color: #7c3aed; }
