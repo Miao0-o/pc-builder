@@ -4565,3 +4565,21 @@ i[data-lucide]:hover {
 }
 .sort-btn:hover { border-color: rgba(255,255,255,0.15); color: #aaa; }
 .sort-btn.active { background: rgba(124,58,237,0.12); border-color: #7c3aed; color: #7c3aed; }
+
+/* ========== Showcase cart button ========== */
+.sc-btn-cart {
+  flex: 1; padding: 7px 12px; border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.3); background: rgba(212,175,55,0.08);
+  color: #d4af37; cursor: pointer; font-size: 12px; font-family: inherit;
+  transition: all 0.2s; white-space: nowrap;
+}
+.sc-btn-cart:hover { background: rgba(212,175,55,0.15); border-color: #d4af37; }
+
+/* ========== Recommend cart button ========== */
+.btn-cart-all {
+  flex: 1; padding: 14px; border-radius: 12px;
+  border: 1px solid rgba(212,175,55,0.3); background: rgba(212,175,55,0.08);
+  color: #d4af37; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; text-align: center; font-family: inherit;
+}
+.btn-cart-all:hover { background: rgba(212,175,55,0.15); border-color: #d4af37; }

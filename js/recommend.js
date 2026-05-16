@@ -236,6 +236,7 @@ function renderResult(config, total, score, platform) {
     </div>
     <div class="rec-actions">
       <button class="btn-rebuild" onclick="initRecommendPage(); document.getElementById('btnGenerate').click();"><i data-lucide="refresh-cw" class="icon-sm"></i> 重新生成</button>
+      <button class="btn-cart-all" onclick="addAllToCart()"><i data-lucide="shopping-cart" class="icon-sm"></i> 加入购物车</button>
       <button class="btn-view3d" onclick="openIn3D()"><i data-lucide="monitor" class="icon-sm"></i> 在3D机箱中查看</button>
     </div>
   `;
@@ -243,6 +244,27 @@ function renderResult(config, total, score, platform) {
   // 存入选中的配置到全局变量供3D跳转
   window._recommendConfig = buildConfigToSelected(config);
 }
+
+
+// 一键添加所有配件到购物车
+function addAllToCart() {
+  if (!window._recommendConfig) return;
+  var icons = { cpu:'cpu', gpu:'gamepad-2', motherboard:'layout-template', ram:'memory-stick', storage:'hard-drive', psu:'plug-zap', case:'monitor', cooler:'fan' };
+  var names = { cpu:'处理器', gpu:'显卡', motherboard:'主板', ram:'内存', storage:'硬盘', psu:'电源', case:'机箱', cooler:'散热器' };
+  for (var key in window._recommendConfig) {
+    var name = window._recommendConfig[key];
+    var price = 0;
+    var comp = pcComponents[key];
+    if (comp) {
+      var opt = comp.options.find(function(o) { return o.name === name; });
+      if (opt) price = opt.price;
+    }
+    if (typeof cartAdd !== 'undefined' && price > 0) {
+      cartAdd(name, price, icons[key] || 'package', names[key] || key);
+    }
+  }
+}
+window.addAllToCart = addAllToCart;
 
 function openIn3D() {
   if (window._recommendConfig) {
