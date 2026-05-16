@@ -2915,18 +2915,18 @@ body::after {
    ============================================================ */
 .chat-fab {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 80px;
+  right: 24px;
   z-index: 150;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 1px solid var(--glass-border);
   background: rgba(11, 17, 32, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: var(--text);
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4236,7 +4236,7 @@ body::after {
 
 /* ========== Feedback FAB ========== */
 #feedbackFab {
-  position: fixed; bottom: 100px; right: 28px; z-index: 150;
+  position: fixed; bottom: 140px; right: 24px; z-index: 150;
   width: 44px; height: 44px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(17,24,39,0.9);

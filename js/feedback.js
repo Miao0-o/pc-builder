@@ -44,7 +44,7 @@ export function initFeedback() {
   fab.innerHTML = '<i data-lucide="bug" style="width:20px;height:20px;color:#d4af37;"></i>';
   fab.title = '反馈问题';
   fab.style.cssText = `
-    position:fixed;bottom:100px;right:28px;z-index:150;
+    position:fixed;bottom:140px;right:24px;z-index:150;
     width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);
     background:rgba(255,255,255,0.05);color:#f0f0f0;
     font-size:18px;cursor:pointer;display:flex;align-items:center;
