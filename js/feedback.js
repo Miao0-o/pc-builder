@@ -41,7 +41,7 @@ function autoCaptureContext() {
 export function initFeedback() {
   const fab = document.createElement('button');
   fab.id = 'feedbackFab';
-  fab.textContent = '\u{1f41b}';
+  fab.innerHTML = '<i data-lucide="bug" style="width:20px;height:20px;color:#d4af37;"></i>';
   fab.title = '反馈问题';
   fab.style.cssText = `
     position:fixed;bottom:100px;right:28px;z-index:150;
@@ -55,6 +55,30 @@ export function initFeedback() {
   fab.addEventListener('mouseleave', () => fab.style.transform = 'scale(1)');
   fab.addEventListener('click', () => showForm());
   document.body.appendChild(fab);
+  // 拖拽
+  (function makeDraggable(el, storageKey) {
+    var pos = {};
+    try { pos = JSON.parse(localStorage.getItem(storageKey)); } catch(e) {}
+    if (pos && pos.x) { el.style.right = 'auto'; el.style.bottom = 'auto'; el.style.left = pos.x + 'px'; el.style.top = pos.y + 'px'; }
+    var sx, sy, sl, st, dragging;
+    el.addEventListener('mousedown', function(e) {
+      if (e.target !== el && e.target.tagName !== 'svg' && e.target.tagName !== 'path') return;
+      sx = e.clientX; sy = e.clientY; sl = parseInt(el.style.left)||0; st = parseInt(el.style.top)||0;
+      el.style.transition = 'none';
+      function mv(e) {
+        var dx = e.clientX - sx, dy = e.clientY - sy;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragging = true;
+        if (dragging) { el.style.left = Math.max(0,Math.min(window.innerWidth-50,sl+dx))+'px'; el.style.top = Math.max(0,Math.min(window.innerHeight-50,st+dy))+'px'; }
+      }
+      function up() {
+        el.style.transition = ''; document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up);
+        if (dragging) try { localStorage.setItem(storageKey, JSON.stringify({x:parseInt(el.style.left),y:parseInt(el.style.top)})); } catch(e) {}
+        setTimeout(function(){ dragging = false; }, 0);
+      }
+      document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+    });
+  })(fab, 'pcBuilder_feedbackPos');
+
 }
 
 function showForm() {

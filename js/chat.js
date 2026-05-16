@@ -12,6 +12,62 @@
   fab.innerHTML = '<i data-lucide="headset" style="width:24px;height:24px;color:#d4af37;"></i>';
   fab.title = '咨询问题点我试试';
   document.body.appendChild(fab);
+  // ========== 拖拽功能 ==========
+  (function makeDraggable(el, storageKey) {
+    var pos = { x: 0, y: 0 };
+    try { var saved = JSON.parse(localStorage.getItem(storageKey)); if (saved) pos = saved; } catch(e) {}
+    el.style.right = 'auto'; el.style.bottom = 'auto';
+    el.style.left = pos.x + 'px'; el.style.top = pos.y + 'px';
+    
+    var startX, startY, startLeft, startTop, dragging = false;
+    
+    function onStart(e) {
+      if (e.target.tagName === 'I' || e.target.tagName === 'svg' || e.target.tagName === 'path') return; // let icon clicks through
+      dragging = false;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+      startLeft = parseInt(el.style.left) || 0;
+      startTop = parseInt(el.style.top) || 0;
+      el.style.transition = 'none';
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onEnd);
+      document.addEventListener('touchmove', onMove, {passive: false});
+      document.addEventListener('touchend', onEnd);
+      e.preventDefault();
+    }
+    
+    function onMove(e) {
+      var cx = e.touches ? e.touches[0].clientX : e.clientX;
+      var cy = e.touches ? e.touches[0].clientY : e.clientY;
+      var dx = cx - startX, dy = cy - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragging = true;
+      if (dragging) {
+        var newLeft = Math.max(0, Math.min(window.innerWidth - 60, startLeft + dx));
+        var newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
+        el.style.left = newLeft + 'px';
+        el.style.top = newTop + 'px';
+      }
+    }
+    
+    function onEnd() {
+      el.style.transition = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onEnd);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+      if (dragging) {
+        try { localStorage.setItem(storageKey, JSON.stringify({x: parseInt(el.style.left), y: parseInt(el.style.top)})); } catch(e) {}
+      }
+      // if not dragged, it was a click
+      if (!dragging) {
+        setTimeout(function() { el.dispatchEvent(new Event('click-no-drag')); }, 0);
+      }
+    }
+    
+    el.addEventListener('mousedown', onStart);
+    el.addEventListener('touchstart', onStart, {passive: false});
+  })(fab, 'pcBuilder_chatFabPos');
+
 
   // tooltip 气泡
   const tooltip = document.createElement('span');
