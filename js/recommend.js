@@ -225,7 +225,7 @@ function renderResult(config, total, score, platform) {
 
   resultArea.innerHTML = `
     <div class="rec-result-header">
-      <h2>🎯 推荐配置</h2>
+      <h2><i data-lucide="sparkles" class="icon-lg"></i> 推荐配置</h2>
       <span class="rec-platform-badge">${platform === 'intel' ? '🔵 Intel平台' : '🔴 AMD平台'}</span>
     </div>
     <div class="rec-parts-list">${rows}</div>
@@ -235,8 +235,8 @@ function renderResult(config, total, score, platform) {
       <div class="rec-comment">${score.comment}</div>
     </div>
     <div class="rec-actions">
-      <button class="btn-rebuild" onclick="initRecommendPage(); document.getElementById('btnGenerate').click();">🔄 重新生成</button>
-      <button class="btn-view3d" onclick="openIn3D()">🖥️ 在3D机箱中查看</button>
+      <button class="btn-rebuild" onclick="initRecommendPage(); document.getElementById('btnGenerate').click();"><i data-lucide="refresh-cw" class="icon-sm"></i> 重新生成</button>
+      <button class="btn-view3d" onclick="openIn3D()"><i data-lucide="monitor" class="icon-sm"></i> 在3D机箱中查看</button>
     </div>
   `;
 
