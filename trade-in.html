@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 旧机自助估价</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="tradein-body">
+
+<nav class="nav">
+  <div class="nav-logo"><i data-lucide="monitor" class="icon-md"></i> 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html">互动装机</a>
+    <a href="recommend.html">一键推荐</a>
+    <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="trade-in.html" class="active"><i data-lucide="refresh-cw" class="icon-sm"></i> 旧机估价</a>
+        <a href="support.html"><i data-lucide="wrench" class="icon-sm"></i> 售后工单</a>
+      </div>
+    </div>
+  </div>
+  <div class="nav-total"><i data-lucide="lightbulb" class="icon-sm"></i> 旧机折价，换新更划算</div>
+
+  <a href="login.html?redirect=trade-in.html" class="nav-user-btn" id="navLoginBtn">登录</a>
+  <div class="nav-user-menu" id="navUserMenu" style="display:none;">
+    <span class="nav-user-email" id="navUserEmail"></span>
+    <button class="nav-logout-btn" id="navLogoutBtn">退出</button>
+  </div>
+</nav>
+
+<div class="tradein-page-light">
+
+  <!-- 顶部标题 -->
+  <div class="til-hero">
+    <h1>旧机在线一键估价</h1>
+    <p>闲置手机专业回收、在线自助估价、价格透明</p>
+  </div>
+
+  <!-- 核心左右分栏 -->
+  <div class="til-main">
+    <!-- 左栏：分步表单 -->
+    <div class="til-form-card">
+      <!-- Step 1: 设备品类 -->
+      <div class="til-step">
+        <div class="til-step-num">1</div>
+        <div class="til-step-content">
+          <div class="til-step-title">选择设备品类</div>
+          <div class="til-option-row" id="deviceTypeGroup"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: 品牌 → 型号 → 内存 -->
+      <div class="til-step" id="stepBrand" style="display:none;">
+        <div class="til-step-num">2</div>
+        <div class="til-step-content">
+          <div class="til-step-title">选择品牌 / 型号 / 版本</div>
+          <div class="til-select-row">
+            <select class="til-select" id="brandSelect" disabled><option value="">品牌</option></select>
+            <select class="til-select" id="modelSelect" disabled><option value="">型号</option></select>
+            <select class="til-select" id="storageSelect" disabled><option value="">内存版本</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: 外观成色 -->
+      <div class="til-step" id="stepCondition" style="display:none;">
+        <div class="til-step-num">3</div>
+        <div class="til-step-content">
+          <div class="til-step-title">外观成色</div>
+          <div class="til-option-row" id="conditionGroup"></div>
+        </div>
+      </div>
+
+      <!-- Step 4: 功能状态 -->
+      <div class="til-step" id="stepFunctional" style="display:none;">
+        <div class="til-step-num">4</div>
+        <div class="til-step-content">
+          <div class="til-step-title">功能状态</div>
+          <div class="til-func-grid" id="functionalGroup"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右栏：实时估价卡 -->
+    <div class="til-price-col">
+      <div class="til-price-card" id="priceCard">
+        <div class="til-price-label">预估回收价</div>
+        <div class="til-price-value">￥<span id="priceNum">0</span></div>
+        <div class="til-price-note">价格有效期至今日 24:00 · 免费上门回收</div>
+        <button class="til-btn-primary" id="btnRecycle" disabled>立即预约回收</button>
+        <div class="til-price-detail" id="priceDetail"></div>
+      </div>
+
+      <!-- 已有抵扣提示 -->
+      <div class="til-discount-card" id="discountCard" style="display:none;">
+        <div class="til-discount-label"><i data-lucide="dollar-sign" class="icon-sm"></i> 已有旧机抵扣金</div>
+        <div class="til-discount-amount">￥<span id="discountAmt">0</span></div>
+        <button class="til-btn-outline" id="btnApplyDiscount">应用到新机配置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部优势条 -->
+  <div class="til-trust-bar">
+    <div class="til-trust-item">
+      <div class="til-trust-icon"><i data-lucide="layout-template" class="icon-lg"></i></div>
+      <div class="til-trust-text">价格透明</div>
+    </div>
+    <div class="til-trust-item">
+      <div class="til-trust-icon"><i data-lucide="truck" class="icon-lg"></i></div>
+      <div class="til-trust-text">免费上门</div>
+    </div>
+    <div class="til-trust-item">
+      <div class="til-trust-icon"><i data-lucide="search" class="icon-lg"></i></div>
+      <div class="til-trust-text">专业质检</div>
+    </div>
+    <div class="til-trust-item">
+      <div class="til-trust-icon"><i data-lucide="zap" class="icon-lg"></i></div>
+      <div class="til-trust-text">快速回款</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 预约回收弹窗 -->
+<div class="til-modal-overlay" id="recycleModal" style="display:none;">
+  <div class="til-modal">
+    <h2><i data-lucide="package" class="icon-lg"></i> 预约上门回收</h2>
+    <div class="til-modal-body">
+      <div class="til-modal-row"><span class="til-modal-label">回收机型</span><span id="rmDevice">-</span></div>
+      <div class="til-modal-row"><span class="til-modal-label">预估价格</span><strong style="font-size:20px;">￥<span id="rmPrice">0</span></strong></div>
+      <input type="text" class="til-input" id="rmName" placeholder="您的姓名" maxlength="20">
+      <input type="tel" class="til-input" id="rmPhone" placeholder="手机号码" maxlength="11">
+      <input type="text" class="til-input" id="rmAddress" placeholder="取件地址" maxlength="200">
+      <input type="date" class="til-input" id="rmDate">
+      <select class="til-select" id="rmTimeSlot" style="width:100%;">
+        <option value="">选择上门时段</option>
+        <option value="morning">上午 9:00-12:00</option>
+        <option value="afternoon">下午 13:00-17:00</option>
+        <option value="evening">晚间 17:00-19:00</option>
+      </select>
+    </div>
+    <div class="til-modal-actions">
+      <button class="til-btn-primary" id="btnConfirmRecycle">确认预约</button>
+      <button class="til-btn-outline" onclick="document.getElementById('recycleModal').style.display='none'">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 折扣应用弹窗 -->
+<div class="til-modal-overlay" id="discountModal" style="display:none;">
+  <div class="til-modal">
+    <h2><i data-lucide="dollar-sign" class="icon-lg"></i> 旧机抵扣已保存</h2>
+    <p style="color:#888;margin:12px 0;">您的旧机估价 <strong style="color:#d4af37;font-size:20px;">￥<span id="dmAmount">0</span></strong> 已记录</p>
+    <p style="font-size:13px;color:#888;margin-bottom:20px;">抵扣金将自动应用到新机配置中</p>
+    <div class="til-modal-actions">
+      <a href="recommend.html" class="til-btn-primary" style="text-decoration:none;text-align:center;"><i data-lucide="target" class="icon-sm"></i> 一键推荐配置</a>
+      <a href="index.html" class="til-btn-outline" style="text-decoration:none;text-align:center;"><i data-lucide="monitor" class="icon-sm"></i> 互动装机选配</a>
+    </div>
+    <button class="til-btn-outline" onclick="document.getElementById('discountModal').style.display='none'" style="margin-top:12px;width:100%;">关闭</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/tradein.js"></script>
+<script src="js/chat.js"></script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <span class="logo-diamond">◆</span>
+        <span class="logo-name">PC BUILDER</span>
+        <span class="logo-badge">AI</span>
+      </div>
+      <p class="footer-tagline">你的专属装机伙伴</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>产品</h4>
+        <a href="index.html">互动装机</a>
+        <a href="recommend.html">一键推荐</a>
+        <a href="ai-advisor.html">AI装机顾问</a>
+        <a href="compare.html">配置对比</a>
+      </div>
+      <div class="footer-col">
+        <h4>服务</h4>
+        <a href="service.html">上门组装</a>
+        <a href="service.html">快递寄送</a>
+        <a href="trade-in.html">旧机估价</a>
+        <a href="support.html">售后工单</a>
+      </div>
+      <div class="footer-col">
+        <h4>关于</h4>
+        <a href="#">关于我们</a>
+        <a href="#">联系方式</a>
+        <a href="#" onclick="document.getElementById('feedbackFab')?.click()">用户反馈</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 PC Builder AI. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">隐私政策</a>
+      <a href="#">服务条款</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+
+<script type="module">
+import { onAuthChange, signOut, getUserDisplay } from './js/auth.js';
+
+onAuthChange((user) => {
+  const loginBtn = document.getElementById('navLoginBtn');
+  const userMenu = document.getElementById('navUserMenu');
+  const userEmail = document.getElementById('navUserEmail');
+  if (user) {
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'flex';
+    if (userEmail) userEmail.textContent = getUserDisplay();
+  } else {
+    if (loginBtn) loginBtn.style.display = '';
+    if (userMenu) userMenu.style.display = 'none';
+  }
+});
+
+document.getElementById('navLogoutBtn')?.addEventListener('click', async () => {
+  await signOut();
+  location.reload();
+});
+</script>
+</body>
+</html>
