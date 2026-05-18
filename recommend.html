@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 一键推荐</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-logo"><i data-lucide="monitor" class="icon-md"></i> 装机大师</div>
+  <div class="nav-links">
+    <a href="index.html">互动装机</a>
+    <a href="recommend.html" class="active">一键推荐</a>
+    <a href="service.html">上门组装 / 快递</a>
+    <div class="nav-dropdown">
+      <span class="nav-dropdown-toggle">更多 <span class="nav-dropdown-arrow">▾</span></span>
+      <div class="nav-dropdown-menu">
+        <a href="trade-in.html"><i data-lucide="refresh-cw" class="icon-sm"></i> 旧机估价</a>
+        <a href="support.html"><i data-lucide="wrench" class="icon-sm"></i> 售后工单</a>
+      </div>
+    </div>
+  </div>
+  <div class="nav-total"><i data-lucide="lightbulb" class="icon-sm"></i> 小白装机，一键搞定</div>
+
+  <a href="login.html?redirect=recommend.html" class="nav-user-btn" id="navLoginBtn">登录</a>
+  <div class="nav-user-menu" id="navUserMenu" style="display:none;">
+    <span class="nav-user-email" id="navUserEmail"></span>
+    <button class="nav-logout-btn" id="navLogoutBtn">退出</button>
+  </div>
+</nav>
+
+<div class="recommend-page">
+
+  <div class="rec-hero">
+    <h1><i data-lucide="sparkles" class="icon-xl"></i> 一键装机推荐</h1>
+    <p class="rec-hero-sub">像买笔记本一样简单——告诉预算和用途，自动生成最佳配置</p>
+  </div>
+
+  <!-- 输入区 -->
+  <div class="rec-input-card">
+    <!-- 预算滑块 -->
+    <div class="rec-section">
+      <div class="rec-section-title"><i data-lucide="dollar-sign" class="icon-sm"></i> 你的预算</div>
+      <div class="rec-budget-slider-wrap">
+        <input type="range" id="budgetSlider" class="rec-slider"
+               min="3000" max="50000" step="500" value="6000">
+        <div class="rec-budget-display" id="budgetDisplay">¥6,000</div>
+      </div>
+      <div class="rec-budget-labels">
+        <span>¥3,000</span><span>¥6,000</span><span>¥10,000</span><span>¥15,000</span><span>¥30,000</span>
+        <span>¥50,000</span>
+      </div>
+    </div>
+
+    <!-- 用途选择 -->
+    <div class="rec-section">
+      <div class="rec-section-title"><i data-lucide="target" class="icon-sm"></i> 主要用途（可多选）</div>
+      <div class="rec-usage-grid">
+        <label class="rec-usage-card">
+          <input type="checkbox" id="useOffice" checked>
+          <span class="rec-usage-icon"><i data-lucide="file-text" class="icon-lg"></i></span>
+          <span class="rec-usage-name">办公影音</span>
+          <span class="rec-usage-desc">Word/Excel/上网/看剧</span>
+        </label>
+        <label class="rec-usage-card">
+          <input type="checkbox" id="useLightGame">
+          <span class="rec-usage-icon"><i data-lucide="gamepad-2" class="icon-lg"></i></span>
+          <span class="rec-usage-name">轻度游戏</span>
+          <span class="rec-usage-desc">LOL/原神/CS2</span>
+        </label>
+        <label class="rec-usage-card">
+          <input type="checkbox" id="useAAAGame">
+          <span class="rec-usage-icon"><i data-lucide="flame" class="icon-lg"></i></span>
+          <span class="rec-usage-name">3A大作</span>
+          <span class="rec-usage-desc">黑神话/赛博朋克/GTA6</span>
+        </label>
+        <label class="rec-usage-card">
+          <input type="checkbox" id="useVideo">
+          <span class="rec-usage-icon"><i data-lucide="film" class="icon-lg"></i></span>
+          <span class="rec-usage-name">视频剪辑</span>
+          <span class="rec-usage-desc">PR/达芬奇/剪映</span>
+        </label>
+        <label class="rec-usage-card">
+          <input type="checkbox" id="useAI">
+          <span class="rec-usage-icon"><i data-lucide="bot" class="icon-lg"></i></span>
+          <span class="rec-usage-name">3D/3D创作</span>
+          <span class="rec-usage-desc">SD绘图/Blender/编程</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 平台偏好 -->
+    <div class="rec-section">
+      <div class="rec-section-title"><i data-lucide="settings" class="icon-sm"></i> CPU平台偏好</div>
+      <div class="rec-platform-group">
+        <label class="rec-platform-option">
+          <input type="radio" name="platform" value="any" checked>
+          <span>无所谓</span>
+        </label>
+        <label class="rec-platform-option">
+          <input type="radio" name="platform" value="intel">
+          <span>偏 Intel</span>
+        </label>
+        <label class="rec-platform-option">
+          <input type="radio" name="platform" value="amd">
+          <span>偏 AMD</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="rec-tradein-hint" id="tradeinHint" style="display:none;text-align:center;margin-bottom:12px;padding:8px 16px;background:rgba(102,255,153,0.06);border:1px solid rgba(102,255,153,0.15);border-radius:8px;font-size:13px;color:var(--text);"></div>
+    <button class="rec-btn-generate" id="btnGenerate">
+      <i data-lucide="target" class="icon-sm"></i> 生成推荐配置
+    </button>
+  </div>
+
+  <!-- 结果区 -->
+  <div class="rec-result-card" id="resultArea">
+    <div class="rec-result-placeholder">
+      <div class="rec-placeholder-icon"><i data-lucide="sparkles" class="icon-2xl"></i></div>
+      <h3>选择预算和用途，点击生成</h3>
+      <p>系统会自动匹配兼容、均衡、高性价比的整机配置</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/recommend.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initRecommendPage();
+  });
+</script>
+<script src="js/chat.js"></script>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <span class="logo-diamond">◆</span>
+        <span class="logo-name">PC BUILDER</span>
+        <span class="logo-badge">3D</span>
+      </div>
+      <p class="footer-tagline">你的专属装机伙伴</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>产品</h4>
+        <a href="index.html">互动装机</a>
+        <a href="recommend.html">一键推荐</a>
+        <a href="ai-advisor.html">3D装机顾问</a>
+        <a href="compare.html">配置对比</a>
+      </div>
+      <div class="footer-col">
+        <h4>服务</h4>
+        <a href="service.html">上门组装</a>
+        <a href="service.html">快递寄送</a>
+        <a href="trade-in.html">旧机估价</a>
+        <a href="support.html">售后工单</a>
+      </div>
+      <div class="footer-col">
+        <h4>关于</h4>
+        <a href="#">关于我们</a>
+        <a href="#">联系方式</a>
+        <a href="#" onclick="document.getElementById('feedbackFab')?.click()">用户反馈</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 PC Builder 3D. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">隐私政策</a>
+      <a href="#">服务条款</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+
+<script type="module">
+import { onAuthChange, signOut, getUserDisplay } from './js/auth.js';
+
+onAuthChange((user) => {
+  const loginBtn = document.getElementById('navLoginBtn');
+  const userMenu = document.getElementById('navUserMenu');
+  const userEmail = document.getElementById('navUserEmail');
+  if (user) {
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'flex';
+    if (userEmail) userEmail.textContent = getUserDisplay();
+  } else {
+    if (loginBtn) loginBtn.style.display = '';
+    if (userMenu) userMenu.style.display = 'none';
+  }
+});
+
+document.getElementById('navLogoutBtn')?.addEventListener('click', async () => {
+  await signOut();
+  location.reload();
+});
+</script>
+</body>
+</html>
