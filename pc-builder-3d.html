@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装机大师 - 3D海景房机箱</title>
+<style>
+  /* ============================================================
+     CSS 变量 - 改这里一键换主题色
+     ============================================================ */
+  :root {
+    --bg: #0a0a0f;
+    --text: #e0e0e0;
+    --text-muted: #888;
+    --accent: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* 顶部信息栏 */
+  .top-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 12px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, rgba(10,10,15,0.95), transparent);
+    pointer-events: none;
+  }
+  .top-bar .title {
+    font-size: 18px; font-weight: 700;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ccc, #888);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .top-bar .hint {
+    font-size: 12px; color: var(--text-muted);
+    pointer-events: auto;
+  }
+
+  /* 3D画布容器 */
+  #canvas-container {
+    width: 100vw; height: 100vh;
+    cursor: grab;
+  }
+  #canvas-container:active { cursor: grabbing; }
+  #canvas-container canvas { display: block; }
+
+  /* 底部部件列表 */
+  .parts-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+    padding: 16px 24px;
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    background: linear-gradient(to top, rgba(10,10,15,0.95), transparent);
+    pointer-events: none;
+  }
+  .parts-bar .part-chip {
+    padding: 8px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer; pointer-events: auto;
+    transition: all 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .parts-bar .part-chip:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+  }
+  .parts-bar .part-chip.active {
+    background: rgba(255,255,255,0.95);
+    color: #000;
+    border-color: #fff;
+    box-shadow: 0 0 20px rgba(255,255,255,0.3);
+  }
+
+  /* 加载提示 */
+  .loading {
+    position: fixed; inset: 0; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 20px; color: var(--text-muted);
+    z-index: 20; pointer-events: none;
+  }
+
+  /* 提示标签（3D部件旁） */
+  .label-3d {
+    position: absolute; pointer-events: none;
+    transform: translate(-50%, -50%);
+    font-size: 11px; font-weight: 700;
+    color: #aaa; text-shadow: 0 0 6px rgba(0,0,0,0.9);
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+  .label-3d.active { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,0.8); }
+</style>
+</head>
+<body>
+
+<div id="canvas-container">
+  <div class="loading" id="loading">加载中...</div>
+</div>
+
+<div class="top-bar">
+  <span class="title">🖥 装机大师</span>
+  <span class="hint" id="hintText">🖱 拖拽旋转 · 滚轮缩放 · 右键平移</span>
+</div>
+
+<div class="parts-bar" id="partsBar"></div>
+
+<!-- ============================================================
+     Three.js Import Map - 指向本地文件（离线可用）
+     ============================================================ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./js/lib/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+// ============================================================
+// 装机大师 - 3D海景房机箱
+// 单文件完整版，详细注释，方便后期修改
+// ============================================================
+
+import * as THREE from 'three';
+import { OrbitControls } from './js/lib/OrbitControls.js';
+
+// ==================== 全局引用 ====================
+const container = document.getElementById('canvas-container');
+const loading = document.getElementById('loading');
+const hintText = document.getElementById('hintText');
+const partsBar = document.getElementById('partsBar');
+let scene, camera, renderer, controls;
+let caseGroup;                // 机箱整体组
+let defaultCamPos, defaultTarget; // 默认视角（用于重置）
+let selectedPart = null;     // 当前选中部件名
+const partGroups = {};       // key → THREE.Group
+const partLabels = {};       // key → DOM标签元素
+
+// ==================== ═══════════════════════════════ ====================
+//  🎨 材质工厂 - 统一管理所有材质，改颜色/粗糙度/金属度来这里
+// ==================== ═══════════════════════════════ ====================
+
+/** 磨砂金属（机箱框架） */
+function matBrushedMetal(hex = 0x888888) {
+  return new THREE.MeshStandardMaterial({
+    color: hex,
+    roughness: 0.35,    // 粗糙度 0=镜面 1=磨砂（改这里调磨砂程度）
+    metalness: 0.85,    // 金属度 0=塑料 1=纯金属
+  });
+}
+
+/** 枪灰色金属（主板托盘、电源仓） */
+function matGunmetal(hex = 0x555555) {
+  return new THREE.MeshStandardMaterial({
+    color: hex,
+    roughness: 0.4,
+    metalness: 0.75,
+  });
+}
+
+/** 钢化玻璃（透明侧板/前面板） */
+function matGlass(opacity = 0.22) {
+  return new THREE.MeshPhysicalMaterial({
+    color: 0x888888,
+    roughness: 0.05,
+    metalness: 0.05,
+    transparent: true,
+    opacity: opacity,       // 透明度 0=全透 1=不透明
+    envMapIntensity: 0.6,   // 环境反射强度
+    clearcoat: 0.1,         // 清漆层（玻璃光泽）
+  });
+}
+
+/** RGB发光风扇 - 发光颜色用emissive控制 */
+function matFan(emissiveColor = 0x3366ff, emissiveStrength = 0.7) {
+  return new THREE.MeshStandardMaterial({
+    color: 0x222222,
+    roughness: 0.3,
+    metalness: 0.3,
+    emissive: emissiveColor,
+    emissiveIntensity: emissiveStrength,
+  });
+}
+
+/** 内部硬件（半透明ghost模式） */
+function matGhost(hex = 0x666666, opacity = 0.45) {
+  return new THREE.MeshStandardMaterial({
+    color: hex,
+    roughness: 0.5,
+    metalness: 0.2,
+    transparent: true,
+    opacity: opacity,
+  });
+}
+
+/** 内部硬件（选中高亮白色模式） */
+function matHighlighted(hex = 0xeeeeee) {
+  return new THREE.MeshStandardMaterial({
+    color: hex,
+    roughness: 0.12,
+    metalness: 0.75,
+    emissive: 0xffffff,
+    emissiveIntensity: 0.15,
+  });
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🏗️ 场景初始化
+// ==================== ═══════════════════════════════ ====================
+
+function init() {
+  // --- 场景 ---
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d0d14);  // 深色背景，衬托玻璃反光
+  scene.fog = new THREE.Fog(0x0d0d14, 12, 30);   // 远处雾化，增加深度感
+
+  // --- 相机 ---
+  const aspect = container.clientWidth / container.clientHeight;
+  camera = new THREE.PerspectiveCamera(
+    38,     // FOV - 视野角度（越小越接近长焦/产品摄影）
+    aspect,
+    0.1,    // 近裁面
+    100     // 远裁面
+  );
+  // 初始视角：从正面略上方俯视，展示海景房机箱正面+内部
+  camera.position.set(0, 2.8, -7.5);
+  camera.lookAt(0, 2.5, 0);
+
+  // --- 渲染器 ---
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 限制像素比，保证性能
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;  // 柔和阴影
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; // 电影级色调映射
+  renderer.toneMappingExposure = 1.25;                // 曝光度
+  renderer.outputColorSpace = THREE.SRGBColorSpace;   // sRGB色彩空间
+  container.appendChild(renderer.domElement);
+
+  // --- OrbitControls - 旋转/缩放/平移 ---
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 2.5, 0);        // 注视点：机箱几何中心
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.12;         // 阻尼系数（越大越"粘滞"）
+  controls.rotateSpeed = 0.4;            // 旋转灵敏度
+  controls.zoomSpeed = 0.6;              // 缩放灵敏度
+  controls.panSpeed = 0.4;               // 平移灵敏度
+  controls.minDistance = 5;              // 最小缩放距离
+  controls.maxDistance = 12;             // 最大缩放距离
+  controls.maxPolarAngle = Math.PI * 0.65; // 最大仰角（防止翻到底部）
+  controls.minPolarAngle = Math.PI * 0.15; // 最小俯角
+  controls.update();
+
+  // 保存默认视角（用于"返回全景"）
+  defaultCamPos = camera.position.clone();
+  defaultTarget = controls.target.clone();
+
+  // --- 灯光系统 ---
+  setupLights();
+
+  // --- 构建场景 ---
+  buildFloor();      // 地面/底座
+  caseGroup = new THREE.Group();
+  scene.add(caseGroup);
+  buildCase();       // 机箱外壳
+  buildInternals();  // 内部硬件
+  createLabels();    // 3D标签
+  buildPartChips();  // 底部部件按钮
+
+  // --- 事件 ---
+  renderer.domElement.addEventListener('pointermove', onPointerMove);
+  renderer.domElement.addEventListener('click', onClick);
+  window.addEventListener('resize', onResize);
+
+  // --- 启动 ---
+  if (loading) loading.style.display = 'none';
+  animate();
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  💡 灯光系统 - 3点布光 + 环境光 + 底部补光
+// ==================== ═══════════════════════════════ ====================
+
+function setupLights() {
+  // 环境光 - 基础照明，避免死黑
+  scene.add(new THREE.AmbientLight(0x8899bb, 1.8));
+
+  // 主光源（太阳光）- 从右上方打下来，产生主要阴影
+  const keyLight = new THREE.DirectionalLight(0xffeedd, 5.5);
+  keyLight.position.set(8, 12, 4);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 2048;
+  keyLight.shadow.mapSize.height = 2048;
+  keyLight.shadow.camera.near = 0.5;
+  keyLight.shadow.camera.far = 60;
+  keyLight.shadow.camera.left = -15;
+  keyLight.shadow.camera.right = 15;
+  keyLight.shadow.camera.top = 15;
+  keyLight.shadow.camera.bottom = -15;
+  keyLight.shadow.bias = -0.0001;
+  keyLight.shadow.normalBias = 0.02;
+  scene.add(keyLight);
+
+  // 补光（冷色）- 从左侧补光，减少阴影过暗
+  const fillLight = new THREE.DirectionalLight(0xaaccff, 2.0);
+  fillLight.position.set(-5, 4, -3);
+  scene.add(fillLight);
+
+  // 轮廓光（背光）- 从后方打亮机箱边缘
+  const rimLight = new THREE.DirectionalLight(0xffffff, 2.5);
+  rimLight.position.set(0, 3, 6);
+  scene.add(rimLight);
+
+  // 底部补光 - 削弱机箱底部过暗
+  const bottomLight = new THREE.DirectionalLight(0x8899bb, 1.2);
+  bottomLight.position.set(0, -1, 0);
+  scene.add(bottomLight);
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🏠 地面/底座
+// ==================== ═══════════════════════════════ ====================
+
+function buildFloor() {
+  // 哑光底座圆盘
+  const baseGeo = new THREE.CylinderGeometry(2.0, 2.1, 0.08, 48);
+  const baseMat = new THREE.MeshStandardMaterial({
+    color: 0x2a2a2a,
+    roughness: 0.25,
+    metalness: 0.7,
+  });
+  const base = new THREE.Mesh(baseGeo, baseMat);
+  base.position.y = -0.04;
+  base.receiveShadow = true;
+  scene.add(base);
+
+  // 底座发光环
+  const ringGeo = new THREE.TorusGeometry(2.05, 0.015, 16, 80);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0x888888,
+    transparent: true,
+    opacity: 0.5,
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = 0.005;
+  ring.name = 'glowRing';
+  scene.add(ring);
+
+  // 地面（接收阴影用）
+  const floorGeo = new THREE.PlaneGeometry(30, 30);
+  const floorMat = new THREE.MeshStandardMaterial({
+    color: 0x111111,
+    roughness: 0.9,
+    metalness: 0,
+  });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.08;
+  floor.receiveShadow = true;
+  scene.add(floor);
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🖥️ 机箱外壳 - 现代海景房风格（全景玻璃+金属框架）
+//  * 改尺寸：修改 cw(宽) ch(高) cd(深) 三个变量
+//  * 改颜色：修改 matBrushedMetal() / matGlass() 的参数
+// ==================== ═══════════════════════════════ ====================
+
+function buildCase() {
+  // ══ 尺寸参数（改机箱大小改这里） ══
+  const cw = 2.5;   // 宽度 (X轴) - 标准ATX约2.3-2.5
+  const ch = 5.2;   // 高度 (Y轴) - 中塔约4.8-5.2
+  const cd = 4.8;   // 深度 (Z轴) - 标准ATX约4.5-5.0
+  const ft = 0.06;  // 框架厚度
+
+  const frameMat = matBrushedMetal(0x8a8a8a);   // 银灰色磨砂铝合金框架
+  const trayMat  = matGunmetal(0x505050);        // 枪灰色主板托盘
+  const glassMat = matGlass(0.18);               // 钢化玻璃（半透明）
+
+  // --- 辅助函数：快速创建长方体框架条 ---
+  function beam(w, h, d, x, y, z, mat) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat || frameMat);
+    m.position.set(x, y, z);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    caseGroup.add(m);
+  }
+
+  // --- 4根竖直立柱（四角） ---
+  beam(ft, ch, ft, -cw/2, ch/2, -cd/2);  // 前左
+  beam(ft, ch, ft,  cw/2, ch/2, -cd/2);  // 前右
+  beam(ft, ch, ft, -cw/2, ch/2,  cd/2);  // 后左
+  beam(ft, ch, ft,  cw/2, ch/2,  cd/2);  // 后右
+
+  // --- 顶部和底部横梁 ---
+  [ch, 0].forEach(y => {
+    beam(cw, ft, ft, 0, y, -cd/2);           // 前横梁
+    beam(cw, ft, ft, 0, y,  cd/2);           // 后横梁
+    beam(ft, ft, cd, -cw/2, y, 0);           // 左横梁
+    beam(ft, ft, cd,  cw/2, y, 0);           // 右横梁
+  });
+
+  // --- 电源仓隔板（底部区域分隔） ---
+  beam(cw - 0.1, 0.02, cd - 0.1, 0, 1.15, 0);
+
+  // --- 后面板（主板托盘）- 枪灰色金属 ---
+  const trayGeo = new THREE.PlaneGeometry(cd - 0.1, ch - 0.15);
+  const trayPanel = new THREE.Mesh(trayGeo, trayMat);
+  trayPanel.position.set(cw/2 - 0.01, ch/2, 0);  // 靠右侧
+  trayPanel.rotation.y = Math.PI / 2;
+  trayPanel.receiveShadow = true;
+  caseGroup.add(trayPanel);
+
+  // --- 玻璃面板 - 前面+左面（海景房标配） ---
+  function glassPanel(w, h, x, y, z, rotY) {
+    const g = new THREE.Mesh(new THREE.PlaneGeometry(w, h), glassMat);
+    g.position.set(x, y, z);
+    g.rotation.y = rotY || 0;
+    caseGroup.add(g);
+  }
+
+  // 前面板玻璃
+  glassPanel(cw - 0.08, ch - 0.12, 0, ch/2, -cd/2 + 0.005, 0);
+  // 左侧板玻璃（全景展示内部）
+  glassPanel(cd - 0.08, ch - 0.12, -cw/2 + 0.005, ch/2, 0, Math.PI/2);
+
+  // 存储尺寸供内部硬件使用
+  caseGroup.userData = { cw, ch, cd };
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🔧 内部硬件 - 按真实ATX布局放置
+// ==================== ═══════════════════════════════ ====================
+
+function buildInternals() {
+  const { cw, ch, cd } = caseGroup.userData;
+
+  // ══ 主板 PCB ══
+  const mbGeo = new THREE.BoxGeometry(0.06, 3.5, 3.1);
+  const mb = addPart('motherboard', mbGeo,
+    [cw/2 - 0.13, ch * 0.56, 0],
+    matGhost(0x3a3a3a), '主板');
+
+  // VRM散热片
+  const vrmGeo = new THREE.BoxGeometry(0.1, 0.28, 0.9);
+  const vrm = new THREE.Mesh(vrmGeo, matGhost(0x505050));
+  vrm.position.set(cw/2 - 0.18, ch * 0.83, 0.2);
+  partGroups['motherboard'].add(vrm);
+
+  // ══ CPU ══
+  const cpuGeo = new THREE.BoxGeometry(0.09, 0.45, 0.45);
+  addPart('cpu', cpuGeo,
+    [cw/2 - 0.17, ch * 0.72, 0.18],
+    matGhost(0x555555), 'CPU');
+
+  // CPU顶盖（IHS）
+  const ihsGeo = new THREE.BoxGeometry(0.03, 0.43, 0.43);
+  const ihs = new THREE.Mesh(ihsGeo, matGhost(0xaaaaaa, 0.55));
+  ihs.position.set(cw/2 - 0.22, ch * 0.72, 0.18);
+  partGroups['cpu'].add(ihs);
+
+  // ══ CPU散热器（双塔风冷） ══
+  const coolerGeo = new THREE.BoxGeometry(0.7, 1.35, 1.15);
+  addPart('cooler', coolerGeo,
+    [cw/2 - 0.52, ch * 0.78, 0.18],
+    matGhost(0x606060), '散热器');
+
+  // 散热器风扇
+  const coolerFanGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.08, 24);
+  const coolerFan = new THREE.Mesh(coolerFanGeo, matFan(0x4488ff, 0.6));
+  coolerFan.position.set(cw/2 - 0.17, ch * 0.78, 0.18);
+  coolerFan.rotation.z = Math.PI / 2;
+  partGroups['cooler'].add(coolerFan);
+
+  // ══ 内存条 x4 ══
+  const ramGroup = new THREE.Group();
+  ramGroup.name = 'ram';
+  for (let i = 0; i < 4; i++) {
+    const stickGeo = new THREE.BoxGeometry(0.04, 1.02, 0.09);
+    const stick = new THREE.Mesh(stickGeo, matGhost(0x777777));
+    stick.position.set(cw/2 - 0.19, ch * 0.6, 0.75 + i * 0.13);
+    ramGroup.add(stick);
+  }
+  caseGroup.add(ramGroup);
+  partGroups['ram'] = ramGroup;
+  partPositions['ram'] = new THREE.Vector3(cw/2 - 0.19, ch * 0.75, 1.1);
+
+  // ══ 显卡 GPU ══
+  const gpuGeo = new THREE.BoxGeometry(0.08, 0.52, 2.9);
+  addPart('gpu', gpuGeo,
+    [cw/2 - 0.22, ch * 0.44, -0.1],
+    matGhost(0x585858), '显卡');
+
+  // 显卡风扇罩（三风扇）
+  const shroudGeo = new THREE.BoxGeometry(0.12, 0.34, 2.0);
+  const shroud = new THREE.Mesh(shroudGeo, matGhost(0x3d3d3d, 0.5));
+  shroud.position.set(cw/2 - 0.29, ch * 0.45, 0.25);
+  partGroups['gpu'].add(shroud);
+
+  // 显卡背板
+  const backplateGeo = new THREE.BoxGeometry(0.03, 0.48, 2.8);
+  const backplate = new THREE.Mesh(backplateGeo, matGhost(0x333333));
+  backplate.position.set(cw/2 - 0.26, ch * 0.44, -0.1);
+  partGroups['gpu'].add(backplate);
+
+  // ══ M.2 SSD ══
+  const ssdGeo = new THREE.BoxGeometry(0.03, 0.07, 0.82);
+  addPart('storage', ssdGeo,
+    [cw/2 - 0.18, ch * 0.34, 0.6],
+    matGhost(0x505050), '硬盘');
+
+  // ══ 电源 PSU ══
+  const psuGeo = new THREE.BoxGeometry(1.45, 0.88, 1.5);
+  addPart('psu', psuGeo,
+    [0, 0.65, -1.4],
+    matGhost(0x5a5a5a), '电源');
+
+  // ══ RGB风扇 - 前面板进风 x3 ══
+  for (let j = 0; j < 3; j++) {
+    const fanGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.06, 24);
+    // 彩虹色渐变
+    const colors = [0x3366ff, 0x9933ff, 0xff3366];
+    const fan = new THREE.Mesh(fanGeo, matFan(colors[j], 0.8));
+    fan.position.set(0, ch * 0.42 + j * 0.9, -cd/2 + 0.04);
+    fan.rotation.x = Math.PI / 2;
+    fan.name = 'fan-front-' + j;
+    caseGroup.add(fan);
+  }
+
+  // 后置排风扇 x1
+  const rearFanGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.06, 24);
+  const rearFan = new THREE.Mesh(rearFanGeo, matFan(0x3366ff, 0.6));
+  rearFan.position.set(0, ch * 0.88, cd/2 - 0.04);
+  rearFan.rotation.x = Math.PI / 2;
+  rearFan.name = 'fan-rear';
+  caseGroup.add(rearFan);
+}
+
+// ==================== 辅助：添加带标签的部件 ====================
+const partPositions = {};
+
+function addPart(key, geo, pos, ghostMat, labelText) {
+  const group = new THREE.Group();
+  group.name = key;
+  const mesh = new THREE.Mesh(geo, ghostMat);
+  mesh.position.set(...pos);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  group.add(mesh);
+  caseGroup.add(group);
+  partGroups[key] = group;
+  partPositions[key] = new THREE.Vector3(...pos);
+  return group;
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🏷️ 3D标签 - 跟随部件位置的CSS标签
+// ==================== ═══════════════════════════════ ====================
+
+function createLabels() {
+  const names = {
+    cpu: 'CPU处理器', gpu: '显卡', motherboard: '主板', ram: '内存',
+    storage: '硬盘', psu: '电源', cooler: '散热器'
+  };
+
+  for (const [key, name] of Object.entries(names)) {
+    if (!partPositions[key]) continue;
+    const el = document.createElement('div');
+    el.className = 'label-3d';
+    el.textContent = name;
+    container.appendChild(el);
+    partLabels[key] = el;
+  }
+}
+
+/** 每帧更新标签屏幕位置 */
+function updateLabels() {
+  if (!camera) return;
+  const rect = renderer.domElement.getBoundingClientRect();
+
+  for (const [key, el] of Object.entries(partLabels)) {
+    const localPos = partPositions[key];
+    if (!localPos) continue;
+
+    // 将局部坐标转换为世界坐标（考虑机箱旋转）
+    const worldPos = localPos.clone();
+    caseGroup.localToWorld(worldPos);
+
+    const screenPos = worldPos.project(camera);
+    const x = (screenPos.x * 0.5 + 0.5) * rect.width;
+    const y = (-screenPos.y * 0.5 + 0.5) * rect.height;
+
+    const behind = screenPos.z > 1;
+    const offScreen = x < -40 || x > rect.width + 40 || y < -40 || y > rect.height + 40;
+
+    if (behind || offScreen) {
+      el.style.opacity = '0';
+    } else {
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.opacity = selectedPart === key ? '1' : '0.55';
+      el.classList.toggle('active', selectedPart === key);
+    }
+  }
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🎯 底部部件选择按钮
+// ==================== ═══════════════════════════════ ====================
+
+function buildPartChips() {
+  const parts = [
+    { key: 'cpu', icon: '🧠', name: 'CPU' },
+    { key: 'gpu', icon: '🎮', name: '显卡' },
+    { key: 'motherboard', icon: '📋', name: '主板' },
+    { key: 'ram', icon: '📏', name: '内存' },
+    { key: 'storage', icon: '💾', name: '硬盘' },
+    { key: 'psu', icon: '🔌', name: '电源' },
+    { key: 'cooler', icon: '❄️', name: '散热' },
+  ];
+
+  partsBar.innerHTML = parts.map(p =>
+    `<span class="part-chip" data-key="${p.key}">${p.icon} ${p.name}</span>`
+  ).join('');
+
+  partsBar.addEventListener('click', (e) => {
+    const chip = e.target.closest('.part-chip');
+    if (!chip) return;
+    const key = chip.dataset.key;
+    focusPart(key);
+  });
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🖱️ 交互
+// ==================== ═══════════════════════════════ ====================
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredPart = null;
+let wasDragging = false;
+let pointerMoved = false;
+
+function onPointerMove(e) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+  pointerMoved = true;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(caseGroup.children, true);
+
+  let hitPart = null;
+  if (intersects.length > 0) {
+    hitPart = findPartFromObject(intersects[0].object);
+  }
+
+  // 鼠标样式
+  container.style.cursor = hitPart ? 'pointer' : 'grab';
+
+  // 标签高亮
+  if (hoveredPart !== hitPart) {
+    hoveredPart = hitPart;
+    updateChipHighlight();
+  }
+}
+
+function onClick(e) {
+  if (!pointerMoved) return; // 忽略纯点击（没有移动的）
+  pointerMoved = false;
+
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(caseGroup.children, true);
+  if (intersects.length > 0) {
+    const part = findPartFromObject(intersects[0].object);
+    if (part) focusPart(part);
+  }
+}
+
+/** 聚焦到某个部件 */
+function focusPart(key) {
+  if (!partGroups[key]) return;
+
+  // 重置上一个选中
+  if (selectedPart && selectedPart !== key) {
+    setPartMaterial(selectedPart, 'ghost');
+  }
+
+  selectedPart = key;
+  setPartMaterial(key, 'highlight');
+  zoomToPart(key);
+  updateChipHighlight();
+
+  hintText.textContent = '已选中: ' + (key === 'cpu' ? 'CPU' : key === 'gpu' ? '显卡' : key);
+}
+
+/** 缩放相机到部件 */
+function zoomToPart(key) {
+  const group = partGroups[key];
+  if (!group) return;
+
+  const pos = new THREE.Vector3();
+  group.getWorldPosition(pos);
+
+  const startTarget = controls.target.clone();
+  const startCam = camera.position.clone();
+
+  // 相机移到部件前方约5单位距离
+  const dirToCamera = startCam.clone().sub(startTarget).normalize();
+  const endTarget = pos.clone();
+  const endCam = pos.clone().add(dirToCamera.multiplyScalar(5));
+
+  const t0 = performance.now();
+  function anim(now) {
+    const t = Math.min((now - t0) / 600, 1);
+    const e = 1 - Math.pow(1 - t, 3);
+    controls.target.lerpVectors(startTarget, endTarget, e);
+    camera.position.lerpVectors(startCam, endCam, e);
+    if (t < 1) requestAnimationFrame(anim);
+  }
+  requestAnimationFrame(anim);
+}
+
+/** 切换部件材质 */
+function setPartMaterial(key, mode) {
+  const group = partGroups[key];
+  if (!group) return;
+  group.traverse(child => {
+    if (child.material && child.material.isMeshStandardMaterial) {
+      if (mode === 'ghost') {
+        child.material.transparent = true;
+        child.material.opacity = 0.45;
+        child.material.emissive.set(0x000000);
+        child.material.emissiveIntensity = 0;
+        child.material.roughness = 0.5;
+        child.material.metalness = 0.2;
+      } else {
+        child.material.transparent = false;
+        child.material.opacity = 1;
+        child.material.emissive.set(0xffffff);
+        child.material.emissiveIntensity = 0.2;
+        child.material.roughness = 0.1;
+        child.material.metalness = 0.8;
+        child.material.color.set(0xeeeeee);
+      }
+    }
+  });
+}
+
+function updateChipHighlight() {
+  const chips = partsBar.querySelectorAll('.part-chip');
+  chips.forEach(c => {
+    c.classList.toggle('active', c.dataset.key === (hoveredPart || selectedPart));
+  });
+}
+
+/** 从射线命中对象找到所属部件组 */
+function findPartFromObject(obj) {
+  let cur = obj;
+  while (cur) {
+    if (cur.name && partGroups[cur.name]) return cur.name;
+    cur = cur.parent;
+  }
+  return null;
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🎬 渲染循环
+// ==================== ═══════════════════════════════ ====================
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  controls.update();
+  updateLabels();
+
+  // 底座光环呼吸效果
+  const ring = scene.getObjectByName('glowRing');
+  if (ring) {
+    const t = performance.now() * 0.001;
+    ring.material.opacity = 0.35 + Math.sin(t * 1.5) * 0.2;
+  }
+
+  // RGB风扇颜色缓慢变化
+  const fans = caseGroup.children.filter(c => c.name && c.name.startsWith('fan-'));
+  fans.forEach((fan, i) => {
+    const t = performance.now() * 0.001;
+    const hue = (t * 0.15 + i * 0.33) % 1;
+    const color = new THREE.Color().setHSL(hue, 0.8, 0.5);
+    fan.traverse(child => {
+      if (child.material && child.material.emissive) {
+        child.material.emissive.copy(color);
+      }
+    });
+  });
+
+  renderer.render(scene, camera);
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  📐 窗口调整
+// ==================== ═══════════════════════════════ ====================
+
+function onResize() {
+  camera.aspect = container.clientWidth / container.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth, container.clientHeight);
+}
+
+// ==================== ═══════════════════════════════ ====================
+//  🚀 启动
+// ==================== ═══════════════════════════════ ====================
+
+init();
+console.log('🖥️ 装机大师 3D海景房机箱 已就绪');
+</script>
+</body>
+</html>
