@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><title>硬件GLB模型生成器</title>
+<style>
+  body{background:#1a1a1a;color:#fff;font-family:"PingFang SC",sans-serif;padding:30px;max-width:700px;margin:0 auto;}
+  h1{text-align:center;margin-bottom:8px;} .sub{text-align:center;color:#888;margin-bottom:30px;}
+  .card{background:#252525;border:1px solid#333;border-radius:10px;padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;gap:16px;}
+  .card .icon{font-size:36px;width:50px;text-align:center;}
+  .card .info{flex:1} .card .info h3{margin:0 0 4px;font-size:16px;}
+  .card .info p{margin:0;font-size:12px;color:#888;}
+  .card button{padding:10px 22px;border-radius:20px;border:none;cursor:pointer;font-weight:700;font-size:13px;transition:.2s;}
+  .card button.gen{background:#4a90d9;color:#fff} .card button.gen:hover{background:#5aa0e9}
+  .card button.gen:disabled{opacity:.4;cursor:not-allowed}
+  .card button.done{background:#2d8a4e;color:#fff}
+  .status{margin-top:4px;font-size:11px;color:#aaa;}
+</style>
+</head>
+<body>
+<h1>🔧 硬件GLB模型生成器</h1>
+<p class="sub">点击按钮生成并下载GLB模型文件（放入 models/ 目录即可被装机页面自动加载）</p>
+
+<div id="cards"></div>
+
+<script type="importmap">
+{"imports":{"three":"./js/lib/three.module.js"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFExporter } from './js/lib/GLTFExporter.js';
+
+// ==================== 材质工具 ====================
+const mkMat = (hex, r=.25, m=.7)=>new THREE.MeshStandardMaterial({color:hex,roughness:r,metalness:m});
+const mkGhost = (hex, o=.35)=>new THREE.MeshStandardMaterial({color:hex,roughness:.5,metalness:.15,transparent:true,opacity:o});
+
+// ==================== GLB导出 ====================
+async function exportGLB(object, filename) {
+  return new Promise((resolve, reject) => {
+    const exporter = new GLTFExporter();
+    exporter.parse(object, (gltf) => {
+      const blob = new Blob([gltf], {type:'application/octet-stream'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = filename;
+      a.click(); URL.revokeObjectURL(url); resolve();
+    }, (err) => reject(err), {binary:true});
+  });
+}
+
+// ==================== 模型1: ATX海景房机箱 ====================
+function buildCase() {
+  const group = new THREE.Group(); group.name = 'ATX_FishTank_Case';
+  const cw=2.5,ch=5.2,cd=4.8,ft=.07;
+  const fMat = mkMat(0x888888, .25, .85);
+  const gMat = new THREE.MeshPhysicalMaterial({color:0xcccccc,roughness:0,metalness:.05,transparent:true,opacity:.15});
+
+  function B(w,h,d,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),fMat);m.position.set(x,y,z);group.add(m);}
+  // 12条框架
+  [0,ch].forEach(y=>{B(cw,ft,ft,0,y,-cd/2);B(cw,ft,ft,0,y,cd/2);B(ft,ft,cd,-cw/2,y,0);B(ft,ft,cd,cw/2,y,0);});
+  B(ft,ch,ft,-cw/2,ch/2,-cd/2);B(ft,ch,ft,cw/2,ch/2,-cd/2);B(ft,ch,ft,-cw/2,ch/2,cd/2);B(ft,ch,ft,cw/2,ch/2,cd/2);
+  // PSU shroud
+  B(cw-.1,.02,cd-.1,0,1.15,0);
+  // Glass panels
+  function G(w,h,x,y,z,ry){const g=new THREE.Mesh(new THREE.PlaneGeometry(w,h),gMat);g.position.set(x,y,z);g.rotation.y=ry||0;group.add(g);}
+  G(cw-.08,ch-.12,0,ch/2,-cd/2+.005,0); G(cd-.08,ch-.12,-cw/2+.005,ch/2,0,Math.PI/2);
+  // Tray
+  const tp=new THREE.Mesh(new THREE.PlaneGeometry(cd-.1,ch-.15),mkMat(0x505050,.4,.7));tp.position.set(cw/2-.01,ch/2,0);tp.rotation.y=Math.PI/2;group.add(tp);
+  // Front mesh panel
+  const meshGeo = new THREE.PlaneGeometry(cw-.15, ch-.3, 12, 24);
+  const meshPanel = new THREE.Mesh(meshGeo, mkMat(0x666666,.5,.6));
+  meshPanel.position.set(0,ch/2,-cd/2+.008); group.add(meshPanel);
+  return group;
+}
+
+// ==================== 模型2: 双风扇显卡 ====================
+function buildGPUDual() {
+  const g = new THREE.Group(); g.name = 'GPU_DualFan';
+  const sz=[.1,.45,2.4];
+  // PCB
+  const pcb = new THREE.Mesh(new THREE.BoxGeometry(.03,.42,2.3), mkMat(0x1a3a1a,.6,.1)); pcb.position.y=.02; g.add(pcb);
+  // Cooler body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(.09,.35,2.1), mkMat(0x555555,.25,.7)); body.position.y=.22; g.add(body);
+  // 2 fans
+  for(let i=0;i<2;i++){
+    const fan = new THREE.Mesh(new THREE.CylinderGeometry(.33,.33,.04,20), mkMat(0x333333,.3,.2)); fan.rotation.x=Math.PI/2; fan.position.set(0,.4,-.6+i*1.2); g.add(fan);
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,.05,12), mkMat(0x444444,.2,.5)); hub.rotation.x=Math.PI/2; hub.position.set(0,.4,-.6+i*1.2); g.add(hub);
+  }
+  // Backplate
+  const bp = new THREE.Mesh(new THREE.BoxGeometry(.02,.4,2.25), mkMat(0x333333,.3,.8)); bp.position.y=-.02; g.add(bp);
+  // PCIe bracket
+  const br = new THREE.Mesh(new THREE.BoxGeometry(.02,.15,.15), mkMat(0x888888,.2,.85)); br.position.set(0,.28,1.2); g.add(br);
+  return g;
+}
+
+// ==================== 模型3: 三风扇显卡 ====================
+function buildGPUTriple() {
+  const g = new THREE.Group(); g.name = 'GPU_TripleFan';
+  // PCB
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.03,.42,3.1), mkMat(0x1a3a1a,.6,.1))).position.y=.02;
+  // Cooler
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.09,.35,2.8), mkMat(0x5a5a5a,.25,.7))).position.y=.22;
+  // 3 fans
+  for(let i=0;i<3;i++){
+    const fan = new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,.04,20), mkMat(0x333333,.3,.2)); fan.rotation.x=Math.PI/2; fan.position.set(0,.4,-1.0+i*1.0); g.add(fan);
+    g.add(new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,.05,12), mkMat(0x444444,.2,.5))).rotation.x=Math.PI/2; g.children[g.children.length-1].position.copy(fan.position);
+  }
+  // Backplate + bracket
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.02,.4,2.95), mkMat(0x333333,.3,.8))).position.y=-.02;
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.02,.15,.15), mkMat(0x888888,.2,.85))).position.set(0,.28,1.55);
+  return g;
+}
+
+// ==================== 模型4: 旗舰显卡(厚三槽) ====================
+function buildGPUFlagship() {
+  const g = new THREE.Group(); g.name = 'GPU_Flagship';
+  // Thick PCB
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.04,.48,3.3), mkMat(0x1a2a1a,.6,.1))).position.y=.02;
+  // Thick cooler
+  const body = new THREE.Mesh(new THREE.BoxGeometry(.14,.42,3.0), mkMat(0x4a4a4a,.2,.8)); body.position.y=.28; g.add(body);
+  // Heat fins (top)
+  for(let i=0;i<7;i++) g.add(new THREE.Mesh(new THREE.BoxGeometry(.08,.06,2.8), mkMat(0x3a3a3a,.3,.6))).position.set(0,.32+i*.04,0);
+  // 3 big fans
+  for(let i=0;i<3;i++){
+    const fan = new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.04,20), mkMat(0x333333,.3,.2)); fan.rotation.x=Math.PI/2; fan.position.set(0,.5,-1.05+i*1.05); g.add(fan);
+    g.add(new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,.05,12), mkMat(0x444444,.2,.5))).rotation.x=Math.PI/2; g.children[g.children.length-1].position.copy(fan.position);
+  }
+  // Backplate + bracket + RGB strip
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.03,.44,3.15), mkMat(0x333333,.3,.8))).position.y=-.03;
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.02,.15,.15), mkMat(0x888888,.2,.85))).position.set(0,.28,1.65);
+  const rgb = new THREE.Mesh(new THREE.BoxGeometry(.005,.03,1.8), new THREE.MeshStandardMaterial({color:0x111,roughness:.2,metalness:.1,emissive:0x00ccff,emissiveIntensity:1})); rgb.position.set(.08,.4,0); g.add(rgb);
+  return g;
+}
+
+// ==================== 模型5: ATX主板 ====================
+function buildMotherboard() {
+  const g = new THREE.Group(); g.name = 'Motherboard_ATX';
+  // PCB
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.03,3.2,2.6), mkMat(0x1a2a1a,.6,.05)));
+  // VRM heatsink
+  const vrm1 = new THREE.Mesh(new THREE.BoxGeometry(.08,.22,.7), mkMat(0x666666,.25,.7)); vrm1.position.set(.04,1.35,.15); g.add(vrm1);
+  const vrm2 = new THREE.Mesh(new THREE.BoxGeometry(.08,.22,.7), mkMat(0x666666,.25,.7)); vrm2.position.set(.04,1.35,-.7); g.add(vrm2);
+  // Chipset heatsink
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.06,.12,.35), mkMat(0x555555,.3,.6))).position.set(.05,-1.05,.4);
+  // RAM slots x4
+  for(let i=0;i<4;i++) g.add(new THREE.Mesh(new THREE.BoxGeometry(.04,.9,.06), mkMat(0x333333,.3,.5))).position.set(.06,.7,.8-i*.18);
+  // PCIe x16 slot
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.04,.08,1.8), mkMat(0x2a2a2a,.5,.3))).position.set(.06,-.3,-.2);
+  // PCIe x1 slots
+  for(let i=0;i<2;i++) g.add(new THREE.Mesh(new THREE.BoxGeometry(.04,.08,.5), mkMat(0x2a2a2a,.5,.3))).position.set(.06,.05+i*.15,.6);
+  // IO shield
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.06,.32,1.4), mkMat(0x888888,.2,.8))).position.set(.06,1.55,-.9);
+  // 24-pin header
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.06,.12,.3), mkMat(0x444444,.4,.5))).position.set(.06,.1,.85);
+  // 8-pin EPS
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.04,.1,.2), mkMat(0x444444,.4,.5))).position.set(.04,1.5,.3);
+  // M.2 slot
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(.02,.02,.7), mkMat(0x3a3a3a,.4,.4))).position.set(.04,-.65,.3);
+  return g;
+}
+
+// ==================== 模型6: 机箱散热风扇 ====================
+function buildCaseFan() {
+  const g = new THREE.Group(); g.name = 'CaseFan_120mm';
+  // Outer frame
+  const frame = new THREE.Mesh(new THREE.TorusGeometry(.32,.03,12,24), mkMat(0x444444,.3,.7)); frame.rotation.x=Math.PI/2; g.add(frame);
+  // Inner ring
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(.28,.01,8,24), mkMat(0x555555,.2,.6)); ring.rotation.x=Math.PI/2; g.add(ring);
+  // Blades (7)
+  for(let i=0;i<7;i++){
+    const angle = (i/7)*Math.PI*2;
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(.02,.28,.06), mkMat(0x3a3a3a,.35,.2)); blade.position.set(Math.cos(angle)*.14, 0, Math.sin(angle)*.14); blade.rotation.y = -angle; g.add(blade);
+  }
+  // Center hub
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.05,16), mkMat(0x555555,.2,.6)); hub.rotation.x=Math.PI/2; g.add(hub);
+  // Mounting corners x4
+  for(let i=0;i<4;i++){
+    const a = (i/4)*Math.PI*2 + Math.PI/4;
+    const corner = new THREE.Mesh(new THREE.BoxGeometry(.04,.04,.04), mkMat(0x3a3a3a,.3,.5)); corner.position.set(Math.cos(a)*.34, Math.sin(a)*.34, 0); g.add(corner);
+  }
+  return g;
+}
+
+// ==================== 场景 + 相机(只用于导出) ====================
+function setupScene(){
+  const scene = new THREE.Scene();
+  scene.add(new THREE.AmbientLight(0xffffff,1));
+  return scene;
+}
+
+// ==================== UI ====================
+const models = [
+  {key:'case', name:'ATX海景房机箱',      icon:'🖥️', desc:'标准ATX海景房风格，铝合金框架+钢化玻璃',       fn:buildCase},
+  {key:'gpu-dual',name:'双风扇显卡',       icon:'🎮', desc:'中端双风扇设计，PCB+散热器+背板',             fn:buildGPUDual},
+  {key:'gpu-triple',name:'三风扇显卡',     icon:'🎮', desc:'高端三风扇设计，长度30cm级',                  fn:buildGPUTriple},
+  {key:'gpu-flagship',name:'旗舰显卡',     icon:'🔥', desc:'三槽厚旗舰卡，密集鳍片+RGB灯条',              fn:buildGPUFlagship},
+  {key:'motherboard',name:'ATX主板',       icon:'📋', desc:'标准ATX布局，VRM散热+4×RAM+PCIe×16+M.2',     fn:buildMotherboard},
+  {key:'fan',    name:'120mm散热风扇',    icon:'🌀', desc:'标准12cm机箱风扇，7扇叶+4角安装孔',            fn:buildCaseFan},
+];
+
+const cardsEl = document.getElementById('cards');
+models.forEach(m => {
+  const card = document.createElement('div'); card.className='card';
+  card.innerHTML = `
+    <div class="icon">${m.icon}</div>
+    <div class="info"><h3>${m.name}</h3><p>${m.desc}</p><div class="status" id="status-${m.key}"></div></div>
+    <button class="gen" id="btn-${m.key}">⬇ 生成GLB</button>`;
+  cardsEl.appendChild(card);
+
+  document.getElementById('btn-'+m.key).addEventListener('click', async () => {
+    const btn = document.getElementById('btn-'+m.key);
+    const st = document.getElementById('status-'+m.key);
+    btn.disabled = true; btn.textContent = '⏳ 生成中...'; st.textContent = '构建模型...';
+
+    try {
+      const model = m.fn();
+      st.textContent = '导出GLB...';
+      await exportGLB(model, m.key + '.glb');
+      btn.textContent = '✅ 完成'; btn.className = 'done';
+      st.textContent = '已下载: ' + m.key + '.glb';
+      // 清理
+      model.traverse(c => { if(c.geometry)c.geometry.dispose(); if(c.material)c.material.dispose(); });
+    } catch(e) {
+      btn.disabled = false; btn.textContent = '❌ 重试'; st.textContent = '错误: '+e.message;
+    }
+  });
+});
+</script>
+</body>
+</html>
